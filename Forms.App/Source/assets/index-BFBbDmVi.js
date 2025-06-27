@@ -1,0 +1,1 @@
+import{T as e}from"./index-CoJhbu0u.js";import{d as o,c as r,o as t}from"./index-CZVtSjPQ.js";import"./_plugin-vue_export-helper-DlAUqK2U.js";const _=o({name:"rednote_task",__name:"index",setup(a){return(n,s)=>(t(),r(e))}});export{_ as default};

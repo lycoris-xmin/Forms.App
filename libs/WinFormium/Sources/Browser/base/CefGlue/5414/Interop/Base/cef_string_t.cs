@@ -3,6 +3,8 @@
 // COPYRIGHTS (C) Xuanchen Lin. ALL RIGHTS RESERVED.
 // GITHUB: https://github.com/XuanchenLin/NanUI
 
+using System.Security;
+
 namespace WinFormium.CefGlue.Interop;
 [StructLayout(LayoutKind.Sequential, Pack = libcef.ALIGN)]
 internal unsafe partial struct cef_string_t
@@ -12,9 +14,7 @@ internal unsafe partial struct cef_string_t
     internal IntPtr _dtor;
 
     [UnmanagedFunctionPointer(libcef.CEF_CALL)]
-#if !DEBUG
     [SuppressUnmanagedCodeSecurity]
-#endif
     public delegate void dtor_delegate(char* str);
 
     public cef_string_t(char* str, int length)

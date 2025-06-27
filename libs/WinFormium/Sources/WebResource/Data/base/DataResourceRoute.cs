@@ -11,8 +11,11 @@ namespace WinFormium.Sources.WebResource.Data.@base;
 public sealed class DataResourceRoute
 {
     public ResourceRequestMethod Method { get; }
+
     public string[] Path { get; }
+
     internal MethodInfo ActionInfo { get; }
+
     public JsonSerializerOptions? DefaultJsonSerializerOptions { get; } = new JsonSerializerOptions
     {
         PropertyNameCaseInsensitive = true,
@@ -39,7 +42,6 @@ public sealed class DataResourceRoute
 
         var paramValues = new List<object?>();
 
-
         foreach (var constructParam in constructor[0].GetParameters())
         {
             var paramName = constructParam.Name?.ToLower();
@@ -53,7 +55,7 @@ public sealed class DataResourceRoute
             {
                 var genericType = paramType.GetGenericArguments()[0];
                 var listType = typeof(List<>);
-                var newType = listType.MakeGenericType(new Type[] { genericType });
+                var newType = listType.MakeGenericType([genericType]);
                 var list = (IList?)Activator.CreateInstance(newType);
 
                 services.GetServices(genericType).ToList().ForEach(x => list?.Add(x));
@@ -65,18 +67,14 @@ public sealed class DataResourceRoute
                 paramValue = services.GetService(paramType);
             }
 
-
-            if (paramValue == null)
-            {
-                paramValue = paramType.IsValueType ? Activator.CreateInstance(paramType) : null;
-            }
+            paramValue ??= paramType.IsValueType ? Activator.CreateInstance(paramType) : null;
 
             paramValues.Add(paramValue);
         }
 
-        var service = Activator.CreateInstance(BaseType, paramValues.ToArray()) as DataResourceService;
 
-        if (service == null) throw new NullReferenceException("Service is null");
+        if (Activator.CreateInstance(BaseType, [.. paramValues]) is not DataResourceService service)
+            throw new NullReferenceException("Service is null");
 
         service.Context = context;
 
@@ -88,7 +86,6 @@ public sealed class DataResourceRoute
 
         var request = context.Request;
         var response = context.Response;
-
 
         paramValues = new List<object?>();
 
@@ -226,22 +223,12 @@ public sealed class DataResourceRoute
                     });
                 }
             }
-            ;
 
-
-
-            if (paramValue == null)
-            {
-                paramValue = paramType.IsValueType ? Activator.CreateInstance(paramType) : null;
-            }
+            paramValue ??= paramType.IsValueType ? Activator.CreateInstance(paramType) : null;
 
             paramValues.Add(paramValue);
         }
 
-        return actionDelegate.DynamicInvoke(paramValues.ToArray());
-
+        return actionDelegate.DynamicInvoke([.. paramValues]);
     }
-
-
-
 }

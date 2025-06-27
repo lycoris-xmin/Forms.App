@@ -3,6 +3,8 @@
 // COPYRIGHTS (C) Xuanchen Lin. ALL RIGHTS RESERVED.
 // GITHUB: https://github.com/XuanchenLin/NanUI
 
+using System.Security;
+
 namespace WinFormium.CefGlue.Interop;
 [StructLayout(LayoutKind.Sequential, Pack = libcef.ALIGN)]
 internal unsafe struct cef_base_scoped_t
@@ -11,8 +13,6 @@ internal unsafe struct cef_base_scoped_t
     internal IntPtr _del;
 
     [UnmanagedFunctionPointer(libcef.CEF_CALLBACK)]
-#if !DEBUG
     [SuppressUnmanagedCodeSecurity]
-#endif
     public delegate void del_delegate(cef_base_ref_counted_t* self);
 }

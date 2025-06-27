@@ -197,8 +197,6 @@ public sealed class WinFormiumApp
                     }
                 }
             }
-
-
         }
 
         if (_env.UserDataPath != null && !Directory.Exists(_env.UserDataPath))
@@ -420,7 +418,6 @@ https://github.com/XuanchenLin/WinFormium/blob/master/LICENCE
 
             //var appContext = new ApplicationContext();
             //var createMainWindowOpts = new MainWindowOptions(appContext);
-
 
             try
             {

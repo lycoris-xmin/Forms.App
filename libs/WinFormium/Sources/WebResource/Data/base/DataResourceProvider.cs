@@ -15,6 +15,11 @@ using WinFormium.Sources.WebResource.Data.Attributes;
 namespace WinFormium.Sources.WebResource.Data.@base;
 public sealed class DataResourceProvider
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public string ServiceSuffix { get; set; } = "ApiService";
+
     static Dictionary<string, DataResourceProvider> RegisteredProviders { get; } = new();
 
     private readonly List<DataResourceRoute> _routes = new();
@@ -75,6 +80,10 @@ public sealed class DataResourceProvider
         RegisteredProviders.Remove(domainName);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fileName"></param>
     public void ImportFromFile(string fileName)
     {
         if (File.Exists(fileName))
@@ -84,30 +93,43 @@ public sealed class DataResourceProvider
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <exception cref="InvalidOperationException"></exception>
     public void ImportFromCurrentAssembly()
     {
-        var assembly = Assembly.GetEntryAssembly();
-
-        if (assembly == null) throw new InvalidOperationException("Entry assembly is null.");
+        var assembly = Assembly.GetEntryAssembly() ?? throw new InvalidOperationException("Entry assembly is null.");
 
         ImportFromAssembly(assembly);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="assembly"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public void ImportFromAssembly(Assembly assembly)
     {
-        if (assembly == null)
+        if (assembly != null)
+        {
+            var services = assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(DataResourceService)));
+
+            foreach (var service in services)
+            {
+                ImportDataResourceService(service);
+            }
+        }
+        else
         {
             throw new ArgumentNullException($"{nameof(assembly)}");
         }
-
-        var services = assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(DataResourceService)));
-
-        foreach (var service in services)
-        {
-            ImportDataResourceService(service);
-        }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="files"></param>
     public void ImportFromAssemblies(string[] files)
     {
         foreach (var fileName in files)
@@ -116,6 +138,10 @@ public sealed class DataResourceProvider
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="directoryName"></param>
     public void ImportFromDirectory(string directoryName)
     {
         if (Directory.Exists(directoryName))
@@ -127,6 +153,11 @@ public sealed class DataResourceProvider
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     private void ImportDataResourceService(Type type)
     {
         if (!type.IsSubclassOf(typeof(DataResourceService)))
@@ -134,18 +165,12 @@ public sealed class DataResourceProvider
             throw new ArgumentNullException(nameof(type), $"Argument must not be null.");
         }
 
-        const string SERVICE_SUFFIX = "Service";
-
         var basePaths = new List<string>();
 
         var serviceName = type.Name;
 
-
-        if (type.Name.EndsWith(SERVICE_SUFFIX))
-        {
-
-            serviceName = serviceName.Substring(0, serviceName.LastIndexOf(SERVICE_SUFFIX));
-        }
+        if (type.Name.EndsWith(ServiceSuffix))
+            serviceName = serviceName.Substring(0, serviceName.LastIndexOf(ServiceSuffix));
 
         var routePathAttributes = type.GetCustomAttributes(typeof(RoutePathAttribute), false) as RoutePathAttribute[];
 
@@ -164,21 +189,18 @@ public sealed class DataResourceProvider
             basePaths.Add(serviceName);
         }
 
-        basePaths = basePaths.Distinct().ToList();
-
+        basePaths = [.. basePaths.Distinct()];
 
         var serviceActions = type.GetMethods().Where(x => x.ReturnType.IsAssignableFrom(typeof(IResourceResult)) || x.ReturnType.IsAssignableFrom(typeof(Task<IResourceResult>)));
 
 
         foreach (var serviceAction in serviceActions)
         {
-            var noActionAttributes = serviceAction.GetCustomAttributes(typeof(NoActionAttribute), true) as NoActionAttribute[];
+            if (serviceAction.GetCustomAttributes(typeof(NoActionAttribute), true) is NoActionAttribute[] noActionAttributes && noActionAttributes.Length > 0)
+                continue;
 
-            if (noActionAttributes != null && noActionAttributes.Length > 0) continue;
 
-            var actionHttpMethodAttributes = serviceAction.GetCustomAttributes(typeof(HttpMethodAttribute), true) as HttpMethodAttribute[];
-
-            if (actionHttpMethodAttributes != null)
+            if (serviceAction.GetCustomAttributes(typeof(HttpMethodAttribute), true) is HttpMethodAttribute[] actionHttpMethodAttributes)
             {
                 foreach (var httpMethodAttr in actionHttpMethodAttributes)
                 {
@@ -218,9 +240,9 @@ public sealed class DataResourceProvider
                         }
                     }
 
-                    paths = paths.Select(x => x.ToLower()).Distinct().ToList();
+                    paths = [.. paths.Select(x => x.ToLower()).Distinct()];
 
-                    var route = new DataResourceRoute(method, paths.ToArray(), serviceAction, DefaultJsonSerializerOptions);
+                    var route = new DataResourceRoute(method, [.. paths], serviceAction, DefaultJsonSerializerOptions);
 
                     _routes.Add(route);
                 }
@@ -237,19 +259,12 @@ public sealed class DataResourceProvider
                     paths.Add($"{basePath}/{path}");
                 }
 
-                paths = paths.Select(x => x.ToLower()).Distinct().ToList();
+                paths = [.. paths.Select(x => x.ToLower()).Distinct()];
 
-                var route = new DataResourceRoute(ResourceRequestMethod.All, paths.ToArray(), serviceAction, DefaultJsonSerializerOptions);
+                var route = new DataResourceRoute(ResourceRequestMethod.All, [.. paths], serviceAction, DefaultJsonSerializerOptions);
 
                 _routes.Add(route);
             }
         }
-
     }
-
-
-
-
-
-
 }

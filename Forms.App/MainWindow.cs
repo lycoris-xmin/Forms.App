@@ -14,7 +14,7 @@ namespace Forms.App.Main
 
         public MainWindow(IServerLoggerFactory factory)
         {
-            this.Url = "https://pvfriend.com";
+            this.Url = AppSettings.StartUrl;
             this.WindowState = WinFormium.Sources.Formium.FormiumWindowState.Maximized;
             _logger = factory.CreateLogger<MainWindow>();
         }

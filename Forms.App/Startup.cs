@@ -4,6 +4,7 @@ using Forms.App.Model.Contexts;
 using Microsoft.Extensions.DependencyInjection;
 using WinFormium.CefGlue;
 using WinFormium.Sources.Bootstrapper;
+using WinFormium.Sources.WebResource.Data;
 using WinFormium.Sources.WebResource.LocalFile;
 
 namespace Forms.App.Main
@@ -85,6 +86,8 @@ namespace Forms.App.Main
                 DomainName = "files.app.local",
                 PhysicalFilePath = AppPath.WebRootPath
             });
+
+            services.AddDataResource("http", "api.app.local", opt => opt.ImportFromCurrentAssembly());
         }
 
         /// <summary>

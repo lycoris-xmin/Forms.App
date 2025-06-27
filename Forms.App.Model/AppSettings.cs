@@ -26,6 +26,24 @@ namespace Forms.App.Model
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public static string StartUrl
+        {
+            get
+            {
+                if (IsDebugger)
+                {
+                    return "http://files.app.local";
+                }
+                else
+                {
+                    return "http://files.app.local";
+                }
+            }
+        }
+
+        /// <summary>
         /// Sql数据库配置
         /// </summary>
         public class Sql

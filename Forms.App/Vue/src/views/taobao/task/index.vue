@@ -1,0 +1,950 @@
+<script setup lang="tsx">
+import { onMounted, reactive } from 'vue';
+import {
+  ArrowDownOutlined,
+  BranchesOutlined,
+  DeleteOutlined,
+  DollarOutlined,
+  EyeOutlined,
+  FileSyncOutlined,
+  ImportOutlined,
+  PlayCircleOutlined,
+  RedoOutlined
+} from '@ant-design/icons-vue';
+import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
+import { useAuthStore } from '@/store/modules/auth';
+import {
+  apiUrl,
+  fetchCheckExportPlanTaskComplete,
+  fetchDeletePlanTask,
+  fetchExportPlanTask,
+  fetchGetTaobaoPlanTaskList,
+  fetchTaobaoStartPlanTask
+} from '@/service/api';
+import AppPermissions, { useRolePermission } from '@/hooks/custome/app.permissions';
+import {
+  planTaskMode as PLANTASK_MODE,
+  planTaskStatus as PLANTASK_STATUS,
+  planTaskStep as PLANTASK_STEP,
+  platform as PLATFORM
+} from '@/views/shared/enums';
+import { copyToClipboard } from '@/utils/helper';
+import { imgFallback } from '@/data/empty.json';
+import DetailModal from './modules/modules/detail-modal.vue';
+import SearchFilter from './modules/search-filter.vue';
+import CompletionDrawer from './modules/completion-drawer.vue';
+import AgainDrawer from './modules/again-drawer.vue';
+import CreateDrawer from './modules/create-drawer.vue';
+import ImportDrawer from './modules/import-drawer.vue';
+import AccountDrawer from './modules/account-drawer.vue';
+
+const authStore = useAuthStore();
+
+const rolePermission = useRolePermission();
+
+const { tableWrapperRef, scrollConfig } = useTableScroll();
+
+type Switch = {
+  id: string;
+  loading: boolean;
+};
+
+type Model = {
+  switch: Switch;
+  createVisible: boolean;
+  againLoading: boolean;
+  detailVisible: boolean;
+  // confirmProductVisible:boolean;
+  // commentVisible: boolean;
+  againVisible: boolean;
+  completionVisible: boolean;
+  editRow: object;
+  exportLoading: boolean;
+  importVisible: boolean;
+  shopNameEnum: Array<object>;
+  startConfirmVisible?: boolean; // 任务开始确认的状态
+};
+
+const model = reactive<Model>({
+  switch: {
+    id: '',
+    loading: false
+  },
+  createVisible: false,
+  againLoading: false,
+  detailVisible: false,
+  // confirmProductVisible: false, // 4次确认流程的状态，新版废弃
+  // commentVisible: false, // 评论流程的状态，新版暂时废弃
+  againVisible: false,
+  accountVisible: false,
+  completionVisible: false,
+  editRow: {},
+  exportLoading: false,
+  startConfirmVisible: false
+});
+
+const {
+  columns,
+  columnChecks,
+  data,
+  getData,
+  getDataByPage,
+  loading,
+  mobilePagination,
+  searchParams,
+  resetSearchParams
+} = useTable({
+  apiFn: (...args) => {
+    return fetchGetTaobaoPlanTaskList(...args);
+  },
+  apiParams: {
+    pageIndex: 1,
+    pageSize: 10
+  },
+  columns: getColumns
+});
+
+const { onBatchDeleted, onDeleted, checkedRowKeys, rowSelection } = useTableOperate(data, getData);
+
+onMounted(() => {
+  searchParams.platform = 0;
+  getShopNameEnum();
+});
+
+async function getShopNameEnum() {
+  try {
+    const { data: res, error } = await fetchGetALIShopName();
+    if (!error && res && res.code === 0) {
+      model.shopNameEnum = res.data.list;
+    }
+  } catch {}
+}
+
+async function deleteHandler(id: string) {
+  const { data: res, error } = await fetchDeletePlanTask([id]);
+
+  if (!error && res && res.code === 0) {
+    onDeleted();
+  }
+}
+
+async function batchDeleteHandler() {
+  const ids = checkedRowKeys.value;
+  if (ids && ids.length) {
+    const { data: res, error } = await fetchDeletePlanTask(ids);
+    if (!error && res && res.code === 0) {
+      onBatchDeleted();
+    }
+  }
+}
+
+async function startPlanHandler(ids?: string[]) {
+  let input = [];
+  if (ids && ids.length) {
+    input = ids;
+  } else if (checkedRowKeys.value.length > 0) {
+    input = checkedRowKeys.value;
+  } else {
+    input = void 0;
+  }
+
+  const { data: res, error } = await fetchTaobaoStartPlanTask(input);
+  if (!error && res && res.code === 0) {
+    window.$message?.success('任务开始匹配');
+    await getData();
+  }
+}
+
+function againHandler(record) {
+  model.editRow = record;
+  model.againVisible = true; // 设置againVisible为true，显示againDrawer
+}
+
+function getColumns() {
+  const cols = [
+    {
+      key: 'title',
+      dataIndex: 'title',
+      title: '任务商品',
+      width: 500,
+      ellipsis: true,
+      customRender: ({ record }) => {
+        let mode = PLANTASK_MODE.filter(x => x.value === record.mode);
+        mode = mode.length ? mode[0] : { label: '未知', value: record.mode, color: '' };
+
+        let platform = PLATFORM.filter(x => x.value === record.platform);
+        platform = platform.length ? platform[0] : { label: '未知', value: record.platform, color: '' };
+
+        function renderDevice() {
+          if (record.mode === 0) {
+            return '';
+          }
+
+          if (record.mode !== 20 && (record.status === 0 || record.status === 10)) {
+            return '';
+          }
+
+          if (record.deviceId !== '0') {
+            if (record.deviceName) {
+              return (
+                <ATag color="cyan" onClick={() => copyToClipboard(record.deviceId)} style="cursor:pointer;">
+                  执行设备：{record.deviceName} ({record.deviceId})
+                </ATag>
+              );
+            }
+            return <ATag color="error">执行设备：设备已删除</ATag>;
+          }
+          return <ATag color="error">执行设备：未分配</ATag>;
+        }
+
+        return (
+          <div class="plantask-product">
+            <div class="v-center flex gap-10px">
+              <ATag color="default" style="cursor:pointer;" onClick={() => copyToClipboard(record.id)}>
+                任务编号：{record.id}
+              </ATag>
+              <ATag color={mode.color}>任务模式：{mode.label}</ATag>
+              {renderDevice()}
+            </div>
+            <div class="flex">
+              <div class="plantask-image">
+                <AImage width={120} height={120} src={record.image} fallback={imgFallback} />
+              </div>
+              <div class="plantask-info">
+                <div class="plantask-title v-center flex">
+                  <ATag color={platform.color}>TB联盟</ATag>
+                  <ATooltip placement="top" title={record.title}>
+                    <a href={record.productUrl} target="_blank">
+                      {record.title}
+                    </a>
+                  </ATooltip>
+                </div>
+                <p class="plantask-shop">
+                  <span class="label">店铺名称：</span>
+                  {record.shopName}
+                </p>
+                <p class="plantask-sku v-center flex">
+                  <span class="label">任务SKU：</span>
+                  {renderSku(record.skuList)}
+                </p>
+                <div class="v-center flex gap-10px">
+                  <p class="plantask-price f-12px">
+                    <span class="label">商品单价：</span>
+                    <span>{renderCNY(record.price)}</span>
+                  </p>
+                  <p class="f-12px">
+                    <span class="label">购买件数：</span>
+                    <span>x {record.count}</span>
+                  </p>
+                  <p class="plantask-price f-12px">
+                    <span class="label">商品总价：</span>
+                    <span>{renderCNY(record.totalPrice, true)}</span>
+                  </p>
+                </div>
+                <p class="plantask-keyword f-12px">
+                  <span class="label">宝贝排名：</span>
+                  <span title={record.ranking || '-'}>{record.ranking > 0 ? record.ranking : '-'}</span>
+                </p>
+                <p class="plantask-keyword f-12px" title={`关键词：${record.keyword || ''}`}>
+                  <span class="label">任务关键词：</span>
+                  {record.keyword}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      }
+    },
+    {
+      key: 'account',
+      dataIndex: 'account',
+      title: '任务信息',
+      width: 300,
+      ellipsis: true,
+      customRender: ({ record }) => {
+        let ip = record.ip;
+        if (ip && record.ipAddress) {
+          ip = `${ip} (${record.ipAddress})`;
+        }
+
+        return (
+          <div style="font-size:14px">
+            <p class="mb-6px" style="display:grid;grid-template-columns:70px 1fr">
+              <span class="text-right">TB号：</span>
+              <span title={record.account || '-'}>{record.account || '-'}</span>
+            </p>
+            <p class="mb-6px" style="display:grid;grid-template-columns:70px 1fr">
+              <span class="text-right">淘龄：</span>
+              <span title={record.age || '-'}>{record.age || '-'}</span>
+            </p>
+            <p class="mb-6px" style="display:grid;grid-template-columns:70px 1fr">
+              <span class="text-right">淘气值：</span>
+              <span title={record.taoQi || '-'}>{record.taoQi || '-'}</span>
+            </p>
+            <p class="mb-6px" style="display:grid;grid-template-columns:70px 1fr">
+              <span class="text-right">订单号：</span>
+              <span title={record.orderId || '-'}>{record.orderId || '-'}</span>
+            </p>
+            <p class="mb-6px" style="display:grid;grid-template-columns:70px 1fr">
+              <span class="text-right">下单IP：</span>
+              <span title={ip || '-'}>{ip || '-'}</span>
+            </p>
+            <p class="mb-6px" style="display:grid;grid-template-columns:70px 1fr">
+              <span class="text-right">收货地址：</span>
+              <span title={record.address || '-'}>{record.address || '-'}</span>
+            </p>
+          </div>
+        );
+      }
+    },
+    {
+      key: 'success',
+      dataIndex: 'success',
+      title: '购买状态',
+      width: 100,
+      align: 'center',
+      customRender: ({ record }) => {
+        if (record.status >= 30) {
+          if (record.success) {
+            return <ATag color="success">购买成功</ATag>;
+          }
+          return <ATag color="error">购买失败</ATag>;
+        }
+        return '-';
+      }
+    },
+    {
+      key: 'status',
+      dataIndex: 'status',
+      title: '状态',
+      width: 100,
+      align: 'center',
+      customRender: ({ record }) => {
+        if (record.status === 20) {
+          const step = PLANTASK_STEP.filter(x => x.value === record.step);
+          if (step && step.length) {
+            return <ATag color={step[0].color}>{step[0].label}</ATag>;
+          }
+
+          return <ATag color="error">异常步骤</ATag>;
+        }
+
+        let item = PLANTASK_STATUS.filter(x => x.value === record.status);
+        item = item.length ? item[0] : { label: '未知', value: record.platform, color: 'error' };
+
+        if (record.status === 31 || record.status === 41) {
+          return (
+            <ATooltip placement="top" title={<span>{record.remark || '程序执行异常'}</span>}>
+              <ATag color={item.color}>{item.label}</ATag>
+            </ATooltip>
+          );
+        } else if (record.status === 120) {
+          return (
+            <ATooltip placement="top" title={<span>{'请等待1-2分钟让程序停止运行指令'}</span>}>
+              <ATag color={item.color}>{item.label}</ATag>
+            </ATooltip>
+          );
+        }
+
+        return <ATag color={item.color}>{item.label}</ATag>;
+      }
+    },
+    {
+      key: 'note',
+      dataIndex: 'note',
+      title: '任务备注',
+      width: 200,
+      ellipsis: true
+    },
+    {
+      key: 'beginTime',
+      dataIndex: 'beginTime',
+      title: '开始时间',
+      align: 'center',
+      width: 200
+    }
+  ];
+
+  if (!authStore.userInfo.isTenant) {
+    cols.push({
+      key: 'creator',
+      dataIndex: 'creator',
+      title: '所属商户',
+      align: 'center',
+      width: 130
+    });
+  } else if (authStore.userInfo.isTenant && !authStore.userInfo.isTenantUser) {
+    cols.push({
+      key: 'creator',
+      dataIndex: 'creator',
+      title: '创建人',
+      align: 'center',
+      width: 130
+    });
+  }
+
+  cols.push({
+    key: 'operate',
+    title: '操作',
+    align: 'center',
+    width: 140,
+    fixed: 'right',
+    customRender: ({ record }) => (
+      <div class="flex-center gap-4px">
+        {taskInfoButton(record)}
+        {completionButton(record)}
+        {againButton(record)}
+        {startButton(record)}
+        {deleteButton(record)}
+      </div>
+    )
+  });
+
+  return cols;
+}
+
+function taskInfoButton(record) {
+  //
+
+  return (
+    <ATooltip placement="top" title="任务详情">
+      <AButton type="link" size="small" onClick={() => viewDetailHandler(record)}>
+        <EyeOutlined />
+      </AButton>
+    </ATooltip>
+  );
+  // }
+
+  return '';
+}
+
+function deleteButton(record) {
+  if (rolePermission.hasOne(AppPermissions.Taobao.Task.DELETE) && authStore.userInfo.isTenant) {
+    // 已完成的任务不能删除
+    if ([30, 31, 40, 41, 11, 20].includes(record.status)) {
+      return '';
+    }
+
+    // 未开始的任务允许删除
+    if (record.status === 0 || record.status === 10 || record.status === 100) {
+      return (
+        <APopconfirm title="确认删除吗？" onConfirm={() => deleteHandler(record.id)}>
+          <ATooltip placement="top" title="删除">
+            <AButton danger size="small" type="link">
+              <DeleteOutlined />
+            </AButton>
+          </ATooltip>
+        </APopconfirm>
+      );
+    } else if (record.mode === 10 || record.mode === 20) {
+      // 指定设备与私有分配运行删除进行中的
+      return (
+        <APopconfirm title="确认删除吗？" onConfirm={() => deleteHandler(record.id)}>
+          <ATooltip placement="top" title="删除">
+            <AButton danger size="small" type="link">
+              <DeleteOutlined />
+            </AButton>
+          </ATooltip>
+        </APopconfirm>
+      );
+    }
+  }
+
+  return '';
+}
+
+function startButton(record) {
+  if (rolePermission.hasOne(AppPermissions.Taobao.Task.UPDATE) && authStore.userInfo.isTenant) {
+    // 已完成的任务不能删除
+    if (record.status === -1) {
+      return (
+        <APopconfirm title="是否将当前任务开始配对?" onConfirm={() => startPlanHandler([record.id])}>
+          <ATooltip placement="top" title="任务开始">
+            <AButton loading={model.againLoading} type="link" size="small">
+              <PlayCircleOutlined />
+            </AButton>
+          </ATooltip>
+        </APopconfirm>
+      );
+    }
+  }
+
+  return '';
+}
+
+function againButton(record) {
+  if (
+    rolePermission.hasOne(AppPermissions.Taobao.Task.CREATE) &&
+    authStore.userInfo.isTenant &&
+    authStore.userInfo.tenantType !== 20
+  ) {
+    return (
+      <ATooltip placement="top" title="快速发布">
+        <AButton loading={model.againLoading} type="link" size="small" onClick={() => againHandler(record)}>
+          <FileSyncOutlined />
+        </AButton>
+      </ATooltip>
+    );
+  }
+
+  return '';
+}
+
+function completionButton(record) {
+  if (!authStore.userInfo.isTenant) {
+    return '';
+  }
+
+  if (![30, 31, 40, 41].includes(record.status)) {
+    return '';
+  }
+
+  return (
+    <ATooltip placement="top" title="任务信息">
+      <AButton type="link" size="small" onClick={() => completionHandler(record)}>
+        <BranchesOutlined />
+      </AButton>
+    </ATooltip>
+  );
+}
+
+function renderSku(skuList) {
+  if (!skuList || !skuList.length) {
+    return <ATag>无SKU</ATag>;
+  }
+
+  return skuList.map(item => (
+    <ATag key={item} color="processing">
+      {item}
+    </ATag>
+  ));
+}
+
+function renderCNY(value, blod = false) {
+  return (
+    <span class="cny" style={blod ? 'font-weight:600;letter-spacing: 1px;' : ''}>
+      {value}
+    </span>
+  );
+}
+
+function createHandler() {
+  model.createVisible = true;
+  //
+  // routerPushByKey('taobao-task-create');
+}
+
+function importHandler() {
+  model.importVisible = true;
+}
+
+function accountHandler() {
+  model.accountVisible = true;
+}
+
+function viewDetailHandler(record) {
+  model.editRow = record;
+  model.detailVisible = true;
+}
+
+function completionHandler(record) {
+  model.editRow = record;
+  model.completionVisible = true;
+}
+
+async function exportHandler() {
+  if (!searchParams.beginTime || !searchParams.endTime) {
+    window.$message?.warning('请选择要下载的订单报表的时间范围');
+    return;
+  }
+
+  await getDataByPage(1);
+
+  if (data.value.length <= 0) {
+    return;
+  }
+
+  window.$message?.success('正在生成报表');
+
+  model.exportLoading = true;
+  try {
+    const { data: res, error } = await fetchExportPlanTask({ ...searchParams });
+    if (!error && res && res.code === 0) {
+      checkExportComplete(res.data);
+    } else {
+      model.exportLoading = false;
+    }
+  } catch {
+    model.exportLoading = false;
+  }
+}
+
+function checkExportComplete(excelId) {
+  let i = 0;
+  const timer = setInterval(async () => {
+    if (i > 100) {
+      window.$message?.error('报表导出失败，请稍后再试');
+      clearInterval(timer);
+      model.exportLoading = false;
+      return;
+    }
+
+    const { data: res, error } = await fetchCheckExportPlanTaskComplete(excelId);
+    if (!error && res && res.code === 0 && res.data.complete) {
+      model.exportLoading = false;
+      clearInterval(timer);
+      downloadExcel(excelId);
+      return;
+    }
+
+    i += 1;
+  }, 3000);
+}
+
+async function downloadExcel(excelId) {
+  try {
+    const response = await fetch(`${apiUrl}/api/plantask/excel/${excelId}`, {
+      mode: 'cors'
+    });
+
+    if (!response.ok) {
+      window.$message?.error('下载异常');
+    }
+
+    const blob = await response.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `订单信息报表_${new Date().getTime()}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href); // 释放 URL
+  } catch (error) {
+    window.$message?.error(`下载失败:${error}`);
+  }
+}
+</script>
+
+<template>
+  <div class="page min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
+    <SearchFilter
+      v-model:model="searchParams"
+      :user-info="authStore.userInfo"
+      :platform="PLATFORM"
+      :mode="PLANTASK_MODE"
+      :shop-name-enum="model.shopNameEnum"
+      @reset="resetSearchParams"
+      @search="getDataByPage(1)"
+    ></SearchFilter>
+
+    <ACard
+      title="任务列表"
+      :bordered="false"
+      :body-style="{ flex: 1, overflow: 'hidden' }"
+      class="plantask flex-col-stretch sm:flex-1-hidden card-wrapper"
+    >
+      <template #extra>
+        <TableHeaderOperation
+          v-model:columns="columnChecks"
+          :disabled-delete="checkedRowKeys.length === 0"
+          :loading="loading"
+          :add-btn="
+            authStore.userInfo.isTenant && rolePermission.hasOne(AppPermissions.Taobao.Task.CREATE)
+            //  &&authStore.userInfo.tenantType !== 20
+          "
+          :delete-btn="authStore.userInfo.isTenant && rolePermission.hasOne(AppPermissions.Taobao.Task.DELETE)"
+          delete-confirm-text="仅会删除未开始与配对中的任务，确认删除吗？"
+          @add="createHandler"
+          @delete="batchDeleteHandler"
+        >
+          <AButton
+            size="small"
+            ghost
+            type="primary"
+            class="v-center flex"
+            :disabled="!data.length"
+            @click="() => getDataByPage()"
+          >
+            <template #icon>
+              <RedoOutlined />
+            </template>
+
+            <span class="ml-6px">任务进度刷新</span>
+          </AButton>
+
+          <AButton
+            size="small"
+            ghost
+            type="primary"
+            class="v-center flex"
+            :disabled="!data.length"
+            :loading="model.exportLoading"
+            @click="exportHandler"
+          >
+            <template #icon>
+              <ArrowDownOutlined />
+            </template>
+
+            <span class="ml-6px">下载订单报表</span>
+          </AButton>
+
+          <AButton
+            v-if="
+              authStore.userInfo.isTenant &&
+              rolePermission.hasOne(AppPermissions.Taobao.Task.CREATE) &&
+              authStore.userInfo.tenantType === 20
+            "
+            size="small"
+            ghost
+            type="primary"
+            class="v-center flex"
+            @click="importHandler"
+          >
+            <template #icon>
+              <ImportOutlined />
+            </template>
+
+            <span class="ml-6px">导入任务</span>
+          </AButton>
+
+          <!--
+ <APopconfirm
+            v-if="
+              authStore.userInfo.isTenant &&
+              rolePermission.hasOne(AppPermissions.Taobao.Task.UPDATE) &&
+              authStore.userInfo.tenantType === 20
+            "
+            :title="
+              authStore.userInfo.tenantType === 20
+                ? '是否已下载了金额统计报表，如果未下载，请先下载统计报表、并确认已经给对应账户准备好资金?'
+                : '是否确定要将所有准备中任务开始配对'
+            "
+            @confirm="startPlanHandler"
+          >
+-->
+          <AButton
+            v-if="
+              authStore.userInfo.isTenant &&
+              rolePermission.hasOne(AppPermissions.Taobao.Task.UPDATE) &&
+              authStore.userInfo.tenantType === 20
+            "
+            size="small"
+            ghost
+            type="primary"
+            class="v-center flex"
+            @click="() => (model.startConfirmVisible = true)"
+          >
+            <template #icon>
+              <PlayCircleOutlined />
+            </template>
+
+            <span class="ml-6px">任务开始</span>
+          </AButton>
+          <!-- </APopconfirm> -->
+
+          <AButton
+            v-if="
+              authStore.userInfo.isTenant &&
+              rolePermission.hasOne(AppPermissions.Taobao.Task.UPDATE) &&
+              authStore.userInfo.tenantType === 20
+            "
+            size="small"
+            ghost
+            type="primary"
+            class="v-center flex"
+            @click="accountHandler"
+          >
+            <template #icon>
+              <DollarOutlined />
+            </template>
+
+            <span class="ml-6px">金额统计</span>
+          </AButton>
+        </TableHeaderOperation>
+      </template>
+
+      <ATable
+        ref="tableWrapperRef"
+        v-model:expanded-row-keys="model.expandedRowKeys"
+        :columns="columns"
+        :data-source="data"
+        size="small"
+        :scroll="scrollConfig"
+        :loading="loading"
+        row-key="id"
+        :row-selection="rowSelection"
+        :pagination="mobilePagination"
+        class="h-full"
+      ></ATable>
+    </ACard>
+
+    <CreateDrawer
+      v-model:visible="model.createVisible"
+      :user-info="authStore.userInfo"
+      :mode="PLANTASK_MODE"
+      @submitted="getDataByPage(1)"
+    ></CreateDrawer>
+
+    <DetailModal
+      :id="model.editRow.id"
+      v-model:visible="model.detailVisible"
+      :mode="model.editRow.mode"
+      :plan-task-status="PLANTASK_STATUS"
+    ></DetailModal>
+
+    <AgainDrawer
+      v-model:visible="model.againVisible"
+      :row-data="model.editRow"
+      :user-info="authStore.userInfo"
+      :mode="PLANTASK_MODE"
+      @submitted="getDataByPage(1)"
+    ></AgainDrawer>
+
+    <CompletionDrawer
+      v-model:visible="model.completionVisible"
+      :row-data="model.editRow"
+      @submitted="getDataByPage"
+    ></CompletionDrawer>
+
+    <ImportDrawer
+      v-model:visible="model.importVisible"
+      :user-info="authStore.userInfo"
+      @submitted="getDataByPage(1)"
+    ></ImportDrawer>
+    <AccountDrawer v-model:visible="model.accountVisible"></AccountDrawer>
+
+    <AModal v-model:open="model.startConfirmVisible" title="任务开始确认" width="500px">
+      <div class="my-12px">
+        <AAlert
+          v-if="checkedRowKeys && checkedRowKeys.length"
+          :message="`已选中 ${checkedRowKeys.length} 个任务`"
+          type="warning"
+        />
+
+        <AAlert v-else message="该操作将下发全部准备中任务启动" type="error" />
+      </div>
+      <div v-if="authStore.userInfo.tenantType === 20" class="mb-12px">
+        <p>请确认您已下载了金额统计报表，并且已经给对应账户准备好资金？</p>
+        <p>如果未下载，请先下载统计报表、并确认已经给对应账户准备好资金。</p>
+      </div>
+      <div v-else class="mb-12px">
+        <p>是否确定要将所有准备中任务开始配对</p>
+      </div>
+      <template #footer>
+        <AButton type="primary" @click="startPlanHandler">确认开始</AButton>
+        <AButton @click="() => (model.startConfirmVisible = false)">取消</AButton>
+      </template>
+    </AModal>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.plantask {
+  :deep(.plantaskcomment-product) {
+    width: 100%;
+    overflow: hidden;
+
+    > .flex {
+      &:first-child {
+        padding-bottom: 5px;
+      }
+
+      &:last-child {
+        gap: 10px;
+        overflow: hidden;
+      }
+    }
+
+    .ant-tag {
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    .plantask-image {
+      flex-shrink: 0;
+      width: 120px;
+      height: 120px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .plantask-info {
+      height: 100%;
+      padding: 5px 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-wrap: break-word;
+      white-space: nowrap;
+    }
+
+    .plantask-title {
+      padding-bottom: 5px;
+
+      .ant-tag {
+        &.tb {
+          background-color: rgb(255, 80, 0);
+        }
+      }
+
+      a {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+        white-space: nowrap;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+      }
+    }
+
+    .plantask-shop {
+      font-size: 12px;
+      padding-bottom: 5px;
+    }
+
+    .plantask-sku {
+      font-size: 12px;
+      padding-bottom: 5px;
+
+      .ant-tag {
+        font-size: 12px;
+        line-height: 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        white-space: nowrap;
+      }
+    }
+
+    .f-12px {
+      font-size: 12px;
+    }
+
+    .plantask-shop,
+    .plantask-sku,
+    .plantask-price,
+    .plantask-keyword {
+      .label {
+        display: inline-block;
+        width: 70px;
+        text-align: right;
+      }
+    }
+  }
+
+  :deep(.screenshot) {
+    padding: 0 10px;
+    flex-wrap: nowrap;
+    position: relative;
+    // -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0));
+    overflow-x: auto;
+
+    .img-div {
+      flex-shrink: 0;
+      overflow: hidden;
+      border-radius: 5px;
+      height: 100px;
+      width: 50px;
+    }
+  }
+}
+</style>

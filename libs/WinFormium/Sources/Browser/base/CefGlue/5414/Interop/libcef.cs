@@ -3,10 +3,10 @@
 // COPYRIGHTS (C) Xuanchen Lin. ALL RIGHTS RESERVED.
 // GITHUB: https://github.com/XuanchenLin/NanUI
 
+using System.Security;
+
 namespace WinFormium.CefGlue.Interop;
-#if !DEBUG
 [SuppressUnmanagedCodeSecurity]
-#endif
 internal static unsafe partial class libcef
 {
     internal const string DllName = "libcef";

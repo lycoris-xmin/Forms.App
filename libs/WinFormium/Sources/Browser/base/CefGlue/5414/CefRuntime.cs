@@ -524,7 +524,7 @@ public static unsafe class CefRuntime
     ///
     /// This function must be called on the browser process UI thread.
     /// </summary>
-    public static bool BeginTracing(string categories = null, CefCompletionCallback callback = null)
+    public static bool BeginTracing(string? categories = null, CefCompletionCallback? callback = null)
     {
         fixed (char* categories_str = categories)
         {
@@ -547,7 +547,7 @@ public static unsafe class CefRuntime
     ///
     /// This function must be called on the browser process UI thread.
     /// </summary>
-    public static bool EndTracing(string tracingFile = null, CefEndTracingCallback callback = null)
+    public static bool EndTracing(string? tracingFile = null, CefEndTracingCallback? callback = null)
     {
         fixed (char* tracingFile_str = tracingFile)
         {

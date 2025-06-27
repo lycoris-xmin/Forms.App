@@ -1,0 +1,1 @@
+import{T as o}from"./index-CoJhbu0u.js";import{d as e,c as r,o as t}from"./index-CZVtSjPQ.js";import"./_plugin-vue_export-helper-DlAUqK2U.js";const _=e({name:"pdd_comment",__name:"index",setup(a){return(n,m)=>(t(),r(o))}});export{_ as default};

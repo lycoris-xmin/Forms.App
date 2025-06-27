@@ -1,0 +1,1 @@
+const l=[{value:0,label:"待处理",color:"warning"},{value:1,label:"通过",color:"success"},{value:10,label:"拒绝",color:"error"}],a=[{value:0,label:"淘宝",color:"#ff5000"},{value:10,label:"京东",color:"#ff0f23"},{value:20,label:"拼多多",color:"#d60a22"},{value:30,label:"抖音",color:"#d3124d"},{value:40,label:"阿里巴巴",color:"#ffaa00"}];export{a as P,l as f};
