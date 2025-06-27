@@ -1,4 +1,5 @@
 ﻿using Forms.App.Core.Logging;
+using Forms.App.Main.JsObject;
 using Forms.App.Model;
 using WinFormium;
 using WinFormium.Sources.Formium.EventArgs;
@@ -40,8 +41,24 @@ namespace Forms.App.Main
         /// <param name="args"></param>
         protected override void OnLoaded(BrowserEventArgs args)
         {
-            if (AppSettings.IsDebugger)
+            if (AppSettings.IsDebugger && !this.HasDevTools)
                 ShowDevTools();
+
+            var frame = this.Browser?.GetMainFrame();
+
+            if (frame != null)
+            {
+                var jsMapList = new List<JavaScriptObjectMap>
+                {
+                    new RootJavaScriptObject().Build()
+                };
+
+                var hbrjso = this.BeginRegisterJavaScriptObject(frame);
+
+                jsMapList.ForEach(x => this.RegisterJavaScriptObject(hbrjso, x.Name, x.JsObject));
+
+                this.EndRegisterJavaScriptObject(hbrjso);
+            }
 
             base.OnLoaded(args);
         }

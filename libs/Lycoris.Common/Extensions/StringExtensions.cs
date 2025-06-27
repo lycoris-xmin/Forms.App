@@ -564,5 +564,24 @@ namespace Lycoris.Common.Extensions
             }
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string ToCamelCase(this string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return input;
+
+            // 去除下划线或空格并转为 PascalCase（HelloWorld）
+            var pascal = Regex.Replace(input, @"[_\s]+(.)", match => match.Groups[1].Value.ToUpper());
+            pascal = char.ToUpper(input[0]) + pascal.Substring(1);
+
+            // 转为 camelCase
+            return char.ToLower(pascal[0]) + pascal.Substring(1);
+        }
+
     }
 }

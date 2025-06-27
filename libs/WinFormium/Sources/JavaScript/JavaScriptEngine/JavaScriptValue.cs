@@ -23,7 +23,6 @@ public class JavaScriptValue : IDisposable
             JAVASCRIPT_VALUE_COLLECTION.ElementAt(i)?.Dispose();
         }
     }
-
     internal static void Release(CefBrowser browser)
     {
         var items = JAVASCRIPT_VALUE_COLLECTION.Where(x => x.GetAssociatedFrame()?.Browser.Identifier == browser.Identifier).ToArray();
@@ -34,7 +33,6 @@ public class JavaScriptValue : IDisposable
         }
     }
 
-
     internal static void Release(CefFrame frame)
     {
         var items = JAVASCRIPT_VALUE_COLLECTION.Where(x => x.GetAssociatedFrame()?.Identifier == frame.Identifier).ToArray();
@@ -44,7 +42,6 @@ public class JavaScriptValue : IDisposable
             item.Dispose();
         }
     }
-
 
     public static implicit operator string?(JavaScriptValue value) => value.GetString();
     public static implicit operator bool(JavaScriptValue value) => value.GetBoolean();
@@ -67,10 +64,6 @@ public class JavaScriptValue : IDisposable
     public static implicit operator JavaScriptValue(ushort value) => new JavaScriptValue(value);
     public static implicit operator JavaScriptValue(decimal value) => new JavaScriptValue(value);
     public static implicit operator JavaScriptValue(DateTime value) => new JavaScriptValue(value);
-
-
-
-
 
     internal readonly object? RawValue = null;
     internal protected Guid Uuid { get; internal set; } = Guid.NewGuid();
@@ -176,10 +169,6 @@ public class JavaScriptValue : IDisposable
                 JAVASCRIPT_VALUE_COLLECTION.Add(this);
                 break;
         }
-
-
-
-        //
     }
 
     public bool GetBoolean()

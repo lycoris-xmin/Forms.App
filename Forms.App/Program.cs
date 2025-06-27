@@ -62,6 +62,8 @@ namespace Forms.App.Main
             {
                 appBuilder.UserServiceCollection(services);
 
+                appBuilder.UseEmbeddedBrowser();
+
                 appBuilder.UseCulture("zh-CN");
 
                 appBuilder.UseSingleApplicationInstanceMode(handler =>

@@ -43,6 +43,9 @@ namespace Forms.App.Main
         protected override void WinFormiumMain(string[] args)
         {
             ApplicationConfiguration.Initialize();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
@@ -56,8 +59,14 @@ namespace Forms.App.Main
             // 在此处配置 Chromium Embedded Framwork
             cef.ConfigureCommandLineArguments(cmdLine =>
             {
-                cmdLine.AppendArgument("disable-web-security");
-                cmdLine.AppendSwitch("no-proxy-server");
+                cmdLine.AppendSwitch("enable-gpu");
+                //cmdLine.AppendArgument("disable-web-security");
+                //cmdLine.AppendSwitch("no-proxy-server");
+            });
+
+            cef.ConfigureDefaultSettings(settings =>
+            {
+                settings.WindowlessRenderingEnabled = true;
             });
 
             cef.UseCustomUserDataDirectory(Path.Combine(AppPath.RootPath, "Local"));

@@ -54,10 +54,12 @@ internal abstract class MessageBridgeHandler
     }
 
     public abstract void OnBeforeBrowse(CefBrowser browser, CefFrame frame, CefRequest request, bool userGesture, bool isRedirect);
+
     public abstract void OnBeforeClose(CefBrowser browser);
 
     public abstract void OnRenderProcessTerminated(CefBrowser browser);
 
     public abstract void OnRemoteContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context);
+
     public abstract void OnRemoteContextReleased(CefBrowser browser, CefFrame frame, CefV8Context context);
 }

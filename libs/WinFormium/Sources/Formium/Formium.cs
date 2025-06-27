@@ -35,7 +35,6 @@ public abstract partial class Formium
     /// </summary>
     public bool AllowFullScreen { get => CurrentFormStyle.AllowFullScreen; set => CurrentFormStyle.AllowFullScreen = value; }
 
-
     public bool EnableSplashScreen { get; set; } = true;
 
     /// <summary>
@@ -113,10 +112,6 @@ public abstract partial class Formium
 
         }
     }
-
-
-
-
 
     /// <summary>
     /// Gets or sets a value indicating whether the form should be displayed as a topmost form.
@@ -470,8 +465,6 @@ public abstract partial class Formium
 
         InvokeOnUIThread(() => { Location = new Point(screen.WorkingArea.Left + (screen.WorkingArea.Width - Width) / 2, screen.WorkingArea.Top + (screen.WorkingArea.Height - Height) / 2); });
     }
-
-
 
     /// <summary>
     /// Shows the form.
@@ -891,7 +884,6 @@ public abstract partial class Formium
     /// <returns>
     /// Returns true for success, otherwise false.
     /// </returns>
-
     public bool RegisterJavaScriptObject(JavaScriptObjectRegisterHandle handle, string name, JavaScriptObjectWrapper jsHostObject)
     {
         return WebView.RegisterJavaScriptObject(handle, name, jsHostObject);
@@ -914,8 +906,6 @@ public abstract partial class Formium
 
         WebView.JavaScriptWindowBindingObject.PostBrowserMessage(frame, message, args);
     }
-
-
 
     /// <summary>
     /// Shows the about dialog.

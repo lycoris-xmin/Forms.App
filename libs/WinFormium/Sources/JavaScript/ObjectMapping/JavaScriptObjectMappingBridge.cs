@@ -92,7 +92,4 @@ internal partial class JavaScriptObjectMappingBridge : MessageBridgeHandler
 
         return true;
     }
-
-
-
 }

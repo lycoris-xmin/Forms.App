@@ -152,6 +152,10 @@ public class JavaScriptObject : JavaScriptValue, IDictionary<string, JavaScriptV
         };
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="frame"></param>
     protected internal override void AssociateToFrame(CefFrame? frame)
     {
         base.AssociateToFrame(frame);
