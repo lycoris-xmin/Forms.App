@@ -442,15 +442,12 @@ public abstract class FramelessWindowBase : StandardWindowBase
             {
 
             }
-
-
         }
         else
         {
             Region?.Dispose();
             Region = null;
         }
-
     }
 
 
