@@ -1,191 +1,47 @@
-﻿using Forms.App.Model.Constants;
-using Lycoris.Common.Extensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Forms.App.Core.Logging.Impl
 {
     public class ServerLogger : IServerLogger
     {
         private readonly ILogger _logger;
-        private readonly IHttpContextAccessor _context;
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly string _className;
 
-        public ServerLogger(ILogger logger, IHttpContextAccessor context, IServiceScopeFactory serviceScopeFactory, string? className)
+        public ServerLogger(ILogger logger)
         {
             _logger = logger;
-            _context = context;
-            _serviceScopeFactory = serviceScopeFactory;
-            _className = className ?? "";
         }
 
         /// <summary>
         /// 日志记录
         /// </summary>
         /// <param name="message"></param>
-        public void Info(string message)
-        {
-            var traceId = GetLogTraceId();
-            if (!traceId.IsNullOrEmpty())
-                _logger.LogInformation("{traceId} - {message}", GetLogTraceId(traceId), message);
-            else
-                _logger.LogInformation("{message}", message);
-        }
+        public void Info(string message) => _logger.LogInformation("{message}", message);
 
         /// <summary>
         /// 日志记录
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="traceId"></param>
-        public void Info(string message, string traceId)
-        {
-            traceId = GetLogTraceId(traceId);
-            if (!traceId.IsNullOrEmpty())
-                _logger.LogInformation("{traceId} - {message}", GetLogTraceId(traceId), message);
-            else
-                _logger.LogInformation("{message}", message);
-        }
-
-        /// <summary>
-        /// 日志记录
-        /// </summary>
-        /// <param name="message"></param>
-        public void Warn(string message)
-        {
-            var traceId = GetLogTraceId();
-            if (!traceId.IsNullOrEmpty())
-                _logger.LogWarning("{traceId} - {message}", traceId, message);
-            else
-                _logger.LogWarning("{message}", message);
-        }
-
-        /// <summary>
-        /// 日志记录
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="traceId"></param>
-        public void Warn(string message, string traceId)
-        {
-            traceId = GetLogTraceId(traceId);
-            if (!traceId.IsNullOrEmpty())
-                _logger.LogWarning("{traceId} - {message}", traceId, message);
-            else
-                _logger.LogWarning("{message}", message);
-        }
+        public void Warn(string message) => _logger.LogWarning("{message}", message);
 
         /// <summary>
         /// 日志记录
         /// </summary>
         /// <param name="message"></param>
         /// <param name="ex"></param>
-        public void Warn(string message, Exception? ex)
-        {
-            var traceId = GetLogTraceId();
-            if (!traceId.IsNullOrEmpty())
-                _logger.LogWarning(ex, "{traceId} - {message}", traceId, message);
-            else
-                _logger.LogWarning(ex, "{message}", message);
-        }
+        public void Warn(string message, Exception? ex) => _logger.LogWarning(ex, "{message}", message);
+
+        /// <summary>
+        /// 日志记录
+        /// </summary>
+        /// <param name="message"></param>
+        public void Error(string message) => _logger.LogError("{message}", message);
 
         /// <summary>
         /// 日志记录
         /// </summary>
         /// <param name="message"></param>
         /// <param name="ex"></param>
-        /// <param name="traceId"></param>
-        public void Warn(string message, Exception? ex, string traceId)
-        {
-            traceId = GetLogTraceId(traceId);
-            if (!traceId.IsNullOrEmpty())
-                _logger.LogWarning(ex, "{traceId} - {message}", traceId, message);
-            else
-                _logger.LogWarning(ex, "{message}", message);
-        }
-
-        /// <summary>
-        /// 日志记录
-        /// </summary>
-        /// <param name="message"></param>
-        public void Error(string message)
-        {
-            var traceId = GetLogTraceId();
-            if (!traceId.IsNullOrEmpty())
-                _logger.LogError("{traceId} - {message}", traceId, message);
-            else
-                _logger.LogError("{message}", message);
-        }
-
-        /// <summary>
-        /// 日志记录
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="traceId"></param>
-        public void Error(string message, string traceId)
-        {
-            traceId = GetLogTraceId(traceId);
-            if (!traceId.IsNullOrEmpty())
-                _logger.LogError("{traceId} - {message}", traceId, message);
-            else
-                _logger.LogError("{message}", message);
-        }
-
-        /// <summary>
-        /// 日志记录
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="ex"></param>
-        public void Error(string message, Exception? ex)
-        {
-            var traceId = GetLogTraceId();
-            if (!traceId.IsNullOrEmpty())
-            {
-                _logger.LogError(ex, "{traceId} - {message}", traceId, message);
-            }
-            else
-            {
-                _logger.LogError(ex, "{message}", message);
-            }
-        }
-
-        /// <summary>
-        /// 日志记录
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="ex"></param>
-        /// <param name="traceId"></param>
-        public void Error(string message, Exception? ex, string traceId)
-        {
-            traceId = GetLogTraceId(traceId);
-            if (!traceId.IsNullOrEmpty())
-            {
-                _logger.LogError(ex, "{traceId} - {message}", traceId, message);
-            }
-            else
-            {
-                _logger.LogError(ex, "{message}", message);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="traceId"></param>
-        /// <returns></returns>
-        private string GetLogTraceId(string? traceId = null)
-        {
-            if (!traceId.IsNullOrEmpty())
-                return traceId!;
-
-            if (_context != null && _context.HttpContext != null && _context.HttpContext.Items != null)
-                traceId = _context.HttpContext.Items.GetValue(HttpItems.TRACE_ID);
-
-            if (!traceId.IsNullOrEmpty())
-                return traceId!;
-
-            return "";
-        }
+        public void Error(string message, Exception? ex) => _logger.LogError(ex, "{message}", message);
 
         /// <summary>
         /// 

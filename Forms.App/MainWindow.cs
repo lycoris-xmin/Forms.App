@@ -1,4 +1,5 @@
 ﻿using Forms.App.Core.Logging;
+using Forms.App.Model;
 using WinFormium;
 using WinFormium.CefGlue;
 using WinFormium.Sources.Formium.EventArgs;
@@ -11,36 +12,50 @@ namespace Forms.App.Main
     {
         private readonly IServerLogger _logger;
 
-        public MainWindow()
+        public MainWindow(IServerLoggerFactory factory)
         {
-            Url = "https://www.google.com";
+            this.Url = "https://pvfriend.com";
+            _logger = factory.CreateLogger<MainWindow>();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
         protected override FormStyle ConfigureWindowStyle(WindowStyleBuilder builder)
         {
             // 此处配置窗口的样式和属性，或留空以使用默认样式
             var style = builder.UseSystemForm();
 
             style.TitleBar = true;
-
-            style.DefaultAppTitle = "My first WinFomrim app";
+            style.DefaultAppTitle = "商友联盟";
 
             return style;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
         protected override void OnLoaded(BrowserEventArgs args)
         {
-            ShowDevTools();
+            if (AppSettings.IsDebugger)
+                ShowDevTools();
 
             base.OnLoaded(args);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
         protected override void OnClosing(ClosingEventArgs args)
         {
             try
             {
-                CefRuntime.QuitMessageLoop();   // 如果你用了 CEF 消息循环
-                CefRuntime.Shutdown();          // 或 Cef.Shutdown();
+                CefRuntime.QuitMessageLoop();
+                CefRuntime.Shutdown();
             }
             catch (Exception)
             {
