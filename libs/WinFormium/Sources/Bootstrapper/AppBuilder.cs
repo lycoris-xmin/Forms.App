@@ -218,7 +218,6 @@ public sealed class AppBuilder
 
             Services.AddSingleton(mainWindowOpts);
 
-
             var createAction = startup.UseMainWindow(mainWindowOpts);
 
             if (createAction != null)
@@ -229,10 +228,7 @@ public sealed class AppBuilder
             }
         }
 
-        if (_configureChromium != null)
-        {
-            _configureChromium.Invoke(chromiumConfig);
-        }
+        _configureChromium?.Invoke(chromiumConfig);
 
         var env = chromiumConfig.Build();
 

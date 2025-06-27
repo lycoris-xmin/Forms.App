@@ -1,6 +1,7 @@
 using Forms.App.Common;
 using Forms.App.Core;
 using Forms.App.EntityFrameworkCore;
+using Forms.App.Main.App_Data;
 using Forms.App.Model;
 using Forms.App.Services;
 using Lycoris.Autofac.Extensions;
@@ -79,6 +80,8 @@ namespace Forms.App.Main
             });
 
             var appHost = hostBuilder.Build();
+
+            FormAppContext.ServiceProvider = appHost.Services;
 
             var app = appHost.Services.GetService<WinFormiumApp>();
 
