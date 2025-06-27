@@ -1,6 +1,6 @@
 ﻿using Forms.App.Core.Logging;
-using Forms.App.Main.App_Data;
 using Forms.App.Model;
+using Forms.App.Model.Contexts;
 using Microsoft.Extensions.DependencyInjection;
 using WinFormium.CefGlue;
 using WinFormium.Sources.Bootstrapper;
@@ -60,7 +60,7 @@ namespace Forms.App.Main
                 cmdLine.AppendSwitch("no-proxy-server");
             });
 
-            cef.UseCustomUserDataDirectory(Path.Combine(AppPath.RootPath, "UserData"));
+            cef.UseCustomUserDataDirectory(Path.Combine(AppPath.RootPath, "Local"));
         }
 
         /// <summary>

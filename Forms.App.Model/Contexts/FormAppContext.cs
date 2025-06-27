@@ -1,4 +1,4 @@
-﻿namespace Forms.App.Main.App_Data
+﻿namespace Forms.App.Model.Contexts
 {
     public class FormAppContext
     {

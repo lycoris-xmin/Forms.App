@@ -1,7 +1,6 @@
 ﻿using Forms.App.Core.Logging;
 using Forms.App.Model;
 using WinFormium;
-using WinFormium.CefGlue;
 using WinFormium.Sources.Formium.EventArgs;
 using WinFormium.Sources.Formium.Forms;
 using WinFormium.Sources.Formium.Forms.@base;
@@ -15,6 +14,7 @@ namespace Forms.App.Main
         public MainWindow(IServerLoggerFactory factory)
         {
             this.Url = "https://pvfriend.com";
+            this.WindowState = WinFormium.Sources.Formium.FormiumWindowState.Maximized;
             _logger = factory.CreateLogger<MainWindow>();
         }
 
@@ -44,25 +44,6 @@ namespace Forms.App.Main
                 ShowDevTools();
 
             base.OnLoaded(args);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
-        protected override void OnClosing(ClosingEventArgs args)
-        {
-            try
-            {
-                CefRuntime.QuitMessageLoop();
-                CefRuntime.Shutdown();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            base.OnClosing(args);
         }
     }
 }
