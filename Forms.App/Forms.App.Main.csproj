@@ -47,7 +47,7 @@
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</None>
 
-		<None Update="Vue\*">
+		<None Update="Vue\**\*">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
 		</None>
