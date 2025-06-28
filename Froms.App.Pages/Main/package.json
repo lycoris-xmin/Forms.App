@@ -15,7 +15,7 @@
     "pnpm": ">=8.7.0"
   },
   "scripts": {
-    "build": "vite build --mode prod",
+    "build": "node ./build/clean/index.js && vite build --mode prod",
     "cleanup": "sa cleanup",
     "dev": "vite --mode test",
     "gen-route": "sa gen-route",
