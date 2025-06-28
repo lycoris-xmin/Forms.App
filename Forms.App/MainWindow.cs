@@ -56,6 +56,8 @@ namespace Forms.App.Main
                     new RootJavaScriptObject(this.Browser, InvokeOnUIThread).Build()
                 };
 
+
+
                 var hbrjso = this.BeginRegisterJavaScriptObject(frame);
 
                 jsMapList.ForEach(x => this.RegisterJavaScriptObject(hbrjso, x.Name, x.JsObject));

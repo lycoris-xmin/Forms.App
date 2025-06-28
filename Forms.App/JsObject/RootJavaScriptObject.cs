@@ -3,6 +3,7 @@ using WinFormium.CefGlue;
 
 namespace Forms.App.Main.JsObject
 {
+
     internal class RootJavaScriptObject : JavaScriptObjectBuilder
     {
         internal override string JsObjectName => "root";
