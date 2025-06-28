@@ -9,11 +9,9 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 	</PropertyGroup>
 
-
 	<ItemGroup>
 		<Folder Include="ApiServices\" />
-		<Folder Include="Vue\" />
-		<Folder Include="Pages\" />
+		<Folder Include="Source\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -45,16 +43,5 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</None>
-
-		<None Update="Pages\**\*">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-		</None>
-
-		<None Update="Vue\**\*">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
-		</None>
 	</ItemGroup>
-
 </Project>

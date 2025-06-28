@@ -1,1 +1,0 @@
-import{T as o}from"./index-ufoS3o2x.js";import{d as e,c as r,o as t}from"./index-C4fDvJn1.js";import"./_plugin-vue_export-helper-DlAUqK2U.js";const _=e({name:"pdd_shop",__name:"index",setup(a){return(n,p)=>(t(),r(o))}});export{_ as default};

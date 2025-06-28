@@ -1,1 +1,0 @@
-import{T as e}from"./index-CoJhbu0u.js";import{d as o,c as r,o as t}from"./index-CZVtSjPQ.js";import"./_plugin-vue_export-helper-DlAUqK2U.js";const _=o({name:"rednote_comment",__name:"index",setup(n){return(a,m)=>(t(),r(e))}});export{_ as default};

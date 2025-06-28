@@ -1,1 +1,0 @@
-const e=[{value:0,label:"正常",color:"success"},{value:-1,label:"冻结",color:"error"}],l=[{value:0,label:"常规商户",color:"geekblue"},{value:10,label:"内部商户",color:"magenta"},{value:20,label:"合作用户",color:"magenta"}];export{l as t,e as u};
