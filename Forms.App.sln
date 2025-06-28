@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36127.28 d17.14
+VisualStudioVersion = 17.14.36127.28
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forms.App.Main", "Forms.App\Forms.App.Main.csproj", "{4B84C255-B2A5-4B43-AE3F-91E1CB11F12B}"
 EndProject
@@ -20,8 +20,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lycoris.Autofac.Extensions", "libs\Lycoris.Autofac.Extensions\Lycoris.Autofac.Extensions.csproj", "{6DE442FF-181F-1D5A-3362-47D9B88ADF27}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormium", "libs\WinFormium\WinFormium.csproj", "{C421D0F0-CAC3-2D64-E938-236F97F39C13}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lycoris.Common", "libs\Lycoris.Common\Lycoris.Common.csproj", "{9D522A48-CCB8-350C-A15B-85A75F71D7CB}"
 EndProject
@@ -65,10 +63,6 @@ Global
 		{6DE442FF-181F-1D5A-3362-47D9B88ADF27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DE442FF-181F-1D5A-3362-47D9B88ADF27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DE442FF-181F-1D5A-3362-47D9B88ADF27}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C421D0F0-CAC3-2D64-E938-236F97F39C13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C421D0F0-CAC3-2D64-E938-236F97F39C13}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C421D0F0-CAC3-2D64-E938-236F97F39C13}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C421D0F0-CAC3-2D64-E938-236F97F39C13}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9D522A48-CCB8-350C-A15B-85A75F71D7CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9D522A48-CCB8-350C-A15B-85A75F71D7CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D522A48-CCB8-350C-A15B-85A75F71D7CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -83,7 +77,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6DE442FF-181F-1D5A-3362-47D9B88ADF27} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{C421D0F0-CAC3-2D64-E938-236F97F39C13} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{9D522A48-CCB8-350C-A15B-85A75F71D7CB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{64742E8C-FA12-62DF-2212-1738EC8581DC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
