@@ -32,5 +32,7 @@ namespace Forms.App.Main.JsObject.Objects
         /// 
         /// </summary>
         private void GotoLaunchPage() => this.Browser?.GetMainFrame().LoadUrl(AppSettings.Route.LaunchUrl);
+
+
     }
 }

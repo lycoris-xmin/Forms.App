@@ -80,6 +80,7 @@ namespace Forms.App.Main.JsObject
         private static Func<CefBrowser?, InvokeOnUIThread, JavaScriptObjectBuilder> CreateFactory(Type type)
         {
             var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
             var ctorArgs = new[] { typeof(CefBrowser), typeof(InvokeOnUIThread) };
 
             var ctor = type.GetConstructor(flags, binder: null, ctorArgs, modifiers: null)

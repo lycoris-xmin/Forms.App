@@ -36,7 +36,8 @@
 		</None>
 
 		<None Update="setup.iss">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</None>
 
 		<None Update="Source\**\*">
