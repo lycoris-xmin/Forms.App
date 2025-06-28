@@ -82,9 +82,14 @@ namespace Forms.App.Main.JsObject.Objects
             if (!array.HasValue())
                 return "0";
 
+            var numbers = array.Select(x => x.GetDecimal()).ToList();
+
+            if (numbers.Any(x => x == 0))
+                throw new ArgumentOutOfRangeException("the number has zero value");
+
             var result = 1m;
 
-            foreach (var item in array.Select(x => x.GetDecimal()))
+            foreach (var item in numbers)
                 result = result / item;
 
             return result.ToString();
