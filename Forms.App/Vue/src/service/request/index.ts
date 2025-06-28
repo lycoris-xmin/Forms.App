@@ -12,11 +12,10 @@ const { baseURL, otherBaseURL } = getServiceBaseURL(import.meta.env, isHttpProxy
 const conf = {
   baseURL,
   headers: {},
-  timeout: 180000,
   withCredentials: true
 };
 
-export function getApiUrl() {
+function getApiUrl() {
   let url = baseURL === '/' ? `${location.protocol}//${location.host}` : baseURL;
 
   // 如果尾部有斜杠 '/', 则移除
@@ -26,6 +25,8 @@ export function getApiUrl() {
 
   return url;
 }
+
+export const apiUrl = getApiUrl();
 
 export function baseResp() {
   return Promise.resolve({
@@ -40,8 +41,15 @@ export function baseResp() {
 export const flatRequest = createFlatRequest<any, RequestInstanceState>(conf, {
   async onRequest(config) {
     const Authorization = getAuthorization();
-    Object.assign(config.headers, { 'X-Authorize': Authorization });
-    Object.assign(config.headers, { 'X-Request': new Date().getTime() });
+
+    Object.assign(config.headers, { Authorization });
+
+    Object.assign(config.headers, { 'X-Request': new Date(new Date().toISOString()).getTime() });
+
+    if (window.$fingerprint) {
+      Object.assign(config.headers, { 'X-Api-Token': window.$fingerprint });
+    }
+
     return config;
   },
   isBackendSuccess(response) {
@@ -172,35 +180,24 @@ export const demoRequest = createRequest<App.Service.DemoResponse>(
   }
 );
 
-export function objectToFormData(obj: any, formData: FormData = new FormData(), parentKey = ''): FormData {
-  if (obj === null || obj === void 0) return formData;
+export function objectToFormData(obj, formData = new FormData(), parentKey = '') {
+  if (obj === null || obj === undefined) return formData;
 
-  // 如果是文件数组（数组内全是 File 或 Blob）
-  if (Array.isArray(obj) && obj.length && obj.every(item => item instanceof File || item instanceof Blob)) {
-    obj.forEach(file => {
-      // 用同一个字段名 append 多次，后端才能绑定 List<IFormFile>
-      formData.append(parentKey, file);
-    });
-  }
-  // 如果是数组（非文件数组）并且非支付数组
-  else if (Array.isArray(obj)) {
-    obj.forEach((item, index) => {
-      objectToFormData(item, formData, `${parentKey}[${index}]`);
-    });
-  }
-  // 如果是对象（非 File）
-  else if (typeof obj === 'object' && !(obj instanceof File || obj instanceof Blob)) {
-    Object.keys(obj).forEach(key => {
-      const value = obj[key];
-      // 忽略值为 null 或 undefined 的字段
-      if (value === null || value === void 0) return;
-
-      const newKey = parentKey ? `${parentKey}.${key}` : key;
-      objectToFormData(value, formData, newKey);
-    });
-  }
-  // 基础类型 或 File
-  else {
+  if (typeof obj === 'object' && !(obj instanceof File)) {
+    if (Array.isArray(obj)) {
+      // 处理数组，使用 `${parentKey}[]` 形式
+      obj.forEach((item, index) => {
+        objectToFormData(item, formData, `${parentKey}[${index}]`);
+      });
+    } else {
+      // 处理对象
+      Object.keys(obj).forEach(key => {
+        const newKey = parentKey ? `${parentKey}[${key}]` : key;
+        objectToFormData(obj[key], formData, newKey);
+      });
+    }
+  } else {
+    // 处理基本类型和 File
     formData.append(parentKey, obj);
   }
 

@@ -4,19 +4,15 @@ import axiosRetry from 'axios-retry';
 import { nanoid } from '@sa/utils';
 import { createAxiosConfig, createDefaultOptions, createRetryOptions } from './options';
 import { BACKEND_ERROR_CODE, REQUEST_ID_KEY } from './constant';
-import type {
-  CustomAxiosRequestConfig,
-  FlatRequestInstance,
-  MappedType,
-  RequestInstance,
-  RequestOption,
-  ResponseType
-} from './type';
+import type { CustomAxiosRequestConfig, FlatRequestInstance, MappedType, RequestInstance, RequestOption, ResponseType } from './type';
 
-function createCommonRequest<ResponseData = any>(
-  axiosConfig?: CreateAxiosDefaults,
-  options?: Partial<RequestOption<ResponseData>>
-) {
+/**
+ * 创建通用请求方法
+ *
+ * @param axiosConfig Axios 初始化配置
+ * @param options 请求处理钩子函数配置
+ */
+function createCommonRequest<ResponseData = any>(axiosConfig?: CreateAxiosDefaults, options?: Partial<RequestOption<ResponseData>>) {
   const opts = createDefaultOptions<ResponseData>(options);
 
   const axiosConf = createAxiosConfig(axiosConfig);
@@ -24,62 +20,62 @@ function createCommonRequest<ResponseData = any>(
 
   const abortControllerMap = new Map<string, AbortController>();
 
-  // config axios retry
+  // 配置 axios 重试机制
   const retryOptions = createRetryOptions(axiosConf);
   axiosRetry(instance, retryOptions);
 
+  // 请求拦截器
   instance.interceptors.request.use(conf => {
     const config: InternalAxiosRequestConfig = { ...conf };
 
-    // set request id
+    // 设置请求 ID
     const requestId = nanoid();
     config.headers.set(REQUEST_ID_KEY, requestId);
 
-    // config abort controller
+    // 配置 AbortController
     if (!config.signal) {
       const abortController = new AbortController();
       config.signal = abortController.signal;
       abortControllerMap.set(requestId, abortController);
     }
 
-    // handle config by hook
+    // 执行请求前钩子处理
     const handledConfig = opts.onRequest?.(config) || config;
 
     return handledConfig;
   });
 
+  // 响应拦截器
   instance.interceptors.response.use(
     async response => {
       const responseType: ResponseType = (response.config?.responseType as ResponseType) || 'json';
 
+      // 非 JSON 响应或后端判断为成功，直接返回
       if (responseType !== 'json' || opts.isBackendSuccess(response)) {
         return Promise.resolve(response);
       }
 
+      // 后端失败处理钩子
       const fail = await opts.onBackendFail(response, instance);
       if (fail) {
         return fail;
       }
 
-      const backendError = new AxiosError<ResponseData>(
-        'the backend request error',
-        BACKEND_ERROR_CODE,
-        response.config,
-        response.request,
-        response
-      );
+      // 构造并抛出后端错误
+      const backendError = new AxiosError<ResponseData>('请求异常', BACKEND_ERROR_CODE, response.config, response.request, response);
 
       await opts.onError(backendError);
 
       return Promise.reject(backendError);
     },
     async (error: AxiosError<ResponseData>) => {
+      // 请求异常错误处理
       await opts.onError(error);
-
       return Promise.reject(error);
     }
   );
 
+  // 取消单个请求
   function cancelRequest(requestId: string) {
     const abortController = abortControllerMap.get(requestId);
     if (abortController) {
@@ -88,6 +84,7 @@ function createCommonRequest<ResponseData = any>(
     }
   }
 
+  // 取消所有请求
   function cancelAllRequest() {
     abortControllerMap.forEach(abortController => {
       abortController.abort();
@@ -104,20 +101,15 @@ function createCommonRequest<ResponseData = any>(
 }
 
 /**
- * create a request instance
+ * 创建标准请求实例
  *
- * @param axiosConfig axios config
- * @param options request options
+ * @param axiosConfig Axios 配置
+ * @param options 请求处理钩子选项
  */
-export function createRequest<ResponseData = any, State = Record<string, unknown>>(
-  axiosConfig?: CreateAxiosDefaults,
-  options?: Partial<RequestOption<ResponseData>>
-) {
+export function createRequest<ResponseData = any, State = Record<string, unknown>>(axiosConfig?: CreateAxiosDefaults, options?: Partial<RequestOption<ResponseData>>) {
   const { instance, opts, cancelRequest, cancelAllRequest } = createCommonRequest<ResponseData>(axiosConfig, options);
 
-  const request: RequestInstance<State> = async function request<T = any, R extends ResponseType = 'json'>(
-    config: CustomAxiosRequestConfig
-  ) {
+  const request: RequestInstance<State> = async function request<T = any, R extends ResponseType = 'json'>(config: CustomAxiosRequestConfig) {
     const response: AxiosResponse<ResponseData> = await instance(config);
 
     const responseType = response.config?.responseType || 'json';
@@ -137,23 +129,17 @@ export function createRequest<ResponseData = any, State = Record<string, unknown
 }
 
 /**
- * create a flat request instance
+ * 创建展平响应的请求实例
  *
- * The response data is a flat object: { data: any, error: AxiosError }
+ * 返回数据结构为：{ data: any, error: AxiosError, response: AxiosResponse }
  *
- * @param axiosConfig axios config
- * @param options request options
+ * @param axiosConfig Axios 配置
+ * @param options 请求处理钩子选项
  */
-export function createFlatRequest<ResponseData = any, State = Record<string, unknown>>(
-  axiosConfig?: CreateAxiosDefaults,
-  options?: Partial<RequestOption<ResponseData>>
-) {
+export function createFlatRequest<ResponseData = any, State = Record<string, unknown>>(axiosConfig?: CreateAxiosDefaults, options?: Partial<RequestOption<ResponseData>>) {
   const { instance, opts, cancelRequest, cancelAllRequest } = createCommonRequest<ResponseData>(axiosConfig, options);
 
-  const flatRequest: FlatRequestInstance<State, ResponseData> = async function flatRequest<
-    T = any,
-    R extends ResponseType = 'json'
-  >(config: CustomAxiosRequestConfig) {
+  const flatRequest: FlatRequestInstance<State, ResponseData> = async function flatRequest<T = any, R extends ResponseType = 'json'>(config: CustomAxiosRequestConfig) {
     try {
       const response: AxiosResponse<ResponseData> = await instance(config);
 
@@ -161,13 +147,16 @@ export function createFlatRequest<ResponseData = any, State = Record<string, unk
 
       if (responseType === 'json') {
         const data = opts.transformBackendResponse(response);
-
         return { data, error: null, response };
       }
 
-      return { data: response.data as MappedType<R, T>, error: null };
+      return { data: response.data as MappedType<R, T>, error: null, response };
     } catch (error) {
-      return { data: null, error, response: (error as AxiosError<ResponseData>).response };
+      return {
+        data: null,
+        error: error as AxiosError<ResponseData>,
+        response: (error as AxiosError<ResponseData>).response
+      };
     }
   } as FlatRequestInstance<State, ResponseData>;
 
@@ -181,9 +170,3 @@ export function createFlatRequest<ResponseData = any, State = Record<string, unk
 export { BACKEND_ERROR_CODE, REQUEST_ID_KEY };
 export type * from './type';
 export type { CreateAxiosDefaults, AxiosError };
-
-// js 单线程(异步) -> 浏览渲染模式 -> 微队列 宏队列
-
-// -> 执行顺序 ->
-
-//

@@ -1,43 +1,78 @@
 <script setup lang="ts">
-import { withDefaults } from 'vue';
-import { useAntdForm } from '@/hooks/common/form';
-import TableSearchFilter from '@/components/advanced/table-search-filter.vue';
-import type { EnumAntd } from '../shared/shared';
+  import { withDefaults } from 'vue';
+  import { useAntdForm, useFormRules } from '@/hooks/common/form';
+  import TableSearchFilter from '@/components/advanced/table-search-filter.vue';
+  import type { EnumMap } from '@/views/shared/types';
 
-defineOptions({
-  name: 'SystemUserListSearch'
-});
+  defineOptions({
+    name: 'UserListSearch'
+  });
 
-interface Emits {
-  (e: 'reset'): void;
-  (e: 'search'): void;
-}
+  interface Emits {
+    (e: 'reset'): void;
+    (e: 'search'): void;
+  }
 
-interface Props {
-  status?: Array<EnumAntd>;
-  role?: Array<EnumAntd>;
-}
+  interface Props {
+    status?: Array<EnumMap>;
+    role?: Array<EnumMap>;
+  }
 
-const { formRef, validate, resetFields } = useAntdForm();
+  const { formRef, validate, resetFields } = useAntdForm();
+  const { patternRules } = useFormRules();
+  const model = defineModel<Api.User.ListSearchFilter>('model', { required: true });
 
-const model = defineModel<Api.User.UserSearchFilter>('model', { required: true });
+  const props = withDefaults(defineProps<Props>(), {
+    status: () => [],
+    role: () => []
+  });
 
-const props = withDefaults(defineProps<Props>(), {
-  status: () => [],
-  role: () => []
-});
+  const rules = {
+    phone: [
+      {
+        validator(_, value) {
+          if (!value) {
+            return Promise.resolve();
+          }
 
-const emit = defineEmits<Emits>();
+          if (!patternRules.phone.pattern.test(value)) {
+            return Promise.reject(new Error(patternRules.phone.message));
+          }
 
-async function reset() {
-  await resetFields();
-  emit('reset');
-}
+          return Promise.resolve();
+        },
+        trigger: 'change'
+      }
+    ],
+    email: [
+      {
+        validator(_, value) {
+          if (!value) {
+            return Promise.resolve();
+          }
 
-async function search() {
-  await validate();
-  emit('search');
-}
+          if (!patternRules.email.pattern.test(value)) {
+            return Promise.reject(new Error(patternRules.email.message));
+          }
+
+          return Promise.resolve();
+        },
+        trigger: 'change'
+      }
+    ]
+  };
+
+  const emit = defineEmits<Emits>();
+
+  async function reset() {
+    await resetFields();
+    emit('reset');
+  }
+
+  async function search() {
+    await validate();
+    emit('search');
+  }
 </script>
 
 <template>
@@ -46,6 +81,7 @@ async function search() {
       ref="formRef"
       name="filer"
       :model="model"
+      :rules="rules"
       :label-col="{
         span: 5,
         md: 7
@@ -53,8 +89,13 @@ async function search() {
     >
       <ARow :gutter="[16, 16]" wrap>
         <ACol :span="24" :md="12" :lg="6">
+          <AFormItem label="手机号" name="phone" class="m-0">
+            <AInput v-model:value="model.phone" autocomplete="off" placeholder="精确查询" />
+          </AFormItem>
+        </ACol>
+        <ACol :span="24" :md="12" :lg="6">
           <AFormItem label="邮箱" name="email" class="m-0">
-            <AInput v-model:value="model.email" autocomplete="off" placeholder="支持模糊查询" />
+            <AInput v-model:value="model.email" autocomplete="off" placeholder="精确查询" />
           </AFormItem>
         </ACol>
         <ACol :span="24" :md="12" :lg="6">

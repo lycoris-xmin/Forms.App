@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { useFullscreen } from '@vueuse/core';
-import { useAppStore } from '@/store/modules/app';
-import { useThemeStore } from '@/store/modules/theme';
-import { GLOBAL_HEADER_MENU_ID } from '@/constants/app';
-import GlobalLogo from '../global-logo/index.vue';
-import GlobalBreadcrumb from '../global-breadcrumb/index.vue';
-// import ThemeButton from './components/theme-button.vue';
-import UserAvatar from './components/user-avatar.vue';
+  import { useFullscreen } from '@vueuse/core';
+  import { useAppStore } from '@/store/modules/app';
+  import { useThemeStore } from '@/store/modules/theme';
+  import { GLOBAL_HEADER_MENU_ID } from '@/constants/app';
+  import GlobalLogo from '../global-logo/index.vue';
+  import GlobalBreadcrumb from '../global-breadcrumb/index.vue';
+  import ThemeButton from './components/theme-button.vue';
+  import UserAvatar from './components/user-avatar.vue';
 
-defineOptions({
-  name: 'GlobalHeader'
-});
+  defineOptions({
+    name: 'GlobalHeader'
+  });
 
-interface Props {
-  /** Whether to show the logo */
-  showLogo?: App.Global.HeaderProps['showLogo'];
-  /** Whether to show the menu toggler */
-  showMenuToggler?: App.Global.HeaderProps['showMenuToggler'];
-  /** Whether to show the menu */
-  showMenu?: App.Global.HeaderProps['showMenu'];
-}
+  interface Props {
+    /** Whether to show the logo */
+    showLogo?: App.Global.HeaderProps['showLogo'];
+    /** Whether to show the menu toggler */
+    showMenuToggler?: App.Global.HeaderProps['showMenuToggler'];
+    /** Whether to show the menu */
+    showMenu?: App.Global.HeaderProps['showMenu'];
+  }
 
-defineProps<Props>();
+  defineProps<Props>();
 
-const appStore = useAppStore();
-const themeStore = useThemeStore();
-const { isFullscreen, toggle } = useFullscreen();
+  const appStore = useAppStore();
+  const themeStore = useThemeStore();
+  const { isFullscreen, toggle } = useFullscreen();
 </script>
 
 <template>
@@ -37,23 +37,10 @@ const { isFullscreen, toggle } = useFullscreen();
       <GlobalBreadcrumb v-if="!appStore.isMobile" class="ml-12px" />
     </div>
     <div class="h-full flex-y-center justify-end">
-      <FullScreen v-if="!appStore.isMobile && false" :full="isFullscreen" @click="toggle" />
-      <!--
- <LangSwitch
-        v-if="false"
-        :lang="appStore.locale"
-        :lang-options="appStore.localeOptions"
-        @change-lang="appStore.changeLocale"
-      /> 
--->
-      <!--
- <ThemeSchemaSwitch
-        :theme-schema="themeStore.themeScheme"
-        :is-dark="themeStore.darkMode"
-        @switch="themeStore.toggleThemeScheme"
-      /> 
--->
-      <!-- <ThemeButton /> -->
+      <FullScreen v-if="!appStore.isMobile" :full="isFullscreen" @click="toggle" />
+      <LangSwitch :lang="appStore.locale" :lang-options="appStore.localeOptions" @change-lang="appStore.changeLocale" />
+      <ThemeSchemaSwitch :theme-schema="themeStore.themeScheme" :is-dark="themeStore.darkMode" @switch="themeStore.toggleThemeScheme" />
+      <ThemeButton />
       <UserAvatar />
     </div>
   </DarkModeContainer>

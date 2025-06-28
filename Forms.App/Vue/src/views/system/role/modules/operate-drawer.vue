@@ -1,108 +1,106 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch, withDefaults } from 'vue';
-import { useAntdForm, useFormRules } from '@/hooks/common/form';
-import { fetchCreateRole, fetchUpdateRole } from '@/service/api';
+  import { computed, reactive, ref, watch, withDefaults } from 'vue';
+  import { useAntdForm, useFormRules } from '@/hooks/common/form';
+  import { createRoleApi, updateRoleApi } from '@/service/api';
 
-defineOptions({
-  name: 'RoleOperateDrawer'
-});
+  defineOptions({
+    name: 'RoleOperateDrawer'
+  });
 
-interface Props {
-  operateType?: AntDesign.TableOperateType;
-  rowData?: Api.Product.TaobaoData | null;
-}
-
-interface Emits {
-  (e: 'submitted'): void;
-}
-
-type LoadingMap = {
-  submit: boolean;
-};
-
-const { formRef, validate, resetFields } = useAntdForm();
-
-const visible = defineModel<boolean>('visible', {
-  default: false
-});
-
-const loadingMap = reactive<LoadingMap>({
-  submit: false
-});
-
-const props = withDefaults(defineProps<Props>(), {
-  operateType: 'add',
-  rowData: null
-});
-
-const emit = defineEmits<Emits>();
-
-const title = computed(() => {
-  const titles: Record<AntDesign.TableOperateType, string> = {
-    add: '新增角色',
-    edit: '编辑角色'
-  };
-  return titles[props.operateType];
-});
-
-const isEdit = computed<boolean>(() => {
-  return props.operateType === 'edit';
-});
-
-const model = ref(createDefaultModel());
-
-const { defaultRequiredRule } = useFormRules();
-
-const rules = {
-  roleName: defaultRequiredRule
-};
-
-watch(visible, () => {
-  if (visible.value) {
-    initModelHandler();
-    resetFields();
+  interface Props {
+    operateType?: AntDesign.TableOperateType;
+    rowData?: Api.Product.TaobaoData | null;
   }
-});
 
-function createDefaultModel(): Api.Role.UpdateRole {
-  return {
-    id: '',
-    roleName: ''
+  interface Emits {
+    (e: 'submitted'): void;
+  }
+
+  type LoadingMap = {
+    submit: boolean;
   };
-}
 
-function initModelHandler() {
-  model.value = createDefaultModel();
+  const { formRef, validate, resetFields } = useAntdForm();
 
-  if (isEdit.value) {
-    if (props.rowData) {
-      Object.assign(model.value, props.rowData);
+  const visible = defineModel<boolean>('visible', {
+    default: false
+  });
+
+  const loadingMap = reactive<LoadingMap>({
+    submit: false
+  });
+
+  const props = withDefaults(defineProps<Props>(), {
+    operateType: 'add',
+    rowData: null
+  });
+
+  const emit = defineEmits<Emits>();
+
+  const title = computed(() => {
+    const titles: Record<AntDesign.TableOperateType, string> = {
+      add: '新增角色',
+      edit: '编辑角色'
+    };
+    return titles[props.operateType];
+  });
+
+  const isEdit = computed<boolean>(() => {
+    return props.operateType === 'edit';
+  });
+
+  const model = ref(createDefaultModel());
+
+  const { defaultRequiredRule } = useFormRules();
+
+  const rules = {
+    roleName: defaultRequiredRule
+  };
+
+  watch(visible, () => {
+    if (visible.value) {
+      initModelHandler();
+      resetFields();
+    }
+  });
+
+  function createDefaultModel(): Api.Role.UpdateRole {
+    return {
+      id: '',
+      roleName: ''
+    };
+  }
+
+  function initModelHandler() {
+    model.value = createDefaultModel();
+
+    if (isEdit.value) {
+      if (props.rowData) {
+        Object.assign(model.value, props.rowData);
+      }
     }
   }
-}
 
-function closeDrawer() {
-  visible.value = false;
-}
-
-async function submitHandler() {
-  await validate();
-
-  loadingMap.submit = true;
-  try {
-    const { data: res, error } = isEdit.value
-      ? await fetchUpdateRole({ ...model.value })
-      : await fetchCreateRole(model.value.roleName);
-
-    if (!error && res && res.code === 0) {
-      window.$message?.success('保存成功');
-      closeDrawer();
-      emit('submitted');
-    }
-  } finally {
-    loadingMap.submit = false;
+  function closeDrawer() {
+    visible.value = false;
   }
-}
+
+  async function submitHandler() {
+    await validate();
+
+    loadingMap.submit = true;
+    try {
+      const { data: res, error } = isEdit.value ? await updateRoleApi({ ...model.value }) : await createRoleApi(model.value.roleName);
+
+      if (!error && res && res.code === 0) {
+        window.$message?.success('保存成功');
+        closeDrawer();
+        emit('submitted');
+      }
+    } finally {
+      loadingMap.submit = false;
+    }
+  }
 </script>
 
 <template>
@@ -124,7 +122,7 @@ async function submitHandler() {
 </template>
 
 <style scoped lang="scss">
-.role-select {
-  gap: 10px;
-}
+  .role-select {
+    gap: 10px;
+  }
 </style>

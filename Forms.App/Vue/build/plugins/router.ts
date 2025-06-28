@@ -2,31 +2,21 @@ import type { RouteMeta } from 'vue-router';
 import ElegantVueRouter from '@elegant-router/vue/vite';
 import type { RouteKey } from '@elegant-router/types';
 
-export function setupElegantRouter() {
+export function setupElegantRouter(viteEnv: Env.ImportMeta) {
+  const isPhoneLogin = viteEnv.VITE_LOGIN_TYPE === 'phone';
   return ElegantVueRouter({
     layouts: {
       base: 'src/layouts/base-layout/index.vue',
       blank: 'src/layouts/blank-layout/index.vue'
     },
     customRoutes: {
-      names: [
-        'exception_403',
-        'exception_404',
-        'exception_500',
-        'document_project',
-        'document_project-link',
-        'document_vue',
-        'document_vite',
-        'document_unocss',
-        'document_naive',
-        'document_antd'
-      ]
+      names: ['exception_403', 'exception_404', 'exception_500', 'document_project', 'document_project-link', 'document_vue', 'document_vite', 'document_unocss', 'document_naive', 'document_antd']
     },
     routePathTransformer(routeName, routePath) {
       const key = routeName as RouteKey;
 
       if (key === 'login') {
-        const modules: UnionKey.LoginModule[] = ['pwd-login', 'code-login', 'register', 'reset-pwd', 'bind-wechat'];
+        const modules: UnionKey.LoginModule[] = isPhoneLogin ? ['phone-pwd-login', 'code-login', 'phone-register', 'reset-pwd', 'bind-wechat'] : ['email-pwd-login', 'email-register', 'reset-pwd', 'bind-wechat'];
 
         const moduleReg = modules.join('|');
 

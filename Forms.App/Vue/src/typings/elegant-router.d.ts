@@ -32,77 +32,20 @@ declare module "@elegant-router/types" {
     "403": "/403";
     "404": "/404";
     "500": "/500";
-    "about": "/about";
-    "about_doc": "/about/doc";
-    "about_update": "/about/update";
-    "alibaba": "/alibaba";
-    "alibaba_comment": "/alibaba/comment";
-    "alibaba_product": "/alibaba/product";
-    "alibaba_shop": "/alibaba/shop";
-    "alibaba_task": "/alibaba/task";
-    "device": "/device";
-    "device_alibaba": "/device/alibaba";
-    "device_detail": "/device/detail/:id";
-    "device_douyin": "/device/douyin";
-    "device_jingdong": "/device/jingdong";
-    "device_list": "/device/list";
-    "device_pdd": "/device/pdd";
-    "device_rednote": "/device/rednote";
-    "device_taobao": "/device/taobao";
-    "douyin": "/douyin";
-    "douyin_comment": "/douyin/comment";
-    "douyin_product": "/douyin/product";
-    "douyin_shop": "/douyin/shop";
-    "douyin_task": "/douyin/task";
-    "friend": "/friend";
-    "friend_audit": "/friend/audit";
-    "friend_list": "/friend/list";
-    "friend_request": "/friend/request";
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
-    "jingdong": "/jingdong";
-    "jingdong_comment": "/jingdong/comment";
-    "jingdong_product": "/jingdong/product";
-    "jingdong_shop": "/jingdong/shop";
-    "jingdong_task": "/jingdong/task";
     "logger": "/logger";
     "logger_request": "/logger/request";
     "logger_system": "/logger/system";
-    "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
-    "maintain": "/maintain";
-    "maintain_command": "/maintain/command";
-    "maintain_script": "/maintain/script";
-    "pdd": "/pdd";
-    "pdd_comment": "/pdd/comment";
-    "pdd_product": "/pdd/product";
-    "pdd_shop": "/pdd/shop";
-    "pdd_task": "/pdd/task";
-    "platform": "/platform";
-    "platform_alipaylovepay": "/platform/alipaylovepay";
-    "platform_categoryrepeat": "/platform/categoryrepeat";
-    "platform_setting": "/platform/setting";
-    "platform_tenant": "/platform/tenant";
-    "platform_tenantuser": "/platform/tenantuser";
-    "rednote": "/rednote";
-    "rednote_comment": "/rednote/comment";
-    "rednote_product": "/rednote/product";
-    "rednote_shop": "/rednote/shop";
-    "rednote_task": "/rednote/task";
-    "report": "/report";
-    "report_alipaylovepay": "/report/alipaylovepay";
-    "report_alipaylovepayentsettle": "/report/alipaylovepayentsettle";
-    "report_alipaylovepaypersettle": "/report/alipaylovepaypersettle";
-    "report_settlement": "/report/settlement";
+    "login": "/login/:module(phone-pwd-login|code-login|phone-register|reset-pwd|bind-wechat)?";
+    "profile": "/profile";
+    "server": "/server";
+    "server_redis": "/server/redis";
+    "server_scheduler": "/server/scheduler";
     "system": "/system";
     "system_role": "/system/role";
     "system_setting": "/system/setting";
     "system_user": "/system/user";
-    "taobao": "/taobao";
-    "taobao_comment": "/taobao/comment";
-    "taobao_product": "/taobao/product";
-    "taobao_shop": "/taobao/shop";
-    "taobao_task": "/taobao/task";
-    "user-center": "/user-center";
   };
 
   /**
@@ -149,24 +92,13 @@ declare module "@elegant-router/types" {
     | "403"
     | "404"
     | "500"
-    | "about"
-    | "alibaba"
-    | "device"
-    | "douyin"
-    | "friend"
     | "home"
     | "iframe-page"
-    | "jingdong"
     | "logger"
     | "login"
-    | "maintain"
-    | "pdd"
-    | "platform"
-    | "rednote"
-    | "report"
+    | "profile"
+    | "server"
     | "system"
-    | "taobao"
-    | "user-center"
   >;
 
   /**
@@ -190,61 +122,15 @@ declare module "@elegant-router/types" {
     | "500"
     | "iframe-page"
     | "login"
-    | "about_doc"
-    | "about_update"
-    | "alibaba_comment"
-    | "alibaba_product"
-    | "alibaba_shop"
-    | "alibaba_task"
-    | "device_alibaba"
-    | "device_douyin"
-    | "device_jingdong"
-    | "device_list"
-    | "device_pdd"
-    | "device_rednote"
-    | "device_taobao"
-    | "device_detail"
-    | "douyin_comment"
-    | "douyin_product"
-    | "douyin_shop"
-    | "douyin_task"
-    | "friend_audit"
-    | "friend_list"
-    | "friend_request"
     | "home"
-    | "jingdong_comment"
-    | "jingdong_product"
-    | "jingdong_shop"
-    | "jingdong_task"
     | "logger_request"
     | "logger_system"
-    | "maintain_command"
-    | "maintain_script"
-    | "pdd_comment"
-    | "pdd_product"
-    | "pdd_shop"
-    | "pdd_task"
-    | "platform_alipaylovepay"
-    | "platform_categoryrepeat"
-    | "platform_setting"
-    | "platform_tenant"
-    | "platform_tenantuser"
-    | "rednote_comment"
-    | "rednote_product"
-    | "rednote_shop"
-    | "rednote_task"
-    | "report_alipaylovepay"
-    | "report_alipaylovepayentsettle"
-    | "report_alipaylovepaypersettle"
-    | "report_settlement"
+    | "profile"
+    | "server_redis"
+    | "server_scheduler"
     | "system_role"
     | "system_setting"
     | "system_user"
-    | "taobao_comment"
-    | "taobao_product"
-    | "taobao_shop"
-    | "taobao_task"
-    | "user-center"
   >;
 
   /**

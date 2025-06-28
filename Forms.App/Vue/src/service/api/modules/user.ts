@@ -1,11 +1,15 @@
 import { baseResp, flatRequest } from '../../request';
 
-export function fetchGetSystemUserList(input: Api.User.UserSearchFilter) {
+export function getUserListApi(input: Api.User.ListSearchFilter): Api.User.Data {
   const { pageIndex, pageSize } = input;
   const data = {
     pageIndex,
     pageSize
   };
+
+  if (input.phone) {
+    data.phone = input.phone;
+  }
 
   if (input.email) {
     data.email = input.email;
@@ -27,9 +31,10 @@ export function fetchGetSystemUserList(input: Api.User.UserSearchFilter) {
   });
 }
 
-export function fetchCreateSystemUser(input: Api.User.UserCreate) {
-  const { email, password, nickName, roleId } = input;
+export function createUserApi(input: Api.User.UserCreate) {
+  const { phone, email, password, nickName, roleId } = input;
   const data = {
+    phone,
     email,
     password,
     nickName,
@@ -43,7 +48,7 @@ export function fetchCreateSystemUser(input: Api.User.UserCreate) {
   });
 }
 
-export function fetchUpdateSystemUser(input: Api.User.UserUpdate) {
+export function updateUserApi(input: Api.User.UserUpdate) {
   const { id } = input;
   const data = {
     id
@@ -82,7 +87,7 @@ export function fetchUpdateSystemUser(input: Api.User.UserUpdate) {
   });
 }
 
-export function fetchDeleteSystemUser(input: Array<string>) {
+export function deleteUserApi(input: Array<string>) {
   if (!input || !input.length) {
     return baseResp();
   }

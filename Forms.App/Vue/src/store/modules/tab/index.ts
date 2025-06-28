@@ -243,7 +243,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
     const tab = tabs.value.find(item => item.id === id);
     if (!tab) return;
 
-    tab.newLabel = void 0;
+    tab.newLabel = undefined;
   }
 
   /**

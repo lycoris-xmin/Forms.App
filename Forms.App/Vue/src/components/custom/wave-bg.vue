@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { getColorPalette } from '@sa/utils';
+  import { computed } from 'vue';
+  import { getColorPalette } from '@sa/utils';
 
-interface Props {
-  /** Theme color */
-  themeColor: string;
-}
+  interface Props {
+    /** Theme color */
+    themeColor: string;
+  }
 
-const props = defineProps<Props>();
+  const props = defineProps<Props>();
 
-const lightColor = computed(() => getColorPalette(props.themeColor, 3));
-const darkColor = computed(() => getColorPalette(props.themeColor, 6));
+  const lightColor = computed(() => getColorPalette(props.themeColor, 3));
+  const darkColor = computed(() => getColorPalette(props.themeColor, 6));
 </script>
 
 <template>

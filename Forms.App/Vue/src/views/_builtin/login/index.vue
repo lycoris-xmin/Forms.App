@@ -1,53 +1,63 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import type { Component } from 'vue';
-import { getColorPalette, mixColor } from '@sa/utils';
-import { $t } from '@/locales';
-// import { useAppStore } from '@/store/modules/app';
-import { useThemeStore } from '@/store/modules/theme';
-import { loginModuleRecord } from '@/constants/app';
-import PwdLogin from './modules/pwd-login.vue';
-// import CodeLogin from './modules/code-login.vue';
-import Register from './modules/register.vue';
-import ResetPwd from './modules/reset-pwd.vue';
-// import BindWechat from './modules/bind-wechat.vue';
+  import { computed } from 'vue';
+  import type { Component } from 'vue';
+  import { getColorPalette, mixColor } from '@sa/utils';
+  import { $t } from '@/locales';
+  import { useAppStore } from '@/store/modules/app';
+  import { useThemeStore } from '@/store/modules/theme';
+  import PhonePwdLogin from './modules/phone-pwd-login.vue';
+  import EmailPwdLogin from './modules/email-pwd-login.vue';
+  import CodeLogin from './modules/code-login.vue';
+  import EmailRegister from './modules/email-register.vue';
+  import CodeRegister from './modules/code-register.vue';
+  import ResetPwd from './modules/reset-pwd.vue';
+  import BindWechat from './modules/bind-wechat.vue';
 
-interface Props {
-  /** The login module */
-  module?: UnionKey.LoginModule;
-}
+  interface Props {
+    /** The login module */
+    module?: UnionKey.LoginModule;
+  }
 
-const props = defineProps<Props>();
+  const props = defineProps<Props>();
 
-// const appStore = useAppStore();
-const themeStore = useThemeStore();
+  const appStore = useAppStore();
+  const themeStore = useThemeStore();
 
-interface LoginModule {
-  label: string;
-  component: Component;
-}
+  interface LoginModule {
+    label: string;
+    component: Component;
+  }
 
-const moduleMap: Record<UnionKey.LoginModule, LoginModule> = {
-  'pwd-login': { label: loginModuleRecord['pwd-login'], component: PwdLogin },
-  // 'code-login': { label: loginModuleRecord['code-login'], component: CodeLogin },
-  register: { label: loginModuleRecord.register, component: Register },
-  'reset-pwd': { label: loginModuleRecord['reset-pwd'], component: ResetPwd }
-  // 'bind-wechat': { label: loginModuleRecord['bind-wechat'], component: BindWechat }
-};
+  const moduleMap: Record<UnionKey.LoginModule, LoginModule> = {
+    'phone-pwd-login': { label: '密码登录', component: PhonePwdLogin },
+    'email-pwd-login': { label: '密码登录', component: EmailPwdLogin },
+    'code-login': { label: '验证码登录', component: CodeLogin },
+    'email-register': { label: '邮箱注册', component: EmailRegister },
+    'code-register': { label: '手机号注册', component: CodeRegister },
+    'reset-pwd': { label: '重置密码', component: ResetPwd },
+    'bind-wechat': { label: '微信登录', component: BindWechat }
+  };
 
-const activeModule = computed(() => moduleMap[props.module || 'pwd-login']);
+  if (import.meta.env.VITE_LOGIN_TYPE === 'phone') {
+    delete moduleMap['email-pwd-login'];
+    delete moduleMap['email-register'];
+  } else {
+    delete moduleMap['phone-pwd-login'];
+    delete moduleMap['code-login'];
+    delete moduleMap['code-register'];
+  }
 
-const bgThemeColor = computed(() =>
-  themeStore.darkMode ? getColorPalette(themeStore.themeColor, 7) : themeStore.themeColor
-);
+  const activeModule = computed(() => moduleMap[props.module || 'phone-pwd-login']);
 
-const bgColor = computed(() => {
-  const COLOR_WHITE = '#ffffff';
+  const bgThemeColor = computed(() => (themeStore.darkMode ? getColorPalette(themeStore.themeColor, 7) : themeStore.themeColor));
 
-  const ratio = themeStore.darkMode ? 0.5 : 0.2;
+  const bgColor = computed(() => {
+    const COLOR_WHITE = '#ffffff';
 
-  return mixColor(COLOR_WHITE, themeStore.themeColor, ratio);
-});
+    const ratio = themeStore.darkMode ? 0.5 : 0.2;
+
+    return mixColor(COLOR_WHITE, themeStore.themeColor, ratio);
+  });
 </script>
 
 <template>
@@ -59,24 +69,12 @@ const bgColor = computed(() => {
           <SystemLogo class="text-64px text-primary lt-sm:text-48px" />
           <h3 class="text-28px text-primary font-500 lt-sm:text-22px">{{ $t('system.title') }}</h3>
           <div class="i-flex-col">
-            <ThemeSchemaSwitch
-              :theme-schema="themeStore.themeScheme"
-              :show-tooltip="false"
-              class="text-20px lt-sm:text-18px"
-              @switch="themeStore.toggleThemeScheme"
-            />
-            <!--
- <LangSwitch
-              :lang="appStore.locale"
-              :lang-options="appStore.localeOptions"
-              :show-tooltip="false"
-              @change-lang="appStore.changeLocale"
-            /> 
--->
+            <ThemeSchemaSwitch :theme-schema="themeStore.themeScheme" :show-tooltip="false" class="text-20px lt-sm:text-18px" @switch="themeStore.toggleThemeScheme" />
+            <LangSwitch :lang="appStore.locale" :lang-options="appStore.localeOptions" :show-tooltip="false" @change-lang="appStore.changeLocale" />
           </div>
         </header>
         <main class="pt-24px">
-          <h3 class="text-18px text-primary font-medium">{{ $t(activeModule.label) }}</h3>
+          <h3 class="text-18px text-primary font-medium">{{ activeModule.label }}</h3>
           <div class="animation-slide-in-left pt-24px">
             <Transition :name="themeStore.page.animateMode" mode="out-in" appear>
               <component :is="activeModule.component" />

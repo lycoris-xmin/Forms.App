@@ -5,14 +5,7 @@ import { useEventListener, usePreferredColorScheme } from '@vueuse/core';
 import { getPaletteColorByNumber } from '@sa/color';
 import { SetupStoreId } from '@/enum';
 import { localStg } from '@/utils/storage';
-import {
-  addThemeVarsToGlobal,
-  createThemeToken,
-  getAntdTheme,
-  initThemeSettings,
-  toggleAuxiliaryColorModes,
-  toggleCssDarkMode
-} from './shared';
+import { addThemeVarsToGlobal, createThemeToken, getAntdTheme, initThemeSettings, toggleAuxiliaryColorModes, toggleCssDarkMode } from './shared';
 
 /** Theme store */
 export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
@@ -137,11 +130,7 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
 
   /** Setup theme vars to global */
   function setupThemeVarsToGlobal() {
-    const { themeTokens, darkThemeTokens } = createThemeToken(
-      themeColors.value,
-      settings.value.tokens,
-      settings.value.recommendColor
-    );
+    const { themeTokens, darkThemeTokens } = createThemeToken(themeColors.value, settings.value.tokens, settings.value.recommendColor);
     addThemeVarsToGlobal(themeTokens, darkThemeTokens);
   }
 

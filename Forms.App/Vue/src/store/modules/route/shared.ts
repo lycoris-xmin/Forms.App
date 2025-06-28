@@ -262,10 +262,7 @@ function findMenuPath(targetKey: string, menu: App.Global.Menu): string[] | null
  * @param route
  * @param menus
  */
-export function getBreadcrumbsByRoute(
-  route: RouteLocationNormalizedLoaded,
-  menus: App.Global.Menu[]
-): App.Global.Menu[] {
+export function getBreadcrumbsByRoute(route: RouteLocationNormalizedLoaded, menus: App.Global.Menu[]): App.Global.Menu[] {
   const key = route.name as string;
   const activeKey = route.meta?.activeMenu;
 

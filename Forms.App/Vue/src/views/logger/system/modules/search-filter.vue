@@ -1,46 +1,46 @@
 <script setup lang="ts">
-import dayjs from 'dayjs';
-import { useAntdForm } from '@/hooks/common/form';
-import TableSearchFilter from '@/components/advanced/table-search-filter.vue';
+  import dayjs from 'dayjs';
+  import { useAntdForm } from '@/hooks/common/form';
+  import TableSearchFilter from '@/components/advanced/table-search-filter.vue';
 
-defineOptions({
-  name: 'LoggerSystemListSearch'
-});
+  defineOptions({
+    name: 'LoggerSystemListSearch'
+  });
 
-interface propsType {
-  level: Array<Any>;
-}
+  interface propsType {
+    level: Array<Any>;
+  }
 
-interface Emits {
-  (e: 'reset'): void;
-  (e: 'search'): void;
-}
+  interface Emits {
+    (e: 'reset'): void;
+    (e: 'search'): void;
+  }
 
-type Model = Api.Logger.SystemSearchFilter & {
-  timeRange: Array<string>;
-};
+  type Model = Api.LoggerSystem.ListFilter & {
+    timeRange: Array<string>;
+  };
 
-const { formRef, resetFields } = useAntdForm();
+  const { formRef, resetFields } = useAntdForm();
 
-const model = defineModel<Model>('model', { required: true });
+  const model = defineModel<Model>('model', { required: true });
 
-const props = defineProps<propsType>();
+  const props = defineProps<propsType>();
 
-const emit = defineEmits<Emits>();
+  const emit = defineEmits<Emits>();
 
-async function reset() {
-  await resetFields();
-  emit('reset');
-}
+  async function reset() {
+    await resetFields();
+    emit('reset');
+  }
 
-async function search() {
-  emit('search');
-}
+  async function search() {
+    emit('search');
+  }
 
-function timeChange(_, dateString: string[]) {
-  model.value.beginTime = dateString[0];
-  model.value.endTime = dateString[1];
-}
+  function timeChange(_, dateString: string[]) {
+    model.value.beginTime = dateString[0];
+    model.value.endTime = dateString[1];
+  }
 </script>
 
 <template>

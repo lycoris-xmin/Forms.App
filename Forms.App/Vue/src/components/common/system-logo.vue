@@ -1,9 +1,15 @@
 <script lang="ts" setup>
-defineOptions({ name: 'SystemLogo' });
+  // import logoImg from '@/assets/imgs/logo.png';
+  defineOptions({ name: 'SystemLogo' });
 </script>
 
 <template>
   <icon-local-logo />
+  <!-- <img class="logo" :src="logoImg" /> -->
 </template>
 
-<style scoped></style>
+<style scoped>
+  .logo {
+    width: 22px;
+  }
+</style>

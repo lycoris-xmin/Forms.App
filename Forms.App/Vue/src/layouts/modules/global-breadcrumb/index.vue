@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { useAttrs } from 'vue';
-import { createReusableTemplate } from '@vueuse/core';
-import type { RouteKey } from '@elegant-router/types';
-import { useThemeStore } from '@/store/modules/theme';
-import { useRouteStore } from '@/store/modules/route';
-import { useRouterPush } from '@/hooks/common/router';
+  import { useAttrs } from 'vue';
+  import { createReusableTemplate } from '@vueuse/core';
+  import type { RouteKey } from '@elegant-router/types';
+  import { useThemeStore } from '@/store/modules/theme';
+  import { useRouteStore } from '@/store/modules/route';
+  import { useRouterPush } from '@/hooks/common/router';
 
-defineOptions({
-  name: 'GlobalBreadcrumb',
-  inheritAttrs: false
-});
+  defineOptions({
+    name: 'GlobalBreadcrumb',
+    inheritAttrs: false
+  });
 
-const attrs = useAttrs();
-const themeStore = useThemeStore();
-const routeStore = useRouteStore();
-const { routerPushByKey } = useRouterPush();
+  const attrs = useAttrs();
+  const themeStore = useThemeStore();
+  const routeStore = useRouteStore();
+  const { routerPushByKey } = useRouterPush();
 
-interface BreadcrumbContentProps {
-  breadcrumb: App.Global.Menu;
-}
+  interface BreadcrumbContentProps {
+    breadcrumb: App.Global.Menu;
+  }
 
-const [DefineBreadcrumbContent, BreadcrumbContent] = createReusableTemplate<BreadcrumbContentProps>();
+  const [DefineBreadcrumbContent, BreadcrumbContent] = createReusableTemplate<BreadcrumbContentProps>();
 
-function handleClickMenu(key: RouteKey) {
-  routerPushByKey(key);
-}
+  function handleClickMenu(key: RouteKey) {
+    routerPushByKey(key);
+  }
 </script>
 
 <template>

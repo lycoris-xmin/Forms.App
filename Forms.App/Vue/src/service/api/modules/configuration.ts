@@ -1,44 +1,23 @@
 import { flatRequest } from '../../request';
 
-export function fetchGetEmailConfiguration() {
-  return flatRequest({
-    url: '/api/configuration/email'
-  });
-}
-
-export function fetchSaveEmailConfiguration(input: Api.Configuration.EmailConfiguration) {
-  return flatRequest({
-    url: '/api/configuration/email',
-    method: 'put',
-    data: {
-      ...input
-    }
-  });
-}
-
-export function fetchEmailTest(email: string) {
-  return flatRequest({
-    url: '/api/configuration/email/test',
-    method: 'post',
-    data: {
-      email
-    }
-  });
-}
-
-export function fetchGetConfigurationList(input: Api.Common.PageFilter) {
+export function getConfigurationListApi(input: Api.Configuration.ListSearchFilter) {
   const { pageIndex, pageSize } = input;
+  const data = {
+    pageIndex,
+    pageSize
+  };
+
+  if (input.configName) {
+    data.configName = input.configName;
+  }
+
   return flatRequest({
     url: '/api/configuration/list',
-    params: {
-      pageIndex,
-      pageSize
-    }
+    params: data
   });
 }
 
-export function fetchUpdateConfiguration(input: Api.Configuration.UpdateConfiguration) {
-  const { id, value } = input;
+export function updateConfigurationListApi({ id, value }: { id: string; value: string }) {
   return flatRequest({
     url: '/api/configuration',
     method: 'put',

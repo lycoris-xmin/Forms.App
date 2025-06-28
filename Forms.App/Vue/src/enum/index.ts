@@ -5,5 +5,5 @@ export enum SetupStoreId {
   Route = 'route-store',
   Tab = 'tab-store',
   Settlement = 'profile-settlement',
-  PageParams = 'page-params'
+  Signalr = 'signalr'
 }

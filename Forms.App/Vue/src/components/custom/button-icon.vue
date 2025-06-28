@@ -1,38 +1,38 @@
 <script setup lang="ts">
-import { withDefaults } from 'vue';
-import type { TooltipPlacement } from 'ant-design-vue/es/tooltip';
-import { twMerge } from 'tailwind-merge';
-defineOptions({
-  name: 'ButtonIcon',
-  inheritAttrs: false
-});
+  import { withDefaults } from 'vue';
+  import type { TooltipPlacement } from 'ant-design-vue/es/tooltip';
+  import { twMerge } from 'tailwind-merge';
+  defineOptions({
+    name: 'ButtonIcon',
+    inheritAttrs: false
+  });
 
-interface Props {
-  /** Button class */
-  class?: string;
-  /** Iconify icon name */
-  icon?: string;
-  /** Tooltip content */
-  tooltipContent?: string;
-  /** Tooltip placement */
-  tooltipPlacement?: TooltipPlacement;
-  /** Trigger tooltip on parent */
-  triggerParent?: boolean;
-}
+  interface Props {
+    /** Button class */
+    class?: string;
+    /** Iconify icon name */
+    icon?: string;
+    /** Tooltip content */
+    tooltipContent?: string;
+    /** Tooltip placement */
+    tooltipPlacement?: TooltipPlacement;
+    /** Trigger tooltip on parent */
+    triggerParent?: boolean;
+  }
 
-const props = withDefaults(defineProps<Props>(), {
-  class: 'h-36px text-icon',
-  icon: '',
-  tooltipContent: '',
-  tooltipPlacement: 'bottom',
-  triggerParent: false
-});
+  const props = withDefaults(defineProps<Props>(), {
+    class: 'h-36px text-icon',
+    icon: '',
+    tooltipContent: '',
+    tooltipPlacement: 'bottom',
+    triggerParent: false
+  });
 
-function getPopupContainer(triggerNode: HTMLElement) {
-  return props.triggerParent ? triggerNode.parentElement! : document.body;
-}
+  function getPopupContainer(triggerNode: HTMLElement) {
+    return props.triggerParent ? triggerNode.parentElement! : document.body;
+  }
 
-const DEFAULT_CLASS = 'h-[36px] text-icon';
+  const DEFAULT_CLASS = 'h-[36px] text-icon';
 </script>
 
 <template>

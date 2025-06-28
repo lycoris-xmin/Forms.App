@@ -89,14 +89,9 @@ export function useAntdForm() {
     formRef.value?.resetFields();
   }
 
-  function validateFields(names) {
-    formRef.value?.validateFields(names);
-  }
-
   return {
     formRef,
     validate,
-    resetFields,
-    validateFields
+    resetFields
   };
 }

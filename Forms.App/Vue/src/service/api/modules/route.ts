@@ -1,8 +1,8 @@
 import { flatRequest } from '../../request';
 
 /** get user routes */
-export function fetchGetUserPermissions() {
-  return flatRequest<App.Service.DataResponse<Array>>({
+export function getUserPermissionsApi() {
+  return flatRequest({
     url: '/api/authorize/user/permissions'
   });
 }
@@ -12,8 +12,8 @@ export function fetchGetUserPermissions() {
  *
  * @param permission route name
  */
-export function fetchIsRouteExist(permission: string) {
-  return flatRequest<App.Service.DataResponse<boolean>>({
+export function checkIsRouteExistApi(permission: string) {
+  return flatRequest({
     url: '/api/authorize/route/exist',
     params: { permission }
   });

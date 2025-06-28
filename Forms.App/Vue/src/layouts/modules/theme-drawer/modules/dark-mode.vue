@@ -1,58 +1,60 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import type { SegmentedOption } from 'ant-design-vue/es/segmented/src/segmented';
-import { $t } from '@/locales';
-import { themeSchemaRecord } from '@/constants/app';
-import { useThemeStore } from '@/store/modules/theme';
-import SettingItem from '../components/setting-item.vue';
+  import { computed } from 'vue';
+  import type { SegmentedOption } from 'ant-design-vue/es/segmented/src/segmented';
+  import { $t } from '@/locales';
+  import { themeSchemaRecord } from '@/constants/app';
+  import { useThemeStore } from '@/store/modules/theme';
+  import SettingItem from '../components/setting-item.vue';
 
-defineOptions({
-  name: 'DarkMode'
-});
-
-const themeStore = useThemeStore();
-
-const icons: Record<UnionKey.ThemeScheme, string> = {
-  light: 'material-symbols:sunny',
-  dark: 'material-symbols:nightlight-rounded',
-  auto: 'material-symbols:hdr-auto'
-};
-
-function getSegmentOptions() {
-  const opts: SegmentedOption[] = Object.keys(themeSchemaRecord).map(item => {
-    const key = item as UnionKey.ThemeScheme;
-    return {
-      value: item,
-      payload: {
-        icon: icons[key]
-      }
-    };
+  defineOptions({
+    name: 'DarkMode'
   });
 
-  return opts;
-}
+  const isDebugger = window.$isDebugger;
 
-const options = computed(() => getSegmentOptions());
+  const themeStore = useThemeStore();
 
-function handleSegmentChange(value: string | number) {
-  themeStore.setThemeScheme(value as UnionKey.ThemeScheme);
-}
+  const icons: Record<UnionKey.ThemeScheme, string> = {
+    light: 'material-symbols:sunny',
+    dark: 'material-symbols:nightlight-rounded',
+    auto: 'material-symbols:hdr-auto'
+  };
 
-const showSiderInverted = computed(() => !themeStore.darkMode && themeStore.layout.mode.includes('vertical'));
+  function getSegmentOptions() {
+    const opts: SegmentedOption[] = Object.keys(themeSchemaRecord).map(item => {
+      const key = item as UnionKey.ThemeScheme;
+      return {
+        value: item,
+        payload: {
+          icon: icons[key]
+        }
+      };
+    });
 
-type CheckedType = boolean | string | number;
+    return opts;
+  }
 
-function handleGrayscaleChange(value: CheckedType) {
-  themeStore.setGrayscale(value as boolean);
-}
+  const options = computed(() => getSegmentOptions());
 
-function handleColourWeaknessChange(value: CheckedType) {
-  themeStore.setColourWeakness(value as boolean);
-}
+  function handleSegmentChange(value: string | number) {
+    themeStore.setThemeScheme(value as UnionKey.ThemeScheme);
+  }
+
+  const showSiderInverted = computed(() => !themeStore.darkMode && themeStore.layout.mode.includes('vertical'));
+
+  type CheckedType = boolean | string | number;
+
+  function handleGrayscaleChange(value: CheckedType) {
+    themeStore.setGrayscale(value as boolean);
+  }
+
+  function handleColourWeaknessChange(value: CheckedType) {
+    themeStore.setColourWeakness(value as boolean);
+  }
 </script>
 
 <template>
-  <ADivider>{{ $t('theme.themeSchema.title') }}</ADivider>
+  <ADivider v-if="isDebugger">{{ $t('theme.themeSchema.title') }}</ADivider>
   <div class="flex-col-stretch gap-16px">
     <div class="i-flex-center">
       <ASegmented :value="themeStore.themeScheme" :options="options" class="bg-layout" @change="handleSegmentChange">
@@ -78,13 +80,13 @@ function handleColourWeaknessChange(value: CheckedType) {
 </template>
 
 <style scoped>
-.sider-inverted-enter-active,
-.sider-inverted-leave-active {
-  --uno: h-22px transition-all-300;
-}
+  .sider-inverted-enter-active,
+  .sider-inverted-leave-active {
+    --uno: h-22px transition-all-300;
+  }
 
-.sider-inverted-enter-from,
-.sider-inverted-leave-to {
-  --uno: translate-x-20px opacity-0 h-0;
-}
+  .sider-inverted-enter-from,
+  .sider-inverted-leave-to {
+    --uno: translate-x-20px opacity-0 h-0;
+  }
 </style>

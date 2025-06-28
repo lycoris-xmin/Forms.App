@@ -1,37 +1,37 @@
 <script setup lang="ts">
-import { Modal } from 'ant-design-vue';
-import { useAuthStore } from '@/store/modules/auth';
-import { useRouterPush } from '@/hooks/common/router';
-import { $t } from '@/locales';
-import { fetchLogout } from '@/service/api';
+  import { Modal } from 'ant-design-vue';
+  import { useAuthStore } from '@/store/modules/auth';
+  import { useRouterPush } from '@/hooks/common/router';
+  import { $t } from '@/locales';
+  import { logoutApi } from '@/service/api';
 
-defineOptions({
-  name: 'UserAvatar'
-});
-
-const authStore = useAuthStore();
-
-const { routerPushByKey, toLogin } = useRouterPush();
-
-function loginOrRegister() {
-  toLogin();
-}
-
-function logout() {
-  Modal.confirm({
-    title: $t('common.tip'),
-    content: $t('common.logoutConfirm'),
-    okText: $t('common.confirm'),
-    cancelText: $t('common.cancel'),
-    onOk: async () => {
-      try {
-        await fetchLogout();
-      } finally {
-        authStore.resetStore();
-      }
-    }
+  defineOptions({
+    name: 'UserAvatar'
   });
-}
+
+  const authStore = useAuthStore();
+
+  const { routerPushByKey, toLogin } = useRouterPush();
+
+  function loginOrRegister() {
+    toLogin();
+  }
+
+  function logout() {
+    Modal.confirm({
+      title: $t('common.tip'),
+      content: $t('common.logoutConfirm'),
+      okText: $t('common.confirm'),
+      cancelText: $t('common.cancel'),
+      onOk: async () => {
+        try {
+          await logoutApi();
+        } finally {
+          authStore.resetStore();
+        }
+      }
+    });
+  }
 </script>
 
 <template>

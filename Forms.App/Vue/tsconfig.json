@@ -12,7 +12,7 @@
       "~/*": ["./*"]
     },
     "resolveJsonModule": true,
-    "types": ["vite/client", "@types/node", "unplugin-icons/types/vue.d.ts", "ant-design-vue/typings/global.d.ts"],
+    "types": ["vite/client", "node", "unplugin-icons/types/vue", "ant-design-vue/typings/global.d.ts"],
     "strict": true,
     "strictNullChecks": true,
     "noUnusedLocals": true,

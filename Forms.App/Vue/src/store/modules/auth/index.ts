@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { useLoading } from '@sa/hooks';
 import { SetupStoreId } from '@/enum';
 import { useRouterPush } from '@/hooks/common/router';
-import { fetchGetUserInfo, fetchLogin } from '@/service/api';
+import { getUserInfoApi, loginApi } from '@/service/api';
 import { localStg } from '@/utils/storage';
 import { useRouteStore } from '../route';
 import { useTabStore } from '../tab';
@@ -21,17 +21,14 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
 
   const userInfo = reactive<Api.Auth.Profile>({
     id: '',
+    phone: '',
     email: '',
     nickName: '',
     avatar: '',
     gender: 0,
     roleId: '0',
     isSuperAdmin: false,
-    isLogin: false,
-    isSettlement: false,
-    isTenant: false,
-    isTenantUser: true,
-    tenantType: 0
+    isLogin: false
   });
 
   const userPermission = ref<Array<string>>([]);
@@ -42,10 +39,6 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   });
 
   const isLogin = computed(() => Boolean(token.value && userInfo.isLogin));
-
-  const isInternalTenant = computed(() => {
-    return userInfo.tenantType === 10;
-  });
 
   async function resetStore() {
     const authStore = useAuthStore();
@@ -62,14 +55,11 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     routeStore.resetStore();
   }
 
-  async function login(
-    { email, password, remember }: { email: string; password: string; remember: boolean },
-    redirect = true
-  ) {
+  async function login({ phone, password, remember }, redirect = true) {
     startLoading();
 
     try {
-      const { data: res, error } = await fetchLogin(email, password, remember);
+      const { data: res, error } = await loginApi(phone, password, remember);
 
       if (!error && res && res.code === 0) {
         const pass = await loginByToken(res.data);
@@ -110,12 +100,10 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   }
 
   async function getUserInfo() {
-    const { data: res, error } = await fetchGetUserInfo();
+    const { data: res, error } = await getUserInfoApi();
 
     if (!error && res && res.code === 0) {
       Object.assign(userInfo, res.data);
-      userInfo.isTenant = userInfo.roleId === 1002 || userInfo.roleId === 1003;
-      userInfo.isTenantUser = userInfo.roleId === 1003;
       return true;
     }
 
@@ -145,7 +133,6 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     isStaticSuper,
     isLogin,
     loginLoading,
-    isInternalTenant,
     resetStore,
     login,
     initUserInfo,

@@ -19,9 +19,7 @@ declare namespace AntDesign {
 
   type TableColumn<T> = SetTableColumnKey<TableColumnType<T>, T> | SetTableColumnKey<TableColumnGroupType<T>, T>;
 
-  type TableApiFn<T = any, R = Api.Common.CommonSearchParams> = (
-    params: R
-  ) => Promise<FlatResponseData<Api.Common.PaginatingQueryRecord<T>>>;
+  type TableApiFn<T = any, R = Api.Common.CommonSearchParams> = (params: R) => Promise<FlatResponseData<Api.Common.PaginatingQueryRecord<T>>>;
 
   /**
    * the type of table operation
@@ -33,8 +31,5 @@ declare namespace AntDesign {
 
   type GetTableData<A extends TableApiFn> = A extends TableApiFn<infer T> ? T : never;
 
-  type AntDesignTableConfig<A extends TableApiFn> = Pick<
-    import('@sa/hooks').TableConfig<A, GetTableData<A>, TableColumn<TableDataWithIndex<GetTableData<A>>>>,
-    'apiFn' | 'apiParams' | 'columns' | 'immediate'
-  >;
+  type AntDesignTableConfig<A extends TableApiFn> = Pick<import('@sa/hooks').TableConfig<A, GetTableData<A>, TableColumn<TableDataWithIndex<GetTableData<A>>>>, 'apiFn' | 'apiParams' | 'columns' | 'immediate'>;
 }

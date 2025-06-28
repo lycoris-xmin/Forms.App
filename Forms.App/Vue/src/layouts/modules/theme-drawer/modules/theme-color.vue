@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { ColorPicker } from '@sa/materials';
-import { useThemeStore } from '@/store/modules/theme';
-import { $t } from '@/locales';
-import SettingItem from '../components/setting-item.vue';
+  import { ColorPicker } from '@sa/materials';
+  import { useThemeStore } from '@/store/modules/theme';
+  import { $t } from '@/locales';
+  import SettingItem from '../components/setting-item.vue';
 
-defineOptions({
-  name: 'ThemeColor'
-});
+  defineOptions({
+    name: 'ThemeColor'
+  });
 
-const themeStore = useThemeStore();
+  const themeStore = useThemeStore();
 
-function handleUpdateColor(color: string, key: App.Theme.ThemeColorKey) {
-  themeStore.updateThemeColors(key, color);
-}
+  function handleUpdateColor(color: string, key: App.Theme.ThemeColorKey) {
+    themeStore.updateThemeColors(key, color);
+  }
 </script>
 
 <template>
@@ -26,15 +26,7 @@ function handleUpdateColor(color: string, key: App.Theme.ThemeColorKey) {
         <p>
           <span class="pr-12px">{{ $t('theme.recommendColorDesc') }}</span>
           <br />
-          <AButton
-            type="link"
-            href="https://uicolors.app/create"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-gray"
-          >
-            https://uicolors.app/create
-          </AButton>
+          <AButton type="link" href="https://uicolors.app/create" target="_blank" rel="noopener noreferrer" class="text-gray">https://uicolors.app/create</AButton>
         </p>
       </template>
     </ATooltip>
@@ -44,11 +36,7 @@ function handleUpdateColor(color: string, key: App.Theme.ThemeColorKey) {
           {{ $t('theme.themeColor.followPrimary') }}
         </ACheckbox>
       </template>
-      <ColorPicker
-        :color="themeStore.themeColors[key]"
-        :disabled="key === 'info' && themeStore.isInfoFollowPrimary"
-        @update:color="handleUpdateColor($event, key)"
-      />
+      <ColorPicker :color="themeStore.themeColors[key]" :disabled="key === 'info' && themeStore.isInfoFollowPrimary" @update:color="handleUpdateColor($event, key)" />
     </SettingItem>
   </div>
 </template>

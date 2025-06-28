@@ -1,26 +1,21 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { $t } from '@/locales';
-import { useThemeStore } from '@/store/modules/theme';
-import {
-  resetCacheStrategyOptions,
-  themePageAnimationModeOptions,
-  themeScrollModeOptions,
-  themeTabModeOptions
-} from '@/constants/app';
-import SettingItem from '../components/setting-item.vue';
+  import { computed } from 'vue';
+  import { $t } from '@/locales';
+  import { useThemeStore } from '@/store/modules/theme';
+  import { resetCacheStrategyOptions, themePageAnimationModeOptions, themeScrollModeOptions, themeTabModeOptions } from '@/constants/app';
+  import SettingItem from '../components/setting-item.vue';
 
-defineOptions({
-  name: 'PageFun'
-});
+  defineOptions({
+    name: 'PageFun'
+  });
 
-const themeStore = useThemeStore();
+  const themeStore = useThemeStore();
 
-const layoutMode = computed(() => themeStore.layout.mode);
+  const layoutMode = computed(() => themeStore.layout.mode);
 
-const isMixLayoutMode = computed(() => layoutMode.value.includes('mix'));
+  const isMixLayoutMode = computed(() => layoutMode.value.includes('mix'));
 
-const isWrapperScrollMode = computed(() => themeStore.layout.scrollMode === 'wrapper');
+  const isWrapperScrollMode = computed(() => themeStore.layout.scrollMode === 'wrapper');
 </script>
 
 <template>
@@ -102,11 +97,7 @@ const isWrapperScrollMode = computed(() => themeStore.layout.scrollMode === 'wra
     <SettingItem v-if="themeStore.footer.visible" key="7-2" :label="$t('theme.footer.height')">
       <AInputNumber v-model:value="themeStore.footer.height" class="w-120px" />
     </SettingItem>
-    <SettingItem
-      v-if="themeStore.footer.visible && layoutMode === 'horizontal-mix'"
-      key="7-3"
-      :label="$t('theme.footer.right')"
-    >
+    <SettingItem v-if="themeStore.footer.visible && layoutMode === 'horizontal-mix'" key="7-3" :label="$t('theme.footer.right')">
       <ASwitch v-model:checked="themeStore.footer.right" />
     </SettingItem>
     <SettingItem key="8" :label="$t('theme.watermark.visible')">
@@ -119,18 +110,18 @@ const isWrapperScrollMode = computed(() => themeStore.layout.scrollMode === 'wra
 </template>
 
 <style scoped>
-.setting-list-move,
-.setting-list-enter-active,
-.setting-list-leave-active {
-  --uno: transition-all-300;
-}
+  .setting-list-move,
+  .setting-list-enter-active,
+  .setting-list-leave-active {
+    --uno: transition-all-300;
+  }
 
-.setting-list-enter-from,
-.setting-list-leave-to {
-  --uno: opacity-0 -translate-x-30px;
-}
+  .setting-list-enter-from,
+  .setting-list-leave-to {
+    --uno: opacity-0 -translate-x-30px;
+  }
 
-.setting-list-leave-active {
-  --uno: absolute;
-}
+  .setting-list-leave-active {
+    --uno: absolute;
+  }
 </style>

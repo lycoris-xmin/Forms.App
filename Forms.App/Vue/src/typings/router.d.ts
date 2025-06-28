@@ -59,10 +59,7 @@ declare module 'vue-router' {
      *   the route is "user_detail", if it is set to "user_list", the menu "user_list" will be activated
      */
     activeMenu?: import('@elegant-router/types').RouteKey | null;
-    /**
-     * By default, the same route path will use one tab, even with different query, if set true, the route with
-     * different query will use different tabs
-     */
+    /** By default, the same route path will use one tab, even with different query, if set true, the route with different query will use different tabs */
     multiTab?: boolean | null;
     /** If set, the route will be fixed in tabs, and the value is the order of fixed tabs */
     fixedIndexInTab?: number | null;

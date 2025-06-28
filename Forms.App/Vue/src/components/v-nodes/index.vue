@@ -1,12 +1,12 @@
 <script setup>
-import { defineProps } from 'vue';
+  import { defineProps } from 'vue';
 
-const props = defineProps({
-  vnodes: {
-    type: Object,
-    required: true
-  }
-});
+  const props = defineProps({
+    vnodes: {
+      type: Object,
+      required: true
+    }
+  });
 </script>
 
 <template>

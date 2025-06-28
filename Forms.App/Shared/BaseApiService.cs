@@ -61,7 +61,5 @@ namespace Forms.App.Main.Shared
         /// <param name="data"></param>
         /// <returns></returns>
         protected IResourceResult Success<T>(PageOutput<T> data) => Content(data.ToJson(), "application/json", Encoding.UTF8);
-
-
     }
 }

@@ -2,7 +2,6 @@ import { useRouter } from 'vue-router';
 import type { RouteLocationRaw } from 'vue-router';
 import type { RouteKey } from '@elegant-router/types';
 import { router as globalRouter } from '@/router';
-import { usePageParams } from '@/store/modules/page-params';
 
 /**
  * Router push
@@ -22,7 +21,6 @@ export function useRouterPush(inSetup = true) {
   interface RouterPushOptions {
     query?: Record<string, string>;
     params?: Record<string, string>;
-    pageParams?: Record<string, string>;
   }
 
   async function routerPushByKey(key: RouteKey, options?: RouterPushOptions) {
@@ -38,10 +36,6 @@ export function useRouterPush(inSetup = true) {
 
     if (Object.keys(params || {}).length) {
       routeLocation.params = params;
-    }
-
-    if (options && options.pageParams && Object.keys(options.pageParams || {}).length) {
-      usePageParams().setParams(key, options.pageParams);
     }
 
     return routerPush(routeLocation);
@@ -71,7 +65,7 @@ export function useRouterPush(inSetup = true) {
    * @param redirectUrl The redirect url, if not specified, it will be the current route fullPath
    */
   async function toLogin(loginModule?: UnionKey.LoginModule, redirectUrl?: string) {
-    const module = loginModule || 'pwd-login';
+    const module = loginModule || import.meta.env.VITE_LOGIN_TYPE === 'phone' ? 'phone-pwd-login' : 'email-pwd-login';
 
     const options: RouterPushOptions = {
       params: {

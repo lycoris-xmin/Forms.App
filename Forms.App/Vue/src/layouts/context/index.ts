@@ -32,9 +32,7 @@ function useMixMenu() {
     })
   );
 
-  const childLevelMenus = computed<App.Global.Menu[]>(
-    () => routeStore.menus.find(menu => menu.key === activeFirstLevelMenuKey.value)?.children || []
-  );
+  const childLevelMenus = computed<App.Global.Menu[]>(() => routeStore.menus.find(menu => menu.key === activeFirstLevelMenuKey.value)?.children || []);
 
   const isActiveFirstLevelMenuHasChildren = computed(() => {
     if (!activeFirstLevelMenuKey.value) {

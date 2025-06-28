@@ -40,327 +40,6 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
-    name: 'about',
-    path: '/about',
-    component: 'layout.base',
-    meta: {
-      title: 'about',
-      i18nKey: 'route.about',
-      order: 1000,
-      icon: 'material-symbols:cinematic-blur-outline-sharp',
-      hideInMenu: true
-    },
-    children: [
-      {
-        name: 'about_doc',
-        path: '/about/doc',
-        component: 'view.about_doc',
-        meta: {
-          title: 'about_doc',
-          i18nKey: 'route.about_doc',
-          order: 1,
-          icon: 'material-symbols:assignment-outline-rounded',
-          hideInMenu: true
-        }
-      },
-      {
-        name: 'about_update',
-        path: '/about/update',
-        component: 'view.about_update',
-        meta: {
-          title: 'about_update',
-          i18nKey: 'route.about_update',
-          order: 2,
-          icon: 'material-symbols:deployed-code-update-outline-rounded'
-        }
-      }
-    ]
-  },
-  {
-    name: 'alibaba',
-    path: '/alibaba',
-    component: 'layout.base',
-    meta: {
-      title: 'alibaba',
-      i18nKey: 'route.alibaba',
-      localIcon: '1688-logo',
-      order: 4
-    },
-    children: [
-      {
-        name: 'alibaba_comment',
-        path: '/alibaba/comment',
-        component: 'view.alibaba_comment',
-        meta: {
-          title: 'alibaba_comment',
-          i18nKey: 'route.alibaba_comment',
-          order: 4,
-          icon: 'ph:chat-centered-dots-light',
-          permission: 'ali1688.comment.view'
-        }
-      },
-      {
-        name: 'alibaba_product',
-        path: '/alibaba/product',
-        component: 'view.alibaba_product',
-        meta: {
-          title: 'alibaba_product',
-          i18nKey: 'route.alibaba_product',
-          order: 2,
-          icon: 'fluent-emoji-high-contrast:wrapped-gift',
-          permission: 'ali1688.product.view'
-        }
-      },
-      {
-        name: 'alibaba_shop',
-        path: '/alibaba/shop',
-        component: 'view.alibaba_shop',
-        meta: {
-          title: 'alibaba_shop',
-          i18nKey: 'route.alibaba_shop',
-          order: 1,
-          icon: 'stash:shop',
-          permission: 'ali1688.shop.view'
-        }
-      },
-      {
-        name: 'alibaba_task',
-        path: '/alibaba/task',
-        component: 'view.alibaba_task',
-        meta: {
-          title: 'alibaba_task',
-          i18nKey: 'route.alibaba_task',
-          order: 3,
-          icon: 'tabler:topology-star-ring-3',
-          permission: 'ali1688.task.view'
-        }
-      }
-    ]
-  },
-  {
-    name: 'device',
-    path: '/device',
-    component: 'layout.base',
-    meta: {
-      title: 'device',
-      i18nKey: 'route.device',
-      order: 2,
-      icon: 'heroicons-outline:chip',
-      keepAlive: true
-    },
-    children: [
-      {
-        name: 'device_alibaba',
-        path: '/device/alibaba',
-        component: 'view.device_alibaba',
-        meta: {
-          title: 'device_alibaba',
-          i18nKey: 'route.device_alibaba',
-          order: 6,
-          localIcon: '1688-logo',
-          permission: 'device.alibaba.view'
-        }
-      },
-      {
-        name: 'device_detail',
-        path: '/device/detail/:id',
-        component: 'view.device_detail',
-        meta: {
-          title: 'device_detail',
-          i18nKey: 'route.device_detail',
-          hideInMenu: true,
-          permission: 'device.list.view'
-        }
-      },
-      {
-        name: 'device_douyin',
-        path: '/device/douyin',
-        component: 'view.device_douyin',
-        meta: {
-          title: 'device_douyin',
-          i18nKey: 'route.device_douyin',
-          order: 4,
-          localIcon: 'dy-logo',
-          permission: 'device.dy.view'
-        }
-      },
-      {
-        name: 'device_jingdong',
-        path: '/device/jingdong',
-        component: 'view.device_jingdong',
-        meta: {
-          title: 'device_jingdong',
-          i18nKey: 'route.device_jingdong',
-          order: 7,
-          localIcon: 'jd-logo',
-          permission: 'device.jd.view'
-        }
-      },
-      {
-        name: 'device_list',
-        path: '/device/list',
-        component: 'view.device_list',
-        meta: {
-          title: 'device_list',
-          i18nKey: 'route.device_list',
-          order: 1,
-          icon: 'fa6-brands:chromecast',
-          keepAlive: true,
-          permission: 'device.list.view'
-        }
-      },
-      {
-        name: 'device_pdd',
-        path: '/device/pdd',
-        component: 'view.device_pdd',
-        meta: {
-          title: 'device_pdd',
-          i18nKey: 'route.device_pdd',
-          order: 3,
-          localIcon: 'pdd-logo',
-          permission: 'device.pdd.view'
-        }
-      },
-      {
-        name: 'device_rednote',
-        path: '/device/rednote',
-        component: 'view.device_rednote',
-        meta: {
-          title: 'device_rednote',
-          i18nKey: 'route.device_rednote',
-          order: 5,
-          localIcon: 'rednote-logo-1',
-          permission: 'device.rednote.view'
-        }
-      },
-      {
-        name: 'device_taobao',
-        path: '/device/taobao',
-        component: 'view.device_taobao',
-        meta: {
-          title: 'device_taobao',
-          i18nKey: 'route.device_taobao',
-          order: 2,
-          icon: 'ri:taobao-fill',
-          keepAlive: true,
-          permission: 'device.taobao.view'
-        }
-      }
-    ]
-  },
-  {
-    name: 'douyin',
-    path: '/douyin',
-    component: 'layout.base',
-    meta: {
-      title: 'douyin',
-      i18nKey: 'route.douyin',
-      order: 6,
-      localIcon: 'dy-logo'
-    },
-    children: [
-      {
-        name: 'douyin_comment',
-        path: '/douyin/comment',
-        component: 'view.douyin_comment',
-        meta: {
-          title: 'douyin_comment',
-          i18nKey: 'route.douyin_comment',
-          order: 4,
-          icon: 'ph:chat-centered-dots-light',
-          permission: 'dy.comment.view'
-        }
-      },
-      {
-        name: 'douyin_product',
-        path: '/douyin/product',
-        component: 'view.douyin_product',
-        meta: {
-          title: 'douyin_product',
-          i18nKey: 'route.douyin_product',
-          order: 2,
-          icon: 'fluent-emoji-high-contrast:wrapped-gift',
-          permission: 'dy.product.view'
-        }
-      },
-      {
-        name: 'douyin_shop',
-        path: '/douyin/shop',
-        component: 'view.douyin_shop',
-        meta: {
-          title: 'douyin_shop',
-          i18nKey: 'route.douyin_shop',
-          order: 1,
-          icon: 'stash:shop',
-          permission: 'dy.shop.view'
-        }
-      },
-      {
-        name: 'douyin_task',
-        path: '/douyin/task',
-        component: 'view.douyin_task',
-        meta: {
-          title: 'douyin_task',
-          i18nKey: 'route.douyin_task',
-          order: 3,
-          icon: 'tabler:topology-star-ring-3',
-          permission: 'dy.task.view'
-        }
-      }
-    ]
-  },
-  {
-    name: 'friend',
-    path: '/friend',
-    component: 'layout.base',
-    meta: {
-      title: 'friend',
-      i18nKey: 'route.friend',
-      icon: 'weui:add-friends-filled',
-      order: 8
-    },
-    children: [
-      {
-        name: 'friend_audit',
-        path: '/friend/audit',
-        component: 'view.friend_audit',
-        meta: {
-          title: 'friend_audit',
-          i18nKey: 'route.friend_audit',
-          order: 3,
-          permission: 'friend.audit.view',
-          icon: 'material-symbols:storefront',
-          keepAlive: true
-        }
-      },
-      {
-        name: 'friend_list',
-        path: '/friend/list',
-        component: 'view.friend_list',
-        meta: {
-          title: 'friend_list',
-          i18nKey: 'route.friend_list',
-          order: 2,
-          icon: 'streamline:interface-security-shield-personshield-secure-security-person',
-          permission: 'friend.list.view',
-          keepAlive: true
-        }
-      },
-      {
-        name: 'friend_request',
-        path: '/friend/request',
-        component: 'view.friend_request',
-        meta: {
-          title: 'friend_request',
-          i18nKey: 'route.friend_request',
-          order: 1,
-          permission: 'friend.request.view',
-          keepAlive: true
-        }
-      }
-    ]
-  },
-  {
     name: 'home',
     path: '/home',
     component: 'layout.base$view.home',
@@ -385,67 +64,6 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
-    name: 'jingdong',
-    path: '/jingdong',
-    component: 'layout.base',
-    meta: {
-      title: 'jingdong',
-      i18nKey: 'route.jingdong',
-      localIcon: 'jd-logo',
-      order: 5
-    },
-    children: [
-      {
-        name: 'jingdong_comment',
-        path: '/jingdong/comment',
-        component: 'view.jingdong_comment',
-        meta: {
-          title: 'jingdong_comment',
-          i18nKey: 'route.jingdong_comment',
-          order: 4,
-          icon: 'ph:chat-centered-dots-light',
-          permission: 'jd.comment.view'
-        }
-      },
-      {
-        name: 'jingdong_product',
-        path: '/jingdong/product',
-        component: 'view.jingdong_product',
-        meta: {
-          title: 'jingdong_product',
-          i18nKey: 'route.jingdong_product',
-          order: 2,
-          icon: 'fluent-emoji-high-contrast:wrapped-gift',
-          permission: 'jd.product.view'
-        }
-      },
-      {
-        name: 'jingdong_shop',
-        path: '/jingdong/shop',
-        component: 'view.jingdong_shop',
-        meta: {
-          title: 'jingdong_shop',
-          i18nKey: 'route.jingdong_shop',
-          order: 1,
-          icon: 'stash:shop',
-          permission: 'jd.shop.view'
-        }
-      },
-      {
-        name: 'jingdong_task',
-        path: '/jingdong/task',
-        component: 'view.jingdong_task',
-        meta: {
-          title: 'jingdong_task',
-          i18nKey: 'route.jingdong_task',
-          order: 3,
-          icon: 'tabler:topology-star-ring-3',
-          permission: 'jd.task.view'
-        }
-      }
-    ]
-  },
-  {
     name: 'logger',
     path: '/logger',
     component: 'layout.base',
@@ -464,8 +82,7 @@ export const generatedRoutes: GeneratedRoute[] = [
           title: 'logger_request',
           i18nKey: 'route.logger_request',
           icon: 'fa-brands:tencent-weibo',
-          permission: 'logger.request.view',
-          keepAlive: true
+          permission: 'logger.request.view'
         }
       },
       {
@@ -476,15 +93,14 @@ export const generatedRoutes: GeneratedRoute[] = [
           title: 'logger_system',
           i18nKey: 'route.logger_system',
           icon: 'material-symbols-light:legend-toggle-rounded',
-          permission: 'logger.system.view',
-          keepAlive: true
+          permission: 'logger.system.view'
         }
       }
     ]
   },
   {
     name: 'login',
-    path: '/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?',
+    path: '/login/:module(phone-pwd-login|code-login|phone-register|reset-pwd|bind-wechat)?',
     component: 'layout.blank$view.login',
     props: true,
     meta: {
@@ -495,302 +111,48 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
-    name: 'maintain',
-    path: '/maintain',
+    name: 'profile',
+    path: '/profile',
+    component: 'layout.base$view.profile',
+    meta: {
+      title: 'profile',
+      i18nKey: 'route.profile',
+      hideInMenu: true
+    }
+  },
+  {
+    name: 'server',
+    path: '/server',
     component: 'layout.base',
     meta: {
-      title: 'maintain',
-      i18nKey: 'route.maintain',
-      icon: 'eva:activity-fill',
+      title: 'server',
+      i18nKey: 'route.server',
+      icon: 'eos-icons:storage-class',
       order: 97
     },
     children: [
       {
-        name: 'maintain_command',
-        path: '/maintain/command',
-        component: 'view.maintain_command',
+        name: 'server_redis',
+        path: '/server/redis',
+        component: 'view.server_redis',
         meta: {
-          title: 'maintain_command',
-          i18nKey: 'route.maintain_command',
-          order: 99,
-          keepAlive: true,
-          permission: 'maintain.command.view',
-          icon: 'icomoon-free:terminal'
-        }
-      },
-      {
-        name: 'maintain_script',
-        path: '/maintain/script',
-        component: 'view.maintain_script',
-        meta: {
-          title: 'maintain_script',
-          i18nKey: 'route.maintain_script',
-          order: 98,
-          keepAlive: true,
-          permission: 'maintain.autojs.script.view',
-          icon: 'ant-design:java-script-outlined'
-        }
-      }
-    ]
-  },
-  {
-    name: 'pdd',
-    path: '/pdd',
-    component: 'layout.base',
-    meta: {
-      title: 'pdd',
-      i18nKey: 'route.pdd',
-      localIcon: 'pdd-logo',
-      order: 6
-    },
-    children: [
-      {
-        name: 'pdd_comment',
-        path: '/pdd/comment',
-        component: 'view.pdd_comment',
-        meta: {
-          title: 'pdd_comment',
-          i18nKey: 'route.pdd_comment',
-          order: 4,
-          icon: 'ph:chat-centered-dots-light',
-          permission: 'pdd.comment.view'
-        }
-      },
-      {
-        name: 'pdd_product',
-        path: '/pdd/product',
-        component: 'view.pdd_product',
-        meta: {
-          title: 'pdd_product',
-          i18nKey: 'route.pdd_product',
-          order: 2,
-          icon: 'fluent-emoji-high-contrast:wrapped-gift',
-          permission: 'pdd.product.view'
-        }
-      },
-      {
-        name: 'pdd_shop',
-        path: '/pdd/shop',
-        component: 'view.pdd_shop',
-        meta: {
-          title: 'pdd_shop',
-          i18nKey: 'route.pdd_shop',
+          title: 'server_redis',
+          i18nKey: 'route.server_redis',
+          icon: 'cib:redis',
           order: 1,
-          icon: 'stash:shop',
-          permission: 'pdd.shop.view'
+          permission: 'server.redis.view'
         }
       },
       {
-        name: 'pdd_task',
-        path: '/pdd/task',
-        component: 'view.pdd_task',
+        name: 'server_scheduler',
+        path: '/server/scheduler',
+        component: 'view.server_scheduler',
         meta: {
-          title: 'pdd_task',
-          i18nKey: 'route.pdd_task',
-          order: 3,
-          icon: 'tabler:topology-star-ring-3',
-          permission: 'pdd.task.view'
-        }
-      }
-    ]
-  },
-  {
-    name: 'platform',
-    path: '/platform',
-    component: 'layout.base',
-    meta: {
-      title: 'platform',
-      i18nKey: 'route.platform',
-      icon: 'icon-park-outline:application-effect',
-      order: 8
-    },
-    children: [
-      {
-        name: 'platform_alipaylovepay',
-        path: '/platform/alipaylovepay',
-        component: 'view.platform_alipaylovepay',
-        meta: {
-          title: 'platform_alipaylovepay',
-          i18nKey: 'route.platform_alipaylovepay',
-          order: 98,
-          keepAlive: true,
-          permission: 'platform.alipay.lovepay.view',
-          icon: 'tdesign:logo-alipay'
-        }
-      },
-      {
-        name: 'platform_categoryrepeat',
-        path: '/platform/categoryrepeat',
-        component: 'view.platform_categoryrepeat',
-        meta: {
-          title: 'platform_categoryrepeat',
-          i18nKey: 'route.platform_categoryrepeat',
-          order: 99,
-          keepAlive: true,
-          permission: 'platform.category.repeatpurchase.view'
-        }
-      },
-      {
-        name: 'platform_setting',
-        path: '/platform/setting',
-        component: 'view.platform_setting',
-        meta: {
-          title: 'platform_setting',
-          i18nKey: 'route.platform_setting',
-          order: 3,
-          keepAlive: true,
-          permission: 'platform.setting.view',
-          icon: 'material-symbols:settings'
-        }
-      },
-      {
-        name: 'platform_tenant',
-        path: '/platform/tenant',
-        component: 'view.platform_tenant',
-        meta: {
-          title: 'platform_tenant',
-          i18nKey: 'route.platform_tenant',
-          icon: 'icon-park-outline:vip-one',
-          order: 1,
-          keepAlive: true,
-          permission: 'platform.tenant.view'
-        }
-      },
-      {
-        name: 'platform_tenantuser',
-        path: '/platform/tenantuser',
-        component: 'view.platform_tenantuser',
-        meta: {
-          title: 'platform_tenantuser',
-          i18nKey: 'route.platform_tenantuser',
+          title: 'server_scheduler',
+          i18nKey: 'route.server_scheduler',
           order: 2,
-          keepAlive: true,
-          permission: 'platform.tenant.user.view'
-        }
-      }
-    ]
-  },
-  {
-    name: 'rednote',
-    path: '/rednote',
-    component: 'layout.base',
-    meta: {
-      title: 'rednote',
-      i18nKey: 'route.rednote',
-      order: 7,
-      localIcon: 'rednote-logo'
-    },
-    children: [
-      {
-        name: 'rednote_comment',
-        path: '/rednote/comment',
-        component: 'view.rednote_comment',
-        meta: {
-          title: 'rednote_comment',
-          i18nKey: 'route.rednote_comment',
-          order: 4,
-          icon: 'ph:chat-centered-dots-light',
-          permission: 'rednote.comment.view'
-        }
-      },
-      {
-        name: 'rednote_product',
-        path: '/rednote/product',
-        component: 'view.rednote_product',
-        meta: {
-          title: 'rednote_product',
-          i18nKey: 'route.rednote_product',
-          order: 2,
-          icon: 'fluent-emoji-high-contrast:wrapped-gift',
-          permission: 'rednote.product.view'
-        }
-      },
-      {
-        name: 'rednote_shop',
-        path: '/rednote/shop',
-        component: 'view.rednote_shop',
-        meta: {
-          title: 'rednote_shop',
-          i18nKey: 'route.rednote_shop',
-          order: 1,
-          icon: 'stash:shop',
-          permission: 'rednote.shop.view'
-        }
-      },
-      {
-        name: 'rednote_task',
-        path: '/rednote/task',
-        component: 'view.rednote_task',
-        meta: {
-          title: 'rednote_task',
-          i18nKey: 'route.rednote_task',
-          order: 3,
-          icon: 'tabler:topology-star-ring-3',
-          permission: 'rednote.task.view'
-        }
-      }
-    ]
-  },
-  {
-    name: 'report',
-    path: '/report',
-    component: 'layout.base',
-    meta: {
-      title: 'report',
-      i18nKey: 'route.report',
-      order: 9,
-      icon: 'ix:barchart'
-    },
-    children: [
-      {
-        name: 'report_alipaylovepay',
-        path: '/report/alipaylovepay',
-        component: 'view.report_alipaylovepay',
-        meta: {
-          title: 'report_alipaylovepay',
-          i18nKey: 'route.report_alipaylovepay',
-          order: 2,
-          keepAlive: true,
-          permission: 'report.alipay.lovepay.view',
-          icon: 'tdesign:logo-alipay'
-        }
-      },
-      {
-        name: 'report_alipaylovepayentsettle',
-        path: '/report/alipaylovepayentsettle',
-        component: 'view.report_alipaylovepayentsettle',
-        meta: {
-          title: 'report_alipaylovepayentsettle',
-          i18nKey: 'route.report_alipaylovepayentsettle',
-          order: 3,
-          keepAlive: true,
-          permission: 'report.alipay.lovepay.entSettle.view',
-          icon: 'tdesign:logo-alipay'
-        }
-      },
-      {
-        name: 'report_alipaylovepaypersettle',
-        path: '/report/alipaylovepaypersettle',
-        component: 'view.report_alipaylovepaypersettle',
-        meta: {
-          title: 'report_alipaylovepaypersettle',
-          i18nKey: 'route.report_alipaylovepaypersettle',
-          order: 4,
-          keepAlive: true,
-          permission: 'report.alipay.lovepay.perSettle.view',
-          icon: 'tdesign:logo-alipay'
-        }
-      },
-      {
-        name: 'report_settlement',
-        path: '/report/settlement',
-        component: 'view.report_settlement',
-        meta: {
-          title: 'report_settlement',
-          i18nKey: 'route.report_settlement',
-          order: 1,
-          icon: 'heroicons-outline:currency-yen',
-          permission: 'report.settlement.view'
+          icon: 'teenyicons:clock-outline',
+          permission: 'server.scheduler.view'
         }
       }
     ]
@@ -846,77 +208,5 @@ export const generatedRoutes: GeneratedRoute[] = [
         }
       }
     ]
-  },
-  {
-    name: 'taobao',
-    path: '/taobao',
-    component: 'layout.base',
-    meta: {
-      title: 'taobao',
-      i18nKey: 'route.taobao',
-      icon: 'ri:taobao-fill',
-      order: 2
-    },
-    children: [
-      {
-        name: 'taobao_comment',
-        path: '/taobao/comment',
-        component: 'view.taobao_comment',
-        meta: {
-          title: 'taobao_comment',
-          i18nKey: 'route.taobao_comment',
-          order: 4,
-          icon: 'ph:chat-centered-dots-light',
-          permission: 'taobao.comment.view'
-        }
-      },
-      {
-        name: 'taobao_product',
-        path: '/taobao/product',
-        component: 'view.taobao_product',
-        meta: {
-          title: 'taobao_product',
-          i18nKey: 'route.taobao_product',
-          order: 2,
-          icon: 'fluent-emoji-high-contrast:wrapped-gift',
-          permission: 'taobao.product.view'
-        }
-      },
-      {
-        name: 'taobao_shop',
-        path: '/taobao/shop',
-        component: 'view.taobao_shop',
-        meta: {
-          title: 'taobao_shop',
-          i18nKey: 'route.taobao_shop',
-          order: 1,
-          icon: 'stash:shop',
-          permission: 'taobao.shop.view'
-        }
-      },
-      {
-        name: 'taobao_task',
-        path: '/taobao/task',
-        component: 'view.taobao_task',
-        meta: {
-          title: 'taobao_task',
-          i18nKey: 'route.taobao_task',
-          order: 3,
-          icon: 'tabler:topology-star-ring-3',
-          permission: 'taobao.task.view'
-        }
-      }
-    ]
-  },
-  {
-    name: 'user-center',
-    path: '/user-center',
-    component: 'layout.base$view.user-center',
-    meta: {
-      title: 'user-center',
-      i18nKey: 'route.user-center',
-      hideInMenu: true,
-      keepAlive: true
-    }
   }
 ];

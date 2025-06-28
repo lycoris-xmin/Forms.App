@@ -1,42 +1,42 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
-import type { RouteKey } from '@elegant-router/types';
-import { SimpleScrollbar } from '@sa/materials';
-import { useAppStore } from '@/store/modules/app';
-import { useThemeStore } from '@/store/modules/theme';
-import { useRouteStore } from '@/store/modules/route';
-import { useRouterPush } from '@/hooks/common/router';
-import { GLOBAL_SIDER_MENU_ID } from '@/constants/app';
-import { useMenu } from '../../../context';
+  import { computed } from 'vue';
+  import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
+  import type { RouteKey } from '@elegant-router/types';
+  import { SimpleScrollbar } from '@sa/materials';
+  import { useAppStore } from '@/store/modules/app';
+  import { useThemeStore } from '@/store/modules/theme';
+  import { useRouteStore } from '@/store/modules/route';
+  import { useRouterPush } from '@/hooks/common/router';
+  import { GLOBAL_SIDER_MENU_ID } from '@/constants/app';
+  import { useMenu } from '../../../context';
 
-defineOptions({
-  name: 'VerticalMenu'
-});
+  defineOptions({
+    name: 'VerticalMenu'
+  });
 
-const appStore = useAppStore();
-const themeStore = useThemeStore();
-const routeStore = useRouteStore();
-const { routerPushByKeyWithMetaQuery } = useRouterPush();
-const { selectedKey } = useMenu();
+  const appStore = useAppStore();
+  const themeStore = useThemeStore();
+  const routeStore = useRouteStore();
+  const { routerPushByKeyWithMetaQuery } = useRouterPush();
+  const { selectedKey } = useMenu();
 
-const darkTheme = computed(() => !themeStore.darkMode && themeStore.sider.inverted);
+  const darkTheme = computed(() => !themeStore.darkMode && themeStore.sider.inverted);
 
-const menuTheme = computed(() => (darkTheme.value ? 'dark' : 'light'));
+  const menuTheme = computed(() => (darkTheme.value ? 'dark' : 'light'));
 
-const openKeys = computed(() => {
-  if (appStore.siderCollapse || !selectedKey.value) return [];
+  const openKeys = computed(() => {
+    if (appStore.siderCollapse || !selectedKey.value) return [];
 
-  if (!selectedKey.value) return [];
+    if (!selectedKey.value) return [];
 
-  return routeStore.getSelectedMenuKeyPath(selectedKey.value);
-});
+    return routeStore.getSelectedMenuKeyPath(selectedKey.value);
+  });
 
-function handleClickMenu(menuInfo: MenuInfo) {
-  const key = menuInfo.key as RouteKey;
+  function handleClickMenu(menuInfo: MenuInfo) {
+    const key = menuInfo.key as RouteKey;
 
-  routerPushByKeyWithMetaQuery(key);
-}
+    routerPushByKeyWithMetaQuery(key);
+  }
 </script>
 
 <template>

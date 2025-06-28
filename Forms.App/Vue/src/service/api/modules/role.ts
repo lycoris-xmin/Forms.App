@@ -1,6 +1,6 @@
 import { baseResp, flatRequest } from '../../request';
 
-export function fetchGetRoleList(input: Api.Common.PageFilter): App.Service.PageResponse<Api.Role.RoleData> {
+export function getRoleListApi(input: Api.Common.PageFilter): App.Service.PageResponse<Api.Role.Data> {
   const { pageIndex, pageSize } = input;
   return flatRequest({
     url: '/api/role/list',
@@ -11,7 +11,7 @@ export function fetchGetRoleList(input: Api.Common.PageFilter): App.Service.Page
   });
 }
 
-export function fetchCreateRole(roleName: string) {
+export function createRoleApi(roleName: string) {
   return flatRequest({
     url: '/api/role',
     method: 'post',
@@ -21,39 +21,35 @@ export function fetchCreateRole(roleName: string) {
   });
 }
 
-export function fetchUpdateRole(input: Api.Role.UpdateRoe) {
+export function updateRoleApi(input: Api.Role.UpdateRoe) {
   const { id, roleName } = input;
   return flatRequest({
-    url: '/api/role',
+    url: `/api/role/${id}`,
     method: 'put',
     data: {
-      id,
       roleName
     }
   });
 }
 
-export function fetchDeleteRole(ids: Array<string>) {
+export function deleteRoleApi(id: string) {
   if (!ids || !ids.length) {
     return baseResp();
   }
 
   return flatRequest({
-    url: '/api/role',
-    method: 'delete',
-    params: {
-      ids
-    }
+    url: `/api/role/${id}`,
+    method: 'delete'
   });
 }
 
-export function fetchGetRolePermission(id: string): App.Service.ListResponse<Api.Role.RolePermission> {
+export function getRolePermissionApi(id: string) {
   return flatRequest({
     url: `/api/role/permission/${id}`
   });
 }
 
-export function fetchSetRolePermission(id: string, permissions: Array<string>): App.Service.Response {
+export function setRolePermissionApi(id: string, permissions: Array<string>) {
   return flatRequest({
     url: `/api/role/permission/${id}`,
     method: 'put',

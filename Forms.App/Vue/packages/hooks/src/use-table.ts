@@ -111,7 +111,7 @@ export default function useHookTable<A extends ApiFn, T, C>(config: TableConfig<
     const formattedParams: Record<string, unknown> = {};
 
     Object.entries(params).forEach(([key, value]) => {
-      if (value !== null && value !== void 0) {
+      if (value !== null && value !== undefined) {
         formattedParams[key] = value;
       }
     });

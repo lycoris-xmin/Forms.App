@@ -19,8 +19,7 @@ export default defineConfig(
         }
       ],
       'unocss/order-attributify': 'off',
-      'no-void': 'off', // 不禁止 void
-      'no-restricted-globals': ['error', 'undefined'] // 禁止 undefined，全用 void 0
+      'no-void': 'off'
     }
   }
 );

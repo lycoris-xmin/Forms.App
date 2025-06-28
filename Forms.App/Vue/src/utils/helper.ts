@@ -1,13 +1,7 @@
-import { apiUrl } from '@/service/api';
-
 type CountdownEverySecondCallback = (remainingSeconds: number) => void;
 type CountdownEndCallback = () => void;
 
-export function countdown(
-  seconds: number,
-  onEverySecond?: CountdownEverySecondCallback,
-  onEnd?: CountdownEndCallback
-): void {
+export function countdown(seconds: number, onEverySecond?: CountdownEverySecondCallback, onEnd?: CountdownEndCallback): void {
   let requestId: number | null = null;
   const startTime = performance.now();
   const endTime = startTime + seconds * 1000; // 结束时间（毫秒）
@@ -61,26 +55,6 @@ export function formatSecondsToMinutes(seconds: number): string {
   return `${formattedMinutes} 分钟 ${formattedSeconds} 秒`;
 }
 
-export function triggerDownload(url, filename) {
-  // 创建一个隐藏的 a 元素
-  const a = document.createElement('a');
-  a.href = url;
-
-  // 如果需要指定下载的文件名
-  if (filename) {
-    a.download = filename;
-  }
-
-  // 将 a 元素添加到文档中
-  document.body.appendChild(a);
-
-  // 模拟点击 a 元素
-  a.click();
-
-  // 点击后移除 a 元素
-  document.body.removeChild(a);
-}
-
 export const downloadFile = async (url, fileName) => {
   try {
     let downloadUrl = url;
@@ -114,26 +88,3 @@ export const downloadFile = async (url, fileName) => {
     window.$message?.error(`下载失败:${error}`);
   }
 };
-
-export function copyToClipboard(text) {
-  // 创建一个文本区域元素
-  const textArea = document.createElement('textarea');
-
-  // 设置文本区域的内容为需要复制的文字
-  textArea.value = text;
-
-  // 将文本区域添加到 DOM 中
-  document.body.appendChild(textArea);
-
-  // 选择文本区域中的内容
-  textArea.select();
-  textArea.setSelectionRange(0, textArea.value.length); // 对于移动设备，必须使用这个方法
-
-  // 执行复制操作
-  document.execCommand('copy');
-
-  // 删除文本区域元素
-  document.body.removeChild(textArea);
-
-  window.$message?.success('复制成功');
-}

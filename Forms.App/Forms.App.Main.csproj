@@ -10,14 +10,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Config\**" />
-		<EmbeddedResource Remove="Config\**" />
-		<None Remove="Config\**" />
+		<EmbeddedResource Include="Source\**\*" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="ApiServices\" />
-		<Folder Include="Source\" />
 		<Folder Include="Vue\" />
 	</ItemGroup>
 
@@ -36,19 +33,19 @@
 		<None Update="appsettings.Development.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		
+
 		<None Update="appsettings.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</None>
-		
+
 		<None Update="setup.iss">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		
-		<None Update="Source\**\*">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</None>
+
+		<None Update="Source\**\*">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
 		</None>
 
 		<None Update="Vue\**\*">

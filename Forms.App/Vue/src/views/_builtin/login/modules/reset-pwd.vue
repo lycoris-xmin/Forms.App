@@ -3,12 +3,14 @@ import { computed, reactive } from 'vue';
 import { useRouterPush } from '@/hooks/common/router';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { useCaptcha } from '@/hooks/business/captcha';
-import Slider from '@/components/slider-verify/index.vue';
-import { fetchRegisterEmailCode } from '@/service/api';
+import Slider from '@/components/slider-verify/block-puzzle/index.vue';
+import { registerEmailCodeApi } from '@/service/api';
 
 defineOptions({
   name: 'ResetPwd'
 });
+
+const isPhoneLogin = import.meta.env.VITE_LOGIN_TYPE === 'phone';
 
 const { toggleLoginModule } = useRouterPush();
 const { formRef, validate } = useAntdForm();
@@ -53,7 +55,7 @@ async function successHandler(val) {
   model.sliderVisible = false;
   model.sliderSuccess = true;
   await getCaptcha(async () => {
-    const { data: res, error } = await fetchRegisterEmailCode(model.email, val);
+    const { data: res, error } = await registerEmailCodeApi(model.email, val);
     return !error && res && res.code === 0;
   });
 }
@@ -86,7 +88,14 @@ async function handleSubmit() {
     </AFormItem>
     <ASpace direction="vertical" size="large" class="w-full">
       <AButton type="primary" block size="large" shape="round" @click="handleSubmit">确认</AButton>
-      <AButton block size="large" shape="round" @click="toggleLoginModule('pwd-login')">返回</AButton>
+      <AButton
+        block
+        size="large"
+        shape="round"
+        @click="toggleLoginModule(isPhoneLogin ? 'phone-pwd-login' : 'email-pwd-login')"
+      >
+        返回
+      </AButton>
     </ASpace>
   </AForm>
 

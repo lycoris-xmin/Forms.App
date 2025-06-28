@@ -1,6 +1,6 @@
 import { flatRequest } from '../../request';
 
-export function fetchLoggerSystemList(input: Api.Logger.SystemSearchFilter) {
+export function getLoggerSystemListApi(input: Api.LoggerSystem.ListFilter) {
   const { pageIndex, pageSize } = input;
   const data = { pageIndex, pageSize };
   input.level = Number.parseInt(input.level, 10);
@@ -24,7 +24,7 @@ export function fetchLoggerSystemList(input: Api.Logger.SystemSearchFilter) {
   });
 }
 
-export function fetchLoggerReqeustList(input: Api.Logger.RequestSearchFilter) {
+export function getLoggerReqeustListApi(input: Api.LoggerRequest.ListFilter) {
   const { pageIndex, pageSize } = input;
   const data = { pageIndex, pageSize };
   input.httpMethod = Number.parseInt(input.httpMethod, 10);
@@ -60,7 +60,7 @@ export function fetchLoggerReqeustList(input: Api.Logger.RequestSearchFilter) {
   });
 }
 
-export function fetchGetLoggerRequestDetail(id: string) {
+export function getLoggerRequestDetailApi(id: string) {
   return flatRequest({
     url: `/api/logger/request/${id}`,
     method: 'get'

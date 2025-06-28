@@ -1,0 +1,35 @@
+.json-editor .vjs-tree-brackets {
+  color: var(--text-color);
+}
+
+.json-editor .vjs-node-index {
+  color: var(--text-color);
+}
+
+.json-editor .vjs-key {
+  color: var(--text-color);
+}
+
+.json-editor .vjs-tree-brackets {
+  color: var(--text-color);
+}
+
+.json-editor .vjs-carets {
+  color: var(--text-color);
+}
+
+.json-editor.dark-mode .vjs-tree-brackets {
+  color: var(--text-dark-color);
+}
+
+.json-editor.dark-mode .vjs-node-index {
+  color: var(--text-dark-color);
+}
+
+.json-editor.dark-mode .vjs-key {
+  color: var(--text-dark-color);
+}
+
+.json-editor.dark-mode .vjs-carets {
+  color: var(--text-dark-color);
+}

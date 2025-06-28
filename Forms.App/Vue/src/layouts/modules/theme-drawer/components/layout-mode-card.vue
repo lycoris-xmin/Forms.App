@@ -1,70 +1,70 @@
 <script setup lang="ts">
-import type { TooltipPlacement } from 'ant-design-vue/es/tooltip';
-import { themeLayoutModeRecord } from '@/constants/app';
-import { $t } from '@/locales';
+  import type { TooltipPlacement } from 'ant-design-vue/es/tooltip';
+  import { themeLayoutModeRecord } from '@/constants/app';
+  import { $t } from '@/locales';
 
-defineOptions({
-  name: 'LayoutModeCard'
-});
+  defineOptions({
+    name: 'LayoutModeCard'
+  });
 
-interface Props {
-  /** Layout mode */
-  mode: UnionKey.ThemeLayoutMode;
-  /** Disabled */
-  disabled?: boolean;
-}
-
-const props = defineProps<Props>();
-
-interface Emits {
-  /** Layout mode change */
-  (e: 'update:mode', mode: UnionKey.ThemeLayoutMode): void;
-}
-
-const emit = defineEmits<Emits>();
-
-type LayoutConfig = Record<
-  UnionKey.ThemeLayoutMode,
-  {
-    placement: TooltipPlacement;
-    headerClass: string;
-    menuClass: string;
-    mainClass: string;
+  interface Props {
+    /** Layout mode */
+    mode: UnionKey.ThemeLayoutMode;
+    /** Disabled */
+    disabled?: boolean;
   }
->;
 
-const layoutConfig: LayoutConfig = {
-  vertical: {
-    placement: 'bottom',
-    headerClass: '',
-    menuClass: 'w-1/3 h-full',
-    mainClass: 'w-2/3 h-3/4'
-  },
-  'vertical-mix': {
-    placement: 'bottom',
-    headerClass: '',
-    menuClass: 'w-1/4 h-full',
-    mainClass: 'w-2/3 h-3/4'
-  },
-  horizontal: {
-    placement: 'bottom',
-    headerClass: '',
-    menuClass: 'w-full h-1/4',
-    mainClass: 'w-full h-3/4'
-  },
-  'horizontal-mix': {
-    placement: 'bottom',
-    headerClass: '',
-    menuClass: 'w-full h-1/4',
-    mainClass: 'w-2/3 h-3/4'
+  const props = defineProps<Props>();
+
+  interface Emits {
+    /** Layout mode change */
+    (e: 'update:mode', mode: UnionKey.ThemeLayoutMode): void;
   }
-};
 
-function handleChangeMode(mode: UnionKey.ThemeLayoutMode) {
-  if (props.disabled) return;
+  const emit = defineEmits<Emits>();
 
-  emit('update:mode', mode);
-}
+  type LayoutConfig = Record<
+    UnionKey.ThemeLayoutMode,
+    {
+      placement: TooltipPlacement;
+      headerClass: string;
+      menuClass: string;
+      mainClass: string;
+    }
+  >;
+
+  const layoutConfig: LayoutConfig = {
+    vertical: {
+      placement: 'bottom',
+      headerClass: '',
+      menuClass: 'w-1/3 h-full',
+      mainClass: 'w-2/3 h-3/4'
+    },
+    'vertical-mix': {
+      placement: 'bottom',
+      headerClass: '',
+      menuClass: 'w-1/4 h-full',
+      mainClass: 'w-2/3 h-3/4'
+    },
+    horizontal: {
+      placement: 'bottom',
+      headerClass: '',
+      menuClass: 'w-full h-1/4',
+      mainClass: 'w-full h-3/4'
+    },
+    'horizontal-mix': {
+      placement: 'bottom',
+      headerClass: '',
+      menuClass: 'w-full h-1/4',
+      mainClass: 'w-2/3 h-3/4'
+    }
+  };
+
+  function handleChangeMode(mode: UnionKey.ThemeLayoutMode) {
+    if (props.disabled) return;
+
+    emit('update:mode', mode);
+  }
 </script>
 
 <template>
@@ -77,10 +77,7 @@ function handleChangeMode(mode: UnionKey.ThemeLayoutMode) {
       @click="handleChangeMode(key)"
     >
       <ATooltip :placement="item.placement" :title="$t(themeLayoutModeRecord[key])">
-        <div
-          class="h-64px w-96px gap-6px rd-4px p-6px shadow dark:shadow-coolGray-5"
-          :class="[key.includes('vertical') ? 'flex' : 'flex-col']"
-        >
+        <div class="h-64px w-96px gap-6px rd-4px p-6px shadow dark:shadow-coolGray-5" :class="[key.includes('vertical') ? 'flex' : 'flex-col']">
           <slot :name="key"></slot>
         </div>
       </ATooltip>

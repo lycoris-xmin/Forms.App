@@ -1,7 +1,7 @@
 <script setup lang="ts">
-defineOptions({
-  name: 'SoybeanAvatar'
-});
+  defineOptions({
+    name: 'SoybeanAvatar'
+  });
 </script>
 
 <template>

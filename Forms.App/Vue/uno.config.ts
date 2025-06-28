@@ -28,13 +28,12 @@ export default defineConfig<Theme>({
   transformers: [transformerDirectives(), transformerVariantGroup()],
   presets: [presetUno({ dark: 'class' }), presetSoybeanAdmin()],
   rule: [
-    [/^p-l-(\d+)$/, ([_, value]) => ({ 'padding-left': `${value}px` })],
-    [/^p-r-(\d+)$/, ([_, value]) => ({ 'padding-right': `${value}px` })],
-    [/^p-(\d+)$/, ([_, value]) => ({ padding: `${value}px` })],
-    [(/^m-(\d+)$/, ([_, value]) => ({ margin: `${value}px` }))],
-    [(/^m-b-(\d+)$/, ([_, value]) => ({ 'margin-bottom': `${value}px` }))],
-    [(/^m-t-(\d+)$/, ([_, value]) => ({ 'margin-top': `${value}px` }))],
-    [(/^gap-(\d+)$/, ([_, value]) => ({ gap: `${value}px` }))],
-    [/^min-w-(\d+)$/, ([_, value]) => ({ 'min-width': `${value}px` })]
+    [/^p-l-(\d+)$/, ([_, value]: RegExpMatchArray) => ({ 'padding-left': `${value}px` })],
+    [/^p-r-(\d+)$/, ([_, value]: RegExpMatchArray) => ({ 'padding-right': `${value}px` })],
+    [/^p-(\d+)$/, ([_, value]: RegExpMatchArray) => ({ padding: `${value}px` })],
+    [/^m-(\d+)$/, ([_, value]: RegExpMatchArray) => ({ margin: `${value}px` })],
+    [/^m-b-(\d+)$/, ([_, value]: RegExpMatchArray) => ({ 'margin-bottom': `${value}px` })],
+    [/^m-t-(\d+)$/, ([_, value]: RegExpMatchArray) => ({ 'margin-top': `${value}px` })],
+    [/^gap-(\d+)$/, ([_, value]: RegExpMatchArray) => ({ gap: `${value}px` })]
   ]
 });

@@ -9,16 +9,7 @@ import { setupUnplugin } from './unplugin';
 import { setupHtmlPlugin } from './html';
 
 export function setupVitePlugins(viteEnv: Env.ImportMeta, buildTime: string) {
-  const plugins: PluginOption = [
-    vue(),
-    vueJsx(),
-    VueDevtools(),
-    setupElegantRouter(),
-    setupUnocss(viteEnv),
-    ...setupUnplugin(viteEnv),
-    progress(),
-    setupHtmlPlugin(buildTime)
-  ];
+  const plugins: PluginOption = [vue(), vueJsx(), VueDevtools(), setupElegantRouter(viteEnv), setupUnocss(viteEnv), ...setupUnplugin(viteEnv), progress(), setupHtmlPlugin(buildTime)];
 
   return plugins;
 }

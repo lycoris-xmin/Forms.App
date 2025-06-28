@@ -1,60 +1,60 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import dayjs from 'dayjs';
-import { useAntdForm } from '@/hooks/common/form';
-import TableSearchFilter from '@/components/advanced/table-search-filter.vue';
+  import { ref } from 'vue';
+  import dayjs from 'dayjs';
+  import { useAntdForm } from '@/hooks/common/form';
+  import TableSearchFilter from '@/components/advanced/table-search-filter.vue';
 
-defineOptions({
-  name: 'LoggerRequestListSearch'
-});
+  defineOptions({
+    name: 'LoggerRequestListSearch'
+  });
 
-interface propsType {
-  httpMethod: Array<Any>;
-}
+  interface propsType {
+    httpMethod: Array<Any>;
+  }
 
-interface Emits {
-  (e: 'reset'): void;
-  (e: 'search'): void;
-}
+  interface Emits {
+    (e: 'reset'): void;
+    (e: 'search'): void;
+  }
 
-type Model = Api.Logger.RequestSearchFilter & {
-  timeRange: Array<string>;
-};
+  type Model = Api.LoggerRequest.ListFilter & {
+    timeRange: Array<string>;
+  };
 
-const { formRef, resetFields } = useAntdForm();
+  const { formRef, resetFields } = useAntdForm();
 
-const model = defineModel<Model>('model', { required: true });
+  const model = defineModel<Model>('model', { required: true });
 
-const props = defineProps<propsType>();
+  const props = defineProps<propsType>();
 
-const emit = defineEmits<Emits>();
+  const emit = defineEmits<Emits>();
 
-const enums = ref({
-  success: [
-    {
-      value: 1,
-      label: '成功'
-    },
-    {
-      value: 0,
-      label: '失败'
-    }
-  ]
-});
+  const enums = ref({
+    success: [
+      {
+        value: 1,
+        label: '成功'
+      },
+      {
+        value: 0,
+        label: '失败'
+      }
+    ]
+  });
 
-async function reset() {
-  await resetFields();
-  emit('reset');
-}
+  async function reset() {
+    await resetFields();
+    emit('reset');
+  }
 
-async function search() {
-  emit('search');
-}
+  async function search() {
+    emit('search');
+  }
 
-function timeChange(_, dateString: string[]) {
-  model.value.beginTime = dateString[0];
-  model.value.endTime = dateString[1];
-}
+  function timeChange(_, dateString: string[]) {
+    model.value.beginTime = dateString[0];
+    model.value.endTime = dateString[1];
+  }
 </script>
 
 <template>
@@ -70,12 +70,7 @@ function timeChange(_, dateString: string[]) {
       <ARow :gutter="[16, 16]" wrap>
         <ACol :span="24" :md="12" :lg="6">
           <AFormItem label="请求方式" name="httpMethod" class="m-0">
-            <ASelect
-              v-model:value="model.httpMethod"
-              placeholder="- 全部 -"
-              :options="props.httpMethod"
-              allow-clear
-            ></ASelect>
+            <ASelect v-model:value="model.httpMethod" placeholder="- 全部 -" :options="props.httpMethod" allow-clear></ASelect>
           </AFormItem>
         </ACol>
         <ACol :span="24" :md="12" :lg="6">

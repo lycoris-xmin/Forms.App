@@ -1,52 +1,50 @@
 <script setup lang="ts">
-import { withDefaults } from 'vue';
-import { $t } from '@/locales';
+  import { withDefaults } from 'vue';
+  import { $t } from '@/locales';
 
-defineOptions({
-  name: 'TableHeaderOperation'
-});
+  defineOptions({
+    name: 'TableHeaderOperation'
+  });
 
-interface Props {
-  disabledDelete?: boolean;
-  loading?: boolean;
-  addBtn?: boolean;
-  deleteBtn?: boolean;
-  deleteConfirmText?: string;
-  refreshBtn?: boolean;
-}
+  interface Props {
+    disabledDelete?: boolean;
+    loading?: boolean;
+    addBtn?: boolean;
+    deleteBtn?: boolean;
+    refreshBtn?: boolean;
+  }
 
-const props = withDefaults(defineProps<Props>(), {
-  disabledDelete: false,
-  loading: false,
-  addBtn: false,
-  deleteBtn: false,
-  deleteConfirmText: '确认删除吗？',
-  refreshBtn: false
-});
+  const props = withDefaults(defineProps<Props>(), {
+    disabledDelete: false,
+    loading: false,
+    addBtn: false,
+    deleteBtn: false,
+    refreshBtn: false
+  });
 
-interface Emits {
-  (e: 'add'): void;
-  (e: 'delete'): void;
-  (e: 'refresh'): void;
-}
+  interface Emits {
+    (e: 'add'): void;
+    (e: 'delete'): void;
+    (e: 'refresh'): void;
+  }
 
-const emit = defineEmits<Emits>();
+  const emit = defineEmits<Emits>();
 
-const columns = defineModel<AntDesign.TableColumnCheck[]>('columns', {
-  default: () => []
-});
+  const columns = defineModel<AntDesign.TableColumnCheck[]>('columns', {
+    default: () => []
+  });
 
-function add() {
-  emit('add');
-}
+  function add() {
+    emit('add');
+  }
 
-function batchDelete() {
-  emit('delete');
-}
+  function batchDelete() {
+    emit('delete');
+  }
 
-function refresh() {
-  emit('refresh');
-}
+  function refresh() {
+    emit('refresh');
+  }
 </script>
 
 <template>
@@ -62,12 +60,7 @@ function refresh() {
 
     <slot name="default"></slot>
 
-    <APopconfirm
-      v-if="props.deleteBtn"
-      :title="props.deleteConfirmText"
-      :disabled="props.disabledDelete"
-      @confirm="batchDelete"
-    >
+    <APopconfirm v-if="props.deleteBtn" :title="$t('common.confirmDelete')" :disabled="props.disabledDelete" @confirm="batchDelete">
       <AButton size="small" danger :disabled="props.disabledDelete">
         <template #icon>
           <icon-ic-round-delete class="align-sub text-icon" />

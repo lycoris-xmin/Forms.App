@@ -38,7 +38,7 @@ namespace Forms.App.Model
                 }
                 else
                 {
-                    return "http://files.app.local";
+                    return "http://embedded.app.local";
                 }
             }
         }

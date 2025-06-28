@@ -91,7 +91,6 @@ export function useTable(config) {
   });
 
   const pagination = reactive({
-    current: 1,
     pageIndex: 1,
     pageSize: 10,
     showSizeChanger: true,
@@ -113,23 +112,19 @@ export function useTable(config) {
   const mobilePagination = computed(() => {
     return {
       ...pagination,
-      currnet: pagination.pageIndex,
       simple: appStore.isMobile
     };
   });
 
   function updatePagination(update) {
     Object.assign(pagination, update);
-    pagination.current = pagination.pageIndex;
   }
 
-  async function getDataByPage(pageIndex = void 0) {
-    if (pageIndex !== void 0) {
-      updatePagination({ pageIndex });
-    }
+  async function getDataByPage(pageNum = 1) {
+    updatePagination({ pageIndex: pageNum });
 
     updateSearchParams({
-      pageIndex: pagination.pageIndex,
+      pageIndex: pageNum,
       pageSize: pagination.pageSize
     });
 
@@ -149,25 +144,6 @@ export function useTable(config) {
     scope.stop();
   });
 
-  function sortChangeHandler(sorter: any, search: boolean = true): TableProps['onChange'] {
-    let order = '';
-    if (sorter.order === 'ascend') {
-      order = 'asc';
-    } else if (sorter.order === 'descend') {
-      order = 'desc';
-    }
-
-    searchParams.sort = {};
-
-    if (order) {
-      searchParams.sort[sorter.field] = order;
-    }
-
-    if (search) {
-      getData();
-    }
-  }
-
   return {
     loading,
     empty,
@@ -182,8 +158,7 @@ export function useTable(config) {
     getDataByPage,
     searchParams,
     updateSearchParams,
-    resetSearchParams,
-    sortChangeHandler
+    resetSearchParams
   };
 }
 
