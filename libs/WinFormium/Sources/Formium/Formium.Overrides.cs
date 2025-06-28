@@ -42,6 +42,9 @@ public partial class Formium
     /// </summary>
     internal protected CefBrowserHost? BrowserHost => WebView.BrowserHost;
 
+    /// <summary>
+    /// 
+    /// </summary>
     protected virtual bool DisableAboutMenu => false;
 
     /// <summary>

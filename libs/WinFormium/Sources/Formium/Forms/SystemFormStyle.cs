@@ -20,23 +20,38 @@ using WinFormium.Sources.Formium.Forms.@base;
 
 namespace WinFormium.Sources.Formium.Forms;
 
+/// <summary>
+/// 
+/// </summary>
 public sealed class SystemFormStyle : FormStyle
 {
     private bool _useDirectCompositon = false;
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     internal protected override bool UseBrowserHitTest { get; set; }
+
     internal Func<Bitmap?>? ShouldDrawSpalsh { get; set; }
 
     internal SystemFormStyle(WinFormium.Formium formium) : base(formium)
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public bool TitleBar { get; set; } = true;
 
+    /// <summary>
+    /// 
+    /// </summary>
     protected internal override bool HasSystemTitleBar { get; set; }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override CreateHostWindowDelegate CreateHostWindow()
     {
         return () =>
@@ -62,8 +77,16 @@ public sealed class SystemFormStyle : FormStyle
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 public static class SystemFormStyleExtension
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
     public static SystemFormStyle UseSystemForm(this WindowStyleBuilder builder)
     {
         return new SystemFormStyle(builder.FormiumInstance);

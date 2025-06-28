@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WinFormium.CefGlue;
 using WinFormium.Sources.Bootstrapper;
 using WinFormium.Sources.WebResource.Data;
-using WinFormium.Sources.WebResource.EmbeddedFile;
+using WinFormium.Sources.WebResource.LocalFile;
 
 namespace Forms.App.Main
 {
@@ -80,12 +80,11 @@ namespace Forms.App.Main
         protected override void ConfigureServices(IServiceCollection services)
         {
             // 在这里配置该应用程序的服务
-            services.AddEmbeddedFileResource(new EmbeddedFileResourceOptions()
+            services.AddLocalFileResource(new LocalFileResourceOptions()
             {
                 Scheme = "http",
-                DomainName = "embedded.app.local",
-                ResourceAssembly = typeof(Program).Assembly,
-                EmbeddedResourceDirectoryName = "Source",
+                DomainName = "files.app.local",
+                PhysicalFilePath = Path.Combine(AppPath.RootPath, "Source")
             });
 
             services.AddDataResource("http", "api.app.local", opt => opt.ImportFromCurrentAssembly());

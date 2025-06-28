@@ -6,5 +6,7 @@
         /// 
         /// </summary>
         public static IServiceProvider ServiceProvider { get; set; } = default!;
+
+        //public static CefBrowser? Browser
     }
 }

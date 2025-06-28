@@ -31,6 +31,9 @@ namespace Forms.App.Main
 
             style.TitleBar = true;
             style.DefaultAppTitle = "商友联盟";
+            style.StartCentered = StartCenteredMode.CenterScreen;
+            style.ShowInTaskbar = true;
+            style.WindowState = WinFormium.Sources.Formium.FormiumWindowState.FullScreen;
 
             return style;
         }
@@ -50,7 +53,7 @@ namespace Forms.App.Main
             {
                 var jsMapList = new List<JavaScriptObjectMap>
                 {
-                    new RootJavaScriptObject().Build()
+                    new RootJavaScriptObject(this.Browser, InvokeOnUIThread).Build()
                 };
 
                 var hbrjso = this.BeginRegisterJavaScriptObject(frame);

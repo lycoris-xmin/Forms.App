@@ -4,6 +4,10 @@
 // GITHUB: https://github.com/XuanchenLin/NanUI
 
 namespace WinFormium.Sources.Bootstrapper;
+
+/// <summary>
+/// 
+/// </summary>
 public abstract class WinFormiumStartup : IWinFormiumStartup
 {
     /// <summary>

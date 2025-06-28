@@ -35,6 +35,9 @@ public abstract partial class Formium
     /// </summary>
     public bool AllowFullScreen { get => CurrentFormStyle.AllowFullScreen; set => CurrentFormStyle.AllowFullScreen = value; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public bool EnableSplashScreen { get; set; } = true;
 
     /// <summary>

@@ -9,13 +9,11 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<EmbeddedResource Include="Source\**\*" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="ApiServices\" />
 		<Folder Include="Vue\" />
+		<Folder Include="Pages\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -44,8 +42,13 @@
 		</None>
 
 		<None Update="Source\**\*">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</None>
+
+		<None Update="Pages\**\*">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</None>
 
 		<None Update="Vue\**\*">

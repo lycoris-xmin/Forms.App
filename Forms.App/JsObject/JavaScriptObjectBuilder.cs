@@ -1,4 +1,5 @@
 ﻿using Lycoris.Common.Extensions;
+using WinFormium.CefGlue;
 using WinFormium.Sources.JavaScript.JavaScriptEngine;
 
 namespace Forms.App.Main.JsObject
@@ -6,10 +7,25 @@ namespace Forms.App.Main.JsObject
     internal abstract class JavaScriptObjectBuilder
     {
         // window.external.
-
         private JavaScriptObject JsObject = new JavaScriptObject();
 
+        public delegate void InvokeOnUIThread(Action action);
+
         internal abstract string JsObjectName { get; }
+
+        protected readonly CefBrowser? Browser;
+        protected readonly InvokeOnUIThread Invoke;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="browser"></param>
+        /// <param name="invoke"></param>
+        protected JavaScriptObjectBuilder(CefBrowser? browser, InvokeOnUIThread invoke)
+        {
+            this.Browser = browser;
+            this.Invoke = invoke;
+        }
 
         /// <summary>
         /// 
@@ -459,5 +475,12 @@ namespace Forms.App.Main.JsObject
             this.Initialize();
             return new JavaScriptObjectMap() { Name = this.JsObjectName, JsObject = this.JsObject };
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        protected void InvokeAsync(Func<Task> task) => this.Invoke(() => task.Invoke().RunSync());
     }
 }
