@@ -84,3 +84,4 @@ pnpm-lock.yaml
 /B2B.Helper.Server/wwwroot/index.html
 /B2B.Helper.Server/wwwroot/logo.png
 /B2B.Helper.Server/App_Data/temp
+/Forms.App.EntityFrameworkCore/Migrations

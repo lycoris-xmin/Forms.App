@@ -5,9 +5,6 @@ namespace Forms.App.Model
 {
     public class AppSettings
     {
-        private const string Key = "8A3CD5B9";
-        private const string Iv = "20200101";
-
         private static bool? _IsDebugger = null;
 
         /// <summary>
@@ -72,7 +69,18 @@ namespace Forms.App.Model
             /// <summary>
             /// sql 链接字符串
             /// </summary>
-            public static string ConnectionString { get => $"Data Source={Path.Combine("", "data/app.db")}"; }
+            public static string ConnectionString
+            {
+                get
+                {
+                    var folder = Path.Combine(AppPath.RootPath, "Data");
+
+                    if (!Directory.Exists(folder))
+                        Directory.CreateDirectory(folder);
+
+                    return $"Data Source={Path.Combine(folder, "app.db")}";
+                }
+            }
 
             private static string? _TablePrefix = null;
 
