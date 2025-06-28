@@ -37,8 +37,11 @@ namespace Forms.App.Main.JsObject
         }
 
         /// <summary>
-        /// 获取或构建 JS 对象
+        /// 构建对象
         /// </summary>
+        /// <param name="formuinm"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         internal static Dictionary<string, JavaScriptObject> GetOrCreateJavaScriptObject(this BaseFormium formuinm, string path)
         {
             if (!Map.HasValue())
@@ -69,15 +72,18 @@ namespace Forms.App.Main.JsObject
         }
 
         /// <summary>
-        /// 使用表达式树创建构造函数委托
+        /// 解释器创建构造函数委托
         /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         private static Func<CefBrowser?, InvokeOnUIThread, JavaScriptObjectBuilder> CreateFactory(Type type)
         {
-            var ctor = type.GetConstructor(
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                binder: null,
-                new[] { typeof(CefBrowser), typeof(InvokeOnUIThread) },
-                modifiers: null) ?? throw new InvalidOperationException($"Constructor not found for type {type.FullName}");
+            var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            var ctorArgs = new[] { typeof(CefBrowser), typeof(InvokeOnUIThread) };
+
+            var ctor = type.GetConstructor(flags, binder: null, ctorArgs, modifiers: null)
+                ?? throw new InvalidOperationException($"Constructor not found for type {type.FullName}");
 
             var browserParam = Expression.Parameter(typeof(CefBrowser), "browser");
             var invokeParam = Expression.Parameter(typeof(InvokeOnUIThread), "invoke");
