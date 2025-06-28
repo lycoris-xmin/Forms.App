@@ -1,4 +1,5 @@
 ﻿using Forms.App.Main.JsObject.Builder;
+using Lycoris.Common.Extensions;
 using WinFormium.CefGlue;
 using WinFormium.Sources.JavaScript.JavaScriptEngine;
 
@@ -43,7 +44,13 @@ namespace Forms.App.Main.JsObject.Objects
         /// <returns></returns>
         private string Subtraction(JavaScriptArray array)
         {
-            var result = array.Select(x => x.GetDecimal()).Aggregate(0m, (a, b) => a - b);
+            if (!array.HasValue())
+                return "0";
+
+            if (array.Count == 1)
+                return array.First().GetDecimal().ToString();
+
+            var result = array.Skip(1).Select(x => x.GetDecimal()).Aggregate(array.First().GetDecimal(), (a, b) => a - b);
             return result.ToString();
         }
 
@@ -54,7 +61,14 @@ namespace Forms.App.Main.JsObject.Objects
         /// <returns></returns>
         private string Multiplication(JavaScriptArray array)
         {
-            var result = array.Select(x => x.GetDecimal()).Aggregate(0m, (a, b) => a * b);
+            if (!array.HasValue())
+                return "0";
+
+            var result = 1m;
+
+            foreach (var item in array.Select(x => x.GetDecimal()))
+                result = result * item;
+
             return result.ToString();
         }
 
@@ -65,7 +79,14 @@ namespace Forms.App.Main.JsObject.Objects
         /// <returns></returns>
         private string Division(JavaScriptArray array)
         {
-            var result = array.Select(x => x.GetDecimal()).Aggregate(0m, (a, b) => a * b);
+            if (!array.HasValue())
+                return "0";
+
+            var result = 1m;
+
+            foreach (var item in array.Select(x => x.GetDecimal()))
+                result = result / item;
+
             return result.ToString();
         }
     }
