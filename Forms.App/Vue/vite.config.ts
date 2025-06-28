@@ -33,7 +33,7 @@ export default defineConfig(configEnv => {
     },
     server: {
       host: '0.0.0.0',
-      port: 9000,
+      port: 7777,
       open: true,
       proxy: createViteProxy(viteEnv, enableProxy)
     },
@@ -41,7 +41,7 @@ export default defineConfig(configEnv => {
       port: 9725
     },
     build: {
-      outDir: '../wwwroot',
+      outDir: '../Source',
       reportCompressedSize: false,
       sourcemap: viteEnv.VITE_SOURCE_MAP === 'Y',
       commonjsOptions: {

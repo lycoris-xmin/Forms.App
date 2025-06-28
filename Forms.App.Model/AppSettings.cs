@@ -25,20 +25,41 @@ namespace Forms.App.Model
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static string StartUrl
+        public class Route
         {
-            get
+            /// <summary>
+            /// 
+            /// </summary>
+            public static string MainUrl
             {
-                if (IsDebugger)
+                get
                 {
-                    return "http://files.app.local";
+                    if (IsDebugger)
+                    {
+                        return "http://127.0.0.1:7777";
+                    }
+                    else
+                    {
+                        return "http://files.app.local";
+                    }
                 }
-                else
+            }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public static string LaunchUrl
+            {
+                get
                 {
-                    return "http://embedded.app.local";
+                    if (IsDebugger)
+                    {
+                        return "http://127.0.0.1:7777";
+                    }
+                    else
+                    {
+                        return "http://files.app.local";
+                    }
                 }
             }
         }

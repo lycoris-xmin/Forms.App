@@ -2,16 +2,14 @@
 using WinFormium.CefGlue;
 using WinFormium.Sources.JavaScript.JavaScriptEngine;
 
-namespace Forms.App.Main.JsObject
+namespace Forms.App.Main.JsObject.Builder
 {
-    internal abstract class JavaScriptObjectBuilder
+    public abstract class JavaScriptObjectBuilder
     {
         // window.external.
         private JavaScriptObject JsObject = new JavaScriptObject();
 
         public delegate void InvokeOnUIThread(Action action);
-
-        internal abstract string JsObjectName { get; }
 
         protected readonly CefBrowser? Browser;
         protected readonly InvokeOnUIThread Invoke;
@@ -23,8 +21,8 @@ namespace Forms.App.Main.JsObject
         /// <param name="invoke"></param>
         protected JavaScriptObjectBuilder(CefBrowser? browser, InvokeOnUIThread invoke)
         {
-            this.Browser = browser;
-            this.Invoke = invoke;
+            Browser = browser;
+            Invoke = invoke;
         }
 
         /// <summary>
@@ -35,7 +33,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddReadOnlyProperty(string propertyName, int value)
         {
-            this.JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value));
+            JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value));
             return this;
         }
 
@@ -47,7 +45,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddReadOnlyProperty(string propertyName, long value)
         {
-            this.JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value.ToString()));
+            JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value.ToString()));
             return this;
         }
 
@@ -59,7 +57,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddReadOnlyProperty(string propertyName, decimal value)
         {
-            this.JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value));
+            JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value));
             return this;
         }
 
@@ -71,7 +69,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddReadOnlyProperty(string propertyName, string value)
         {
-            this.JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value));
+            JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value));
             return this;
         }
 
@@ -83,7 +81,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddReadOnlyProperty(string propertyName, bool value)
         {
-            this.JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value));
+            JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value));
             return this;
         }
 
@@ -95,7 +93,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddReadOnlyProperty(string propertyName, DateTime value)
         {
-            this.JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value));
+            JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(value));
             return this;
         }
 
@@ -107,7 +105,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddReadOnlyProperty(string propertyName, Func<JavaScriptValue> configure)
         {
-            this.JsObject.DefineProperty(propertyName.ToCamelCase(), configure);
+            JsObject.DefineProperty(propertyName.ToCamelCase(), configure);
             return this;
         }
 
@@ -120,7 +118,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddProperty(string propertyName, Func<int> getter, Action<int> setter)
         {
-            this.JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(getter()), value => setter(((int?)value ?? 0)));
+            JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(getter()), value => setter((int?)value ?? 0));
             return this;
         }
 
@@ -133,9 +131,9 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddProperty(string propertyName, Func<long> getter, Action<long> setter)
         {
-            this.JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(getter().ToString()), value =>
+            JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(getter().ToString()), value =>
             {
-                var temp = ((string?)value ?? string.Empty);
+                var temp = (string?)value ?? string.Empty;
                 setter(temp.ToTryLong() ?? 0);
             });
             return this;
@@ -150,9 +148,16 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddProperty(string propertyName, Func<string> getter, Action<string> setter)
         {
-            this.JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(getter()), value => setter(((string?)value ?? string.Empty)));
+            JsObject.DefineProperty(propertyName.ToCamelCase(), () => new JavaScriptValue(getter()), value => setter((string?)value ?? string.Empty));
             return this;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        protected JavaScriptObjectBuilder AddMethod(Action configure) => this.AddMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -162,7 +167,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddMethod(string methodName, Action configure)
         {
-            this.JsObject.Add(methodName.ToCamelCase(), ((args) =>
+            JsObject.Add(methodName.ToCamelCase(), (args) =>
             {
                 try
                 {
@@ -173,7 +178,7 @@ namespace Forms.App.Main.JsObject
                 {
                     return new JavaScriptValue(false);
                 }
-            }));
+            });
             return this;
         }
 
@@ -185,7 +190,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddMethod(string methodName, Action<JavaScriptArray> configure)
         {
-            this.JsObject.Add(methodName.ToCamelCase(), ((args) =>
+            JsObject.Add(methodName.ToCamelCase(), (args) =>
             {
                 try
                 {
@@ -196,7 +201,7 @@ namespace Forms.App.Main.JsObject
                 {
                     return new JavaScriptValue(false);
                 }
-            }));
+            });
             return this;
         }
 
@@ -208,7 +213,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddMethod(string methodName, Func<JavaScriptArray, int> configure)
         {
-            this.JsObject.Add(methodName.ToCamelCase(), ((args) =>
+            JsObject.Add(methodName.ToCamelCase(), (args) =>
             {
                 try
                 {
@@ -219,7 +224,7 @@ namespace Forms.App.Main.JsObject
                 {
                     return null;
                 }
-            }));
+            });
 
             return this;
         }
@@ -232,7 +237,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddMethod(string methodName, Func<JavaScriptArray, long> configure)
         {
-            this.JsObject.Add(methodName.ToCamelCase(), ((args) =>
+            JsObject.Add(methodName.ToCamelCase(), (args) =>
             {
                 try
                 {
@@ -243,7 +248,7 @@ namespace Forms.App.Main.JsObject
                 {
                     return null;
                 }
-            }));
+            });
 
             return this;
         }
@@ -256,7 +261,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddMethod(string methodName, Func<JavaScriptArray, string> configure)
         {
-            this.JsObject.Add(methodName.ToCamelCase(), ((args) =>
+            JsObject.Add(methodName.ToCamelCase(), (args) =>
             {
                 try
                 {
@@ -267,7 +272,7 @@ namespace Forms.App.Main.JsObject
                 {
                     return null;
                 }
-            }));
+            });
 
             return this;
         }
@@ -280,7 +285,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddMethod(string methodName, Func<JavaScriptArray, DateTime> configure)
         {
-            this.JsObject.Add(methodName.ToCamelCase(), ((args) =>
+            JsObject.Add(methodName.ToCamelCase(), (args) =>
             {
                 try
                 {
@@ -291,7 +296,7 @@ namespace Forms.App.Main.JsObject
                 {
                     return null;
                 }
-            }));
+            });
 
             return this;
         }
@@ -305,7 +310,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddMethod<T>(string methodName, Func<JavaScriptArray, T> configure) where T : class, new()
         {
-            this.JsObject.Add(methodName.ToCamelCase(), ((args) =>
+            JsObject.Add(methodName.ToCamelCase(), (args) =>
             {
                 try
                 {
@@ -316,7 +321,7 @@ namespace Forms.App.Main.JsObject
                 {
                     return null;
                 }
-            }));
+            });
 
             return this;
         }
@@ -329,7 +334,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddAsyncMethod(string methodName, Func<JavaScriptArray, Task> configure)
         {
-            this.JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
+            JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
             {
                 try
                 {
@@ -352,7 +357,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddAsyncMethod(string methodName, Func<JavaScriptArray, Task<int>> configure)
         {
-            this.JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
+            JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
             {
                 try
                 {
@@ -375,7 +380,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddAsyncMethod(string methodName, Func<JavaScriptArray, Task<long>> configure)
         {
-            this.JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
+            JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
             {
                 try
                 {
@@ -398,7 +403,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddAsyncMethod(string methodName, Func<JavaScriptArray, Task<string>> configure)
         {
-            this.JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
+            JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
             {
                 try
                 {
@@ -421,7 +426,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddAsyncMethod(string methodName, Func<JavaScriptArray, Task<DateTime>> configure)
         {
-            this.JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
+            JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
             {
                 try
                 {
@@ -445,7 +450,7 @@ namespace Forms.App.Main.JsObject
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddAsyncMethod<T>(string methodName, Func<JavaScriptArray, Task<T>> configure) where T : class, new()
         {
-            this.JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
+            JsObject.Add(methodName.ToCamelCase(), async (args, promise) =>
             {
                 try
                 {
@@ -470,10 +475,10 @@ namespace Forms.App.Main.JsObject
         /// </summary>
         /// <param name="formium"></param>
         /// <param name="frame"></param>
-        internal JavaScriptObjectMap Build()
+        internal JavaScriptObject Build()
         {
-            this.Initialize();
-            return new JavaScriptObjectMap() { Name = this.JsObjectName, JsObject = this.JsObject };
+            Initialize();
+            return JsObject;
         }
 
         /// <summary>
@@ -481,6 +486,6 @@ namespace Forms.App.Main.JsObject
         /// </summary>
         /// <param name="task"></param>
         /// <returns></returns>
-        protected void InvokeAsync(Func<Task> task) => this.Invoke(() => task.Invoke().RunSync());
+        protected void InvokeAsync(Func<Task> task) => Invoke(() => task.Invoke().RunSync());
     }
 }

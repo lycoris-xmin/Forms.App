@@ -1,71 +1,39 @@
-﻿using Forms.App.Core.Logging;
-using Forms.App.Main.JsObject;
+﻿using Forms.App.Main.Shared;
 using Forms.App.Model;
-using WinFormium;
+using WinFormium.CefGlue;
 using WinFormium.Sources.Formium.EventArgs;
-using WinFormium.Sources.Formium.Forms;
-using WinFormium.Sources.Formium.Forms.@base;
 
 namespace Forms.App.Main
 {
-    public class MainWindow : Formium
+    public class MainWindow : BaseFormium
     {
-        private readonly IServerLogger _logger;
-
-        public MainWindow(IServerLoggerFactory factory)
-        {
-            this.Url = AppSettings.StartUrl;
-            this.WindowState = WinFormium.Sources.Formium.FormiumWindowState.Maximized;
-            _logger = factory.CreateLogger<MainWindow>();
-        }
-
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
-        protected override FormStyle ConfigureWindowStyle(WindowStyleBuilder builder)
+        /// <param name="provider"></param>
+        public MainWindow(IServiceProvider provider) : base(provider)
         {
-            // 此处配置窗口的样式和属性，或留空以使用默认样式
-            var style = builder.UseSystemForm();
-
-            style.TitleBar = true;
-            style.DefaultAppTitle = "商友联盟";
-            style.StartCentered = StartCenteredMode.CenterScreen;
-            style.ShowInTaskbar = true;
-            style.WindowState = WinFormium.Sources.Formium.FormiumWindowState.FullScreen;
-
-            return style;
+            this.Url = AppSettings.Route.MainUrl;
+            this.WindowState = WinFormium.Sources.Formium.FormiumWindowState.Maximized;
         }
 
         /// <summary>
-        /// 
+        /// 窗体加载
         /// </summary>
         /// <param name="args"></param>
-        protected override void OnLoaded(BrowserEventArgs args)
+        protected override void OnReady(BrowserEventArgs args)
         {
-            if (AppSettings.IsDebugger && !this.HasDevTools)
-                ShowDevTools();
+            //
+        }
 
-            var frame = this.Browser?.GetMainFrame();
+        /// <summary>
+        /// 页面加载
+        /// </summary>
+        /// <param name="args"></param>
+        /// <param name="mainFrame"></param>
+        protected override void PageOnReady(PageLoadStartEventArgs args, CefFrame? mainFrame)
+        {
 
-            if (frame != null)
-            {
-                var jsMapList = new List<JavaScriptObjectMap>
-                {
-                    new RootJavaScriptObject(this.Browser, InvokeOnUIThread).Build()
-                };
-
-
-
-                var hbrjso = this.BeginRegisterJavaScriptObject(frame);
-
-                jsMapList.ForEach(x => this.RegisterJavaScriptObject(hbrjso, x.Name, x.JsObject));
-
-                this.EndRegisterJavaScriptObject(hbrjso);
-            }
-
-            base.OnLoaded(args);
         }
     }
 }

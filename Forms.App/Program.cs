@@ -1,6 +1,7 @@
 using Forms.App.Common;
 using Forms.App.Core;
 using Forms.App.EntityFrameworkCore;
+using Forms.App.Main.JsObject;
 using Forms.App.Model;
 using Forms.App.Model.Contexts;
 using Forms.App.Services;
@@ -84,6 +85,8 @@ namespace Forms.App.Main
             var appHost = hostBuilder.Build();
 
             FormAppContext.ServiceProvider = appHost.Services;
+
+            JavaScriptBuilderExtensions.BuildMap();
 
             var app = appHost.Services.GetService<WinFormiumApp>();
 

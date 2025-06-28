@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Forms.App.Main": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
