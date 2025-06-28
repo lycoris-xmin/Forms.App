@@ -73,12 +73,10 @@ namespace Forms.App.Model
             {
                 get
                 {
-                    var folder = Path.Combine(AppPath.RootPath, "Data");
+                    if (!Directory.Exists(AppPath.Data))
+                        Directory.CreateDirectory(AppPath.Data);
 
-                    if (!Directory.Exists(folder))
-                        Directory.CreateDirectory(folder);
-
-                    return $"Data Source={Path.Combine(folder, "app.db")}";
+                    return $"Data Source={Path.Combine(AppPath.Data, "app.db")}";
                 }
             }
 

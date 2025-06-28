@@ -23,12 +23,12 @@
         /// <summary>
         /// wwwroot路径
         /// </summary>
-        public static string WebRootPath => $"{RootPath}/Source";
+        public static string WebRootPath => $"{RootPath}/source";
 
         /// <summary>
         /// AppData文件
         /// </summary>
-        public static string AppData { get => $"{RootPath}/Data"; }
+        public static string Data { get => $"{RootPath}/data"; }
 
         /// <summary>
         /// 配置文件路径
@@ -55,7 +55,7 @@
         /// <summary>
         /// 缓存文件夹
         /// </summary>
-        public static string Temp => Path.Combine(RootPath, "Temp");
+        public static string Temp => Path.Combine(RootPath, "temp");
 
         /// <summary>
         /// 日志文件路径

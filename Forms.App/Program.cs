@@ -8,6 +8,7 @@ using Forms.App.Services;
 using Lycoris.Autofac.Extensions;
 using Lycoris.Common.ConfigurationManager;
 using Lycoris.Common.Extensions;
+using Lycoris.Common.Helper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -26,6 +27,8 @@ namespace Forms.App.Main
         {
             // ≈‰÷√Œƒº˛
             SettingManager.JsonConfigurationInitialization(AppPath.JsonFile);
+
+            ConfigHelper.SetConfigPath(AppPath.Data);
 
             var hostBuilder = Host.CreateDefaultBuilder();
 

@@ -1,5 +1,6 @@
 ﻿using Forms.App.EntityFrameworkCore.Builder.ColumnConverters;
 using Forms.App.EntityFrameworkCore.Data.Attributes;
+using Forms.App.EntityFrameworkCore.Data.Constants;
 using Forms.App.EntityFrameworkCore.Data.Tables.Shared;
 using Forms.App.Model;
 using Lycoris.Common.Extensions;
@@ -158,10 +159,12 @@ namespace Forms.App.EntityFrameworkCore.Builder
 
                 if (column.JsonMap)
                 {
-                    builder.OwnsOne(p.Name, p.Name, valueBuiler =>
-                    {
-                        valueBuiler.ToJson();
-                    });
+                    propertyBuilder.HasColumnType(DbColumnType.TEXT);
+
+                    var converterType = typeof(JsonMapConverter<>).MakeGenericType(p.PropertyType);
+
+                    // 直接调用 HasConversion(Type)
+                    propertyBuilder.HasConversion(converterType);
                 }
                 else if (column.Sensitive)
                 {
