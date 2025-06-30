@@ -5,7 +5,7 @@ using WinFormium.Sources.Formium.EventArgs;
 
 namespace Forms.App.Main
 {
-    public class MainWindow : BaseFormium
+    public class MainWindow : BaseFormiumWindow
     {
         /// <summary>
         /// ctor

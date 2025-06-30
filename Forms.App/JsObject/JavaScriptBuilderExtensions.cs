@@ -42,7 +42,7 @@ namespace Forms.App.Main.JsObject
         /// <param name="formuinm"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        internal static Dictionary<string, JavaScriptObject> GetOrCreateJavaScriptObject(this BaseFormium formuinm, string path)
+        internal static Dictionary<string, JavaScriptObject> GetOrCreateJavaScriptObject(this BaseFormiumWindow formuinm, string path)
         {
             if (!Map.HasValue())
                 return new Dictionary<string, JavaScriptObject>();

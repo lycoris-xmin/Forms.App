@@ -12,7 +12,7 @@ using static Forms.App.Main.JsObject.Builder.JavaScriptObjectBuilder;
 
 namespace Forms.App.Main.Shared
 {
-    public abstract class BaseFormium : Formium
+    public abstract class BaseFormiumWindow : Formium
     {
         /// <summary>
         /// 
@@ -38,7 +38,7 @@ namespace Forms.App.Main.Shared
         /// ctor
         /// </summary>
         /// <param name="provider"></param>
-        public BaseFormium(IServiceProvider provider)
+        public BaseFormiumWindow(IServiceProvider provider)
         {
             this.ServiceProvider = provider;
             this.Logger = provider.GetRequiredService<IServerLoggerFactory>().CreateLogger(this.GetType());

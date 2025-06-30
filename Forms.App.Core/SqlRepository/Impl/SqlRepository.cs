@@ -22,11 +22,6 @@ namespace Forms.App.Core.SqlRepository.Impl
         /// </summary>
         private readonly SqlServerContext _context;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private bool _delayedDoubleDeletion = false;
-
         private SqlParameterBuilder<T, TPrimary>? _parameterBuilder = null;
         /// <summary>
         /// 
