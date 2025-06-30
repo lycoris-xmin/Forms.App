@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36127.28
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forms.App.Main", "Forms.App\Forms.App.Main.csproj", "{4B84C255-B2A5-4B43-AE3F-91E1CB11F12B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forms.App.Main", "Forms.App.Main\Forms.App.Main.csproj", "{4B84C255-B2A5-4B43-AE3F-91E1CB11F12B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forms.App.Services", "Forms.App.Services\Forms.App.Services.csproj", "{184D2FD5-44AC-46C0-98ED-FB7DD6250B3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forms.App.Application", "Forms.App.Application\Forms.App.Application.csproj", "{184D2FD5-44AC-46C0-98ED-FB7DD6250B3B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forms.App.Model", "Forms.App.Model\Forms.App.Model.csproj", "{D7DCA69C-ECE6-47C0-8FA6-BCDCB5171535}"
 EndProject

@@ -26,7 +26,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Forms.App.Services\Forms.App.Services.csproj" />
+		<ProjectReference Include="..\Forms.App.Application\Forms.App.Application.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
