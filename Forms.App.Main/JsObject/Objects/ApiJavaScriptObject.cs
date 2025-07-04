@@ -199,7 +199,7 @@ namespace Forms.App.Main.JsObject.Objects
                 }
             }
 
-            return array.Where(x => x.Methods != null && x.Methods.Any()).ToArray();
+            return [.. array.Where(x => x.Methods != null && x.Methods.Count != 0)];
         }
 
         /// <summary>
@@ -250,6 +250,21 @@ namespace Forms.App.Main.JsObject.Objects
             if (value == null)
                 return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
 
+            if (targetType == typeof(string))
+                return value.GetString();
+            else if (targetType == typeof(int))
+                return value.GetInt();
+            else if (targetType == typeof(float))
+                return value.GetFloat();
+            else if (targetType == typeof(double))
+                return value.GetDouble();
+            else if (targetType == typeof(bool))
+                return value.GetBoolean();
+            else if (targetType == typeof(decimal))
+                return value.GetDecimal();
+            else if (targetType == typeof(DateTime))
+                return value.GetDateTime();
+
             // 先转为 JSON 字符串再反序列化为目标类型
             var json = value.ToJson();
 
@@ -264,21 +279,48 @@ namespace Forms.App.Main.JsObject.Objects
         private JavaScriptValue ConvertReturnValue(Type returnType, object? result)
         {
             if (result == null)
+            {
+                if (returnType == typeof(string))
+                    return new JavaScriptValue("");
+
                 return new JavaScriptValue();
+            }
             else if (returnType == typeof(string))
+            {
                 return new JavaScriptValue((string)result);
+            }
             else if (returnType == typeof(int))
+            {
                 return new JavaScriptValue((int)result);
+            }
             else if (returnType == typeof(long))
+            {
                 return new JavaScriptValue(result.ToString()!);
+            }
             else if (returnType == typeof(double))
+            {
                 return new JavaScriptValue(((double)result).ToString("0.00")!);
+            }
             else if (returnType == typeof(decimal))
+            {
                 return new JavaScriptValue(((decimal)result).ToString("0.00")!);
+            }
             else if (returnType == typeof(DateTime))
+            {
                 return new JavaScriptValue(((DateTime)result).ToString("yyyy-MM-dd HH:mm:ss")!);
-            else
-                return new JavaScriptValue(result.ToJson());
+            }
+
+            var js = new JavaScriptObject();
+
+            var props = result.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var prop in props)
+            {
+                var value = prop.GetValue(result);
+                js.Add(prop.Name.ToCamelCase(), ConvertReturnValue(prop.PropertyType, value));
+            }
+
+            return js;
         }
 
         /// <summary>

@@ -27,10 +27,28 @@ namespace Forms.App.Main.Server
         /// <param name="a"></param>
         /// <returns></returns>
         [ApiMethod("TestReturn")]
-        public string Test(string a)
+        public TestRe Test(string a)
         {
             this.Logger.Info(a);
-            return a;
+            return  new TestRe();
         }
+    }
+
+    public class TestRe()
+    {
+        public string Name { get; set; } = "123";
+
+        private string ddd { get; set; }
+
+        public TestReCC CC { get; set; } = new TestReCC();
+    }
+
+    public class TestReCC()
+    {
+        public string Name { get; set; } = "123";
+
+        private string ddd { get; set; }
+
+        public string CC { get; set; }
     }
 }
