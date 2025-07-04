@@ -21,7 +21,7 @@ namespace Forms.App.Main.Shared
         /// <summary>
         /// 
         /// </summary>
-        protected IServerLogger Logger { get => this.LoggerFactory.CreateLogger(this.GetType()); }
+        protected IServerLogger Logger { get => LoggerFactory.CreateLogger(GetType()); }
 
         /// <summary>
         /// 
