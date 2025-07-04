@@ -248,28 +248,66 @@ namespace Forms.App.Main.JsObject.Objects
         /// <returns></returns>
         public static object? ConvertToParamer(JavaScriptValue value, Type targetType)
         {
-            if (value == null)
-                return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
+            if (value == null || value.ValueType == JavaScriptValueType.Undefined)
+                return GetDefaultValue(targetType);
 
+            // 基础类型和直接支持类型
             if (targetType == typeof(string))
                 return value.GetString();
-            else if (targetType == typeof(int))
+            if (targetType == typeof(int))
                 return value.GetInt();
-            else if (targetType == typeof(float))
+            if (targetType == typeof(float))
                 return value.GetFloat();
-            else if (targetType == typeof(double))
+            if (targetType == typeof(double))
                 return value.GetDouble();
-            else if (targetType == typeof(bool))
+            if (targetType == typeof(bool))
                 return value.GetBoolean();
-            else if (targetType == typeof(decimal))
+            if (targetType == typeof(decimal))
                 return value.GetDecimal();
-            else if (targetType == typeof(DateTime))
+            if (targetType == typeof(DateTime))
                 return value.GetDateTime();
 
-            // 先转为 JSON 字符串再反序列化为目标类型
-            var json = value.ToJson();
+            // 枚举
+            if (targetType.IsEnum)
+            {
+                var str = value.GetString();
+                return Enum.Parse(targetType, str!, ignoreCase: true);
+            }
 
-            return JsonConvert.DeserializeObject(json, targetType);
+            // Nullable<T>
+            if (Nullable.GetUnderlyingType(targetType) is Type innerType)
+                return ConvertToParamer(value, innerType);
+
+            // 数组或 List<T>
+            if (typeof(IEnumerable).IsAssignableFrom(targetType) && targetType != typeof(string))
+            {
+                var json = value.ToJson();
+                return JsonConvert.DeserializeObject(json, targetType);
+            }
+
+            // Dictionary<string, T> 或其他复杂对象
+            if (targetType.IsClass || targetType.IsValueType)
+            {
+                var json = value.ToJson();
+                return JsonConvert.DeserializeObject(json, targetType);
+            }
+
+            throw new NotSupportedException($"暂不支持将 JavaScriptValue 转换为 {targetType.Name}");
+        }
+
+        /// <summary>
+        /// 获取类型的默认值
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static object? GetDefaultValue(Type type)
+        {
+            if (type.IsValueType)
+                return Nullable.GetUnderlyingType(type) != null
+                    ? null
+                    : Activator.CreateInstance(type);
+
+            return null;
         }
 
         /// <summary>
