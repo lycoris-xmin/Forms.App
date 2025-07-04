@@ -17,20 +17,20 @@ namespace Forms.App.Main.JsObject.Objects
         protected override void Initialize()
         {
             // 
-            this.AddMethod(GotoMainPage);
+            AddMethod(GotoMainPage);
 
             // 
-            this.AddMethod(GotoLaunchPage);
+            AddMethod(GotoLaunchPage);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        private void GotoMainPage() => this.Browser?.GetMainFrame().LoadUrl(AppSettings.Route.MainUrl);
+        private void GotoMainPage() => Browser?.GetMainFrame().LoadUrl(AppSettings.Route.MainUrl);
 
         /// <summary>
         /// 
         /// </summary>
-        private void GotoLaunchPage() => this.Browser?.GetMainFrame().LoadUrl(AppSettings.Route.LaunchUrl);
+        private void GotoLaunchPage() => Browser?.GetMainFrame().LoadUrl(AppSettings.Route.LaunchUrl);
     }
 }

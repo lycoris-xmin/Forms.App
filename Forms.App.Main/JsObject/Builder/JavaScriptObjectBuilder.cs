@@ -157,7 +157,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        protected JavaScriptObjectBuilder AddMethod(Action configure) => this.AddMethod(configure.Method.Name, configure);
+        protected JavaScriptObjectBuilder AddMethod(Action configure) => AddMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -187,7 +187,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        protected JavaScriptObjectBuilder AddMethod(Action<JavaScriptArray> configure) => this.AddMethod(configure.Method.Name, configure);
+        protected JavaScriptObjectBuilder AddMethod(Action<JavaScriptArray> configure) => AddMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -217,7 +217,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        protected JavaScriptObjectBuilder AddMethod(Func<JavaScriptArray, int> configure) => this.AddMethod(configure.Method.Name, configure);
+        protected JavaScriptObjectBuilder AddMethod(Func<JavaScriptArray, int> configure) => AddMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -248,7 +248,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        protected JavaScriptObjectBuilder AddMethod(Func<JavaScriptArray, long> configure) => this.AddMethod(configure.Method.Name, configure);
+        protected JavaScriptObjectBuilder AddMethod(Func<JavaScriptArray, long> configure) => AddMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -279,7 +279,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        protected JavaScriptObjectBuilder AddMethod(Func<JavaScriptArray, string> configure) => this.AddMethod(configure.Method.Name, configure);
+        protected JavaScriptObjectBuilder AddMethod(Func<JavaScriptArray, string> configure) => AddMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -310,7 +310,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        protected JavaScriptObjectBuilder AddMethod(Func<JavaScriptArray, DateTime> configure) => this.AddMethod(configure.Method.Name, configure);
+        protected JavaScriptObjectBuilder AddMethod(Func<JavaScriptArray, DateTime> configure) => AddMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -342,7 +342,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// <param name="configure"></param>
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddMethod<T>(Func<JavaScriptArray, T> configure) where T : class, new()
-            => this.AddMethod(configure.Method.Name, configure);
+            => AddMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -374,7 +374,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        protected JavaScriptObjectBuilder AddAsyncMethod(Func<JavaScriptArray, Task> configure) => this.AddAsyncMethod(configure.Method.Name, configure);
+        protected JavaScriptObjectBuilder AddAsyncMethod(Func<JavaScriptArray, Task> configure) => AddAsyncMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -404,7 +404,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        protected JavaScriptObjectBuilder AddAsyncMethod(Func<JavaScriptArray, Task<int>> configure) => this.AddAsyncMethod(configure.Method.Name, configure);
+        protected JavaScriptObjectBuilder AddAsyncMethod(Func<JavaScriptArray, Task<int>> configure) => AddAsyncMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -434,7 +434,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        protected JavaScriptObjectBuilder AddAsyncMethod(Func<JavaScriptArray, Task<long>> configure) => this.AddAsyncMethod(configure.Method.Name, configure);
+        protected JavaScriptObjectBuilder AddAsyncMethod(Func<JavaScriptArray, Task<long>> configure) => AddAsyncMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -464,7 +464,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        protected JavaScriptObjectBuilder AddAsyncMethod(Func<JavaScriptArray, Task<string>> configure) => this.AddAsyncMethod(configure.Method.Name, configure);
+        protected JavaScriptObjectBuilder AddAsyncMethod(Func<JavaScriptArray, Task<string>> configure) => AddAsyncMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -494,7 +494,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        protected JavaScriptObjectBuilder AddAsyncMethod(Func<JavaScriptArray, Task<DateTime>> configure) => this.AddAsyncMethod(configure.Method.Name, configure);
+        protected JavaScriptObjectBuilder AddAsyncMethod(Func<JavaScriptArray, Task<DateTime>> configure) => AddAsyncMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 
@@ -525,7 +525,7 @@ namespace Forms.App.Main.JsObject.Builder
         /// <param name="configure"></param>
         /// <returns></returns>
         protected JavaScriptObjectBuilder AddAsyncMethod<T>(Func<JavaScriptArray, Task<T>> configure) where T : class, new()
-            => this.AddAsyncMethod(configure.Method.Name, configure);
+            => AddAsyncMethod(configure.Method.Name, configure);
 
         /// <summary>
         /// 

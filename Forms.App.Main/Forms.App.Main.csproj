@@ -10,7 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="FormiumApi\" />
+		<Folder Include="Server\" />
 		<Folder Include="Source\" />
 	</ItemGroup>
 

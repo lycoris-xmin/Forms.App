@@ -17,13 +17,13 @@ namespace Forms.App.Main.JsObject.Objects
         /// </summary>
         protected override void Initialize()
         {
-            this.AddMethod("Add", this.Addition);
+            AddMethod("Add", Addition);
 
-            this.AddMethod("Sub", this.Subtraction);
+            AddMethod("Sub", Subtraction);
 
-            this.AddMethod("Multip", this.Multiplication);
+            AddMethod("Multip", Multiplication);
 
-            this.AddMethod("Division", this.Division);
+            AddMethod("Division", Division);
         }
 
         /// <summary>
