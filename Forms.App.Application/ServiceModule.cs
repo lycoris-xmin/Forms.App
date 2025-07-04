@@ -1,6 +1,6 @@
 ﻿using Lycoris.Autofac.Extensions;
 
-namespace Forms.App.Services
+namespace Forms.App.Application
 {
     public class ServiceModule : AutofacRegisterModule
     {

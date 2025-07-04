@@ -7,9 +7,9 @@ using WinFormium.Sources.Bootstrapper;
 using WinFormium.Sources.WebResource.Data;
 using WinFormium.Sources.WebResource.LocalFile;
 
-namespace Forms.App.Main
+namespace Forms.App.Main.Application
 {
-    internal class Startup : WinFormiumStartup
+    internal class App_Startup : WinFormiumStartup
     {
         /// <summary>
         /// 
@@ -22,7 +22,7 @@ namespace Forms.App.Main
                 if (factory == null)
                     return null;
 
-                return factory.CreateLogger<Startup>();
+                return factory.CreateLogger<App_Startup>();
             }
         }
 
@@ -44,10 +44,11 @@ namespace Forms.App.Main
         protected override void WinFormiumMain(string[] args)
         {
             ApplicationConfiguration.Initialize();
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+            System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+            System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
 

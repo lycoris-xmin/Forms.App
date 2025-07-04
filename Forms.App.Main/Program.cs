@@ -1,10 +1,11 @@
+using Forms.App.Application;
 using Forms.App.Common;
 using Forms.App.Core;
 using Forms.App.EntityFrameworkCore;
+using Forms.App.Main.Application;
 using Forms.App.Main.JsObject;
 using Forms.App.Model;
 using Forms.App.Model.Contexts;
-using Forms.App.Services;
 using Lycoris.Autofac.Extensions;
 using Lycoris.Common.ConfigurationManager;
 using Lycoris.Common.Extensions;
@@ -58,6 +59,7 @@ namespace Forms.App.Main
                 opt.AddRegisterModule<EntityFrameworkCoreModule>();
                 opt.AddRegisterModule<CoreModule>();
                 opt.AddRegisterModule<ServiceModule>();
+                opt.AddRegisterModule<MainModule>();
             });
 
             var appBuilder = WinFormiumApp.CreateBuilder();
@@ -80,7 +82,7 @@ namespace Forms.App.Main
 
                 appBuilder.UseDevToolsMenu();
 
-                appBuilder.UseWinFormiumApp<Startup>();
+                appBuilder.UseWinFormiumApp<App_Startup>();
 
                 appBuilder!.Build();
             });

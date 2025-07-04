@@ -33,7 +33,7 @@ namespace Forms.App.Main
         /// <param name="mainFrame"></param>
         protected override void PageOnReady(PageLoadStartEventArgs args, CefFrame? mainFrame)
         {
-
+            //
         }
     }
 }
