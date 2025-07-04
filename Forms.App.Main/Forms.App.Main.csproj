@@ -10,7 +10,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="Server\" />
 		<Folder Include="Source\" />
 	</ItemGroup>
 

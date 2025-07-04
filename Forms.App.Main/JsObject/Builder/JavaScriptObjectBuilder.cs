@@ -554,6 +554,18 @@ namespace Forms.App.Main.JsObject.Builder
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="propertyName"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        protected JavaScriptObjectBuilder AddObject(string propertyName, JavaScriptObject obj)
+        {
+            JsObject.DefineProperty(propertyName.ToCamelCase(), () => obj);
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected abstract void Initialize();
 
         /// <summary>

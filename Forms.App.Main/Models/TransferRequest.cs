@@ -30,6 +30,11 @@ namespace Forms.App.Main.Models
         /// <summary>
         /// 
         /// </summary>
+        public string? JsonData { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         public TransferRequest AddQueryParameter(string name, string? value)
         {
@@ -68,6 +73,17 @@ namespace Forms.App.Main.Models
                 return this;
 
             this.Files.Add(name, (fileName, data));
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <returns></returns>
+        public TransferRequest AddJsonData(string jsonData)
+        {
+            this.JsonData = jsonData;
             return this;
         }
     }

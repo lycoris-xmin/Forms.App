@@ -1,65 +1,22 @@
 ﻿using Forms.App.Core.Logging;
-using Forms.App.Model.Models.Api;
-using Lycoris.Common.Extensions;
-using System.Text;
-using WinFormium.Sources.WebResource.Data.@base;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Forms.App.Main.Shared
 {
-    public class BaseApiService : DataResourceService
+    /// <summary>
+    /// 
+    /// </summary>
+    public class BaseApiService
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public IServiceProvider ServiceProvider { get; set; } = default!;
+        protected readonly IServiceProvider ServiceProvider;
+        protected readonly IServerLogger Logger;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public IServerLoggerFactory LoggerFactory { get; set; } = default!;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        protected IServerLogger Logger { get => LoggerFactory.CreateLogger(GetType()); }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected IResourceResult Success()
+        public BaseApiService(IServiceProvider serviceProvider)
         {
-            var resp = new BaseOutput()
-            {
-                Code = 0,
-                Msg = null
-            };
+            this.ServiceProvider = serviceProvider;
 
-            return Content(resp.ToJson(), "application/json", Encoding.UTF8);
+            var factory = serviceProvider.GetRequiredService<IServerLoggerFactory>();
+            this.Logger = factory.CreateLogger(this.GetType());
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        protected IResourceResult Success<T>(DataOutput<T> data) => Content(data.ToJson(), "application/json", Encoding.UTF8);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        protected IResourceResult Success<T>(ListOutput<T> data) => Content(data.ToJson(), "application/json", Encoding.UTF8);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        protected IResourceResult Success<T>(PageOutput<T> data) => Content(data.ToJson(), "application/json", Encoding.UTF8);
     }
 }
