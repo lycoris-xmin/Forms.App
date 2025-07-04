@@ -4,6 +4,7 @@ using Forms.App.Model.Contexts;
 using Lycoris.Common.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using System.Collections;
 using System.Reflection;
 using Vanara.Extensions;
 using WinFormium.CefGlue;
@@ -279,49 +280,65 @@ namespace Forms.App.Main.JsObject.Objects
         private JavaScriptValue ConvertReturnValue(Type returnType, object? result)
         {
             if (result == null)
-            {
-                if (returnType == typeof(string))
-                    return new JavaScriptValue("");
+                return returnType == typeof(string) ? new JavaScriptValue("") : new JavaScriptValue();
 
-                return new JavaScriptValue();
-            }
-            else if (returnType == typeof(string))
+            if (result is string str)
+                return new JavaScriptValue(str);
+            if (result is int i)
+                return new JavaScriptValue(i);
+            if (result is long l)
+                return new JavaScriptValue(l.ToString());
+            if (result is double d)
+                return new JavaScriptValue(d.ToString("0.00"));
+            if (result is decimal dec)
+                return new JavaScriptValue(dec.ToString("0.00"));
+            if (result is bool b)
+                return new JavaScriptValue(b);
+            if (result is DateTime dt)
+                return new JavaScriptValue(dt.ToString("yyyy-MM-dd HH:mm:ss"));
+
+            // 处理数组、List
+            if (typeof(IEnumerable).IsAssignableFrom(returnType) && returnType != typeof(string))
             {
-                return new JavaScriptValue((string)result);
-            }
-            else if (returnType == typeof(int))
-            {
-                return new JavaScriptValue((int)result);
-            }
-            else if (returnType == typeof(long))
-            {
-                return new JavaScriptValue(result.ToString()!);
-            }
-            else if (returnType == typeof(double))
-            {
-                return new JavaScriptValue(((double)result).ToString("0.00")!);
-            }
-            else if (returnType == typeof(decimal))
-            {
-                return new JavaScriptValue(((decimal)result).ToString("0.00")!);
-            }
-            else if (returnType == typeof(DateTime))
-            {
-                return new JavaScriptValue(((DateTime)result).ToString("yyyy-MM-dd HH:mm:ss")!);
+                var jsArray = new JavaScriptArray();
+
+                foreach (var item in (IEnumerable)result)
+                    jsArray.Add(ConvertReturnValue(item?.GetType() ?? typeof(object), item));
+
+                return jsArray;
             }
 
-            var js = new JavaScriptObject();
+            // 处理 Dictionary<string, T>
+            if (result is IDictionary dict)
+            {
+                var jsObj = new JavaScriptObject();
 
-            var props = result.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                foreach (DictionaryEntry entry in dict)
+                {
+                    var key = entry.Key?.ToString() ?? "";
+                    jsObj.Add(key.ToCamelCase(), ConvertReturnValue(entry.Value?.GetType() ?? typeof(object), entry.Value));
+                }
+
+                return jsObj;
+            }
+
+            // 处理自定义对象
+            var obj = new JavaScriptObject();
+            var props = returnType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             foreach (var prop in props)
             {
+                if (!prop.CanRead)
+                    continue;
+
                 var value = prop.GetValue(result);
-                js.Add(prop.Name.ToCamelCase(), ConvertReturnValue(prop.PropertyType, value));
+                var valueType = prop.PropertyType;
+                obj.Add(prop.Name.ToCamelCase(), ConvertReturnValue(valueType, value));
             }
 
-            return js;
+            return obj;
         }
+
 
         /// <summary>
         /// 
