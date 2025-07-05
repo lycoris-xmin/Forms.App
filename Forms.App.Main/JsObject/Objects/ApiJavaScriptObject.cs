@@ -36,8 +36,10 @@ namespace Forms.App.Main.JsObject.Objects
             {
                 var jsObj = new JavaScriptObject();
 
+                // 方法入参转化
                 object?[] ConvertArgs(JavaScriptArray args, MethodInfo method) => ConvertArguments(args, method);
 
+                // 异步无法返回值方法
                 async Task HandleAsyncNoReturn(JavaScriptArray args, JavaScriptPromise promise, MethodInfo method)
                 {
                     try
@@ -46,9 +48,8 @@ namespace Forms.App.Main.JsObject.Objects
                         var service = scope.ServiceProvider.GetRequiredService(@class.ClassType);
 
                         var argValues = ConvertArgs(args, method);
-                        var task = method.Invoke(service, argValues) as Task;
 
-                        if (task != null)
+                        if (method.Invoke(service, argValues) is Task task)
                             await task;
 
                         promise.Resolve(true);
@@ -59,6 +60,7 @@ namespace Forms.App.Main.JsObject.Objects
                     }
                 }
 
+                // 异步有返回值方法
                 async Task HandleAsyncWithReturn(JavaScriptArray args, JavaScriptPromise promise, MethodInfo method)
                 {
                     try
@@ -82,6 +84,7 @@ namespace Forms.App.Main.JsObject.Objects
                     }
                 }
 
+                // 同步无返回值方法
                 JavaScriptValue HandleSyncNoReturn(JavaScriptArray args, MethodInfo method)
                 {
                     try
@@ -98,6 +101,7 @@ namespace Forms.App.Main.JsObject.Objects
                     }
                 }
 
+                // 同步有返回值方法
                 JavaScriptValue HandleSyncWithReturn(JavaScriptArray args, MethodInfo method)
                 {
                     using var scope = FormAppContext.ServiceProvider.CreateScope();
@@ -107,6 +111,7 @@ namespace Forms.App.Main.JsObject.Objects
                     return ConvertReturnValue(method.ReturnType, result);
                 }
 
+                // 进行方法注册
                 foreach (var method in @class.Methods)
                 {
                     var hasReturnValue = method.MethodInfo.ReturnType != typeof(void) && method.MethodInfo.ReturnType != typeof(Task);
@@ -161,7 +166,7 @@ namespace Forms.App.Main.JsObject.Objects
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        private ApiType[] GetApiMenthods(Type[] types)
+        private static ApiType[] GetApiMenthods(Type[] types)
         {
             var filter = types.Select(x => new ApiType()
             {
@@ -303,9 +308,7 @@ namespace Forms.App.Main.JsObject.Objects
         private static object? GetDefaultValue(Type type)
         {
             if (type.IsValueType)
-                return Nullable.GetUnderlyingType(type) != null
-                    ? null
-                    : Activator.CreateInstance(type);
+                return Nullable.GetUnderlyingType(type) != null ? null : Activator.CreateInstance(type);
 
             return null;
         }
@@ -315,7 +318,7 @@ namespace Forms.App.Main.JsObject.Objects
         /// </summary>
         /// <param name="result"></param>
         /// <returns></returns>
-        private JavaScriptValue ConvertReturnValue(Type returnType, object? result)
+        private static JavaScriptValue ConvertReturnValue(Type returnType, object? result)
         {
             if (result == null)
                 return returnType == typeof(string) ? new JavaScriptValue("") : new JavaScriptValue();
@@ -346,7 +349,7 @@ namespace Forms.App.Main.JsObject.Objects
                 return jsArray;
             }
 
-            // 处理 Dictionary<string, T>
+            // 处理字典
             if (result is IDictionary dict)
             {
                 var jsObj = new JavaScriptObject();
@@ -376,7 +379,6 @@ namespace Forms.App.Main.JsObject.Objects
 
             return obj;
         }
-
 
         /// <summary>
         /// 
