@@ -8,7 +8,9 @@ using System.Collections;
 using System.Reflection;
 using Vanara.Extensions;
 using WinFormium.CefGlue;
+using WinFormium.JavaScript;
 using WinFormium.Sources.JavaScript.JavaScriptEngine;
+using static Quartz.Logging.OperationName;
 
 namespace Forms.App.Main.JsObject.Objects
 {
@@ -253,7 +255,7 @@ namespace Forms.App.Main.JsObject.Objects
         /// <returns></returns>
         public static object? ConvertToParamer(JavaScriptValue value, Type targetType)
         {
-            if (value == null || value.ValueType == JavaScriptValueType.Undefined)
+            if (value == null || value.ValueType == JavaScriptValueType.Undefined || value.ValueType == JavaScriptValueType.Null)
                 return GetDefaultValue(targetType);
 
             // 基础类型和直接支持类型
@@ -283,21 +285,58 @@ namespace Forms.App.Main.JsObject.Objects
             if (Nullable.GetUnderlyingType(targetType) is Type innerType)
                 return ConvertToParamer(value, innerType);
 
-            // 数组或 List<T>
-            if (typeof(IEnumerable).IsAssignableFrom(targetType) && targetType != typeof(string))
+            var jsObj = value.ToObject();
+            var dict = new Dictionary<string, object?>();
+            foreach (var kv in jsObj)
             {
-                var json = value.ToJson();
-                return JsonConvert.DeserializeObject(json, targetType);
+                var key = kv.Key;
+                var val = ConvertJsValue(kv.Value);
+                dict[key] = val;
             }
 
-            // Dictionary<string, T> 或其他复杂对象
-            if (targetType.IsClass || targetType.IsValueType)
-            {
-                var json = value.ToJson();
-                return JsonConvert.DeserializeObject(json, targetType);
-            }
+            var json = JsonConvert.SerializeObject(dict);
+            return JsonConvert.DeserializeObject(json, targetType);
+        }
 
-            throw new NotSupportedException($"暂不支持将 JavaScriptValue 转换为 {targetType.Name}");
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static object? ConvertJsValue(JavaScriptValue value)
+        {
+            switch (value.ValueType)
+            {
+                case JavaScriptValueType.Null:
+                case JavaScriptValueType.Undefined:
+                    return null;
+                case JavaScriptValueType.Number:
+                    return value.GetDouble();
+                case JavaScriptValueType.String:
+                    return value.GetString();
+                case JavaScriptValueType.Bool:
+                    return value.GetBoolean();
+                case JavaScriptValueType.Date:
+                    return value.GetDateTime();
+                case JavaScriptValueType.Object:
+                    var obj = value.ToObject();
+                    var result = new Dictionary<string, object?>();
+                    foreach (var kv in obj)
+                    {
+                        result[kv.Key] = ConvertJsValue(kv.Value);
+                    }
+                    return result;
+                case JavaScriptValueType.Array:
+                    var array = value.ToArray(); 
+                    var list = new List<object?>();
+                    foreach (var item in array)
+                    {
+                        list.Add(ConvertJsValue(item));
+                    }
+                    return list;
+                default:
+                    return null;
+            }
         }
 
         /// <summary>
