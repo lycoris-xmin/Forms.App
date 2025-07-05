@@ -290,7 +290,7 @@ namespace Forms.App.Main.JsObject.Objects
             foreach (var kv in jsObj)
             {
                 var key = kv.Key;
-                var val = ConvertJsValue(kv.Value);
+                var val = ConvertInputValue(kv.Value);
                 dict[key] = val;
             }
 
@@ -303,7 +303,7 @@ namespace Forms.App.Main.JsObject.Objects
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        private static object? ConvertJsValue(JavaScriptValue value)
+        private static object? ConvertInputValue(JavaScriptValue value)
         {
             switch (value.ValueType)
             {
@@ -323,7 +323,7 @@ namespace Forms.App.Main.JsObject.Objects
                     var result = new Dictionary<string, object?>();
                     foreach (var kv in obj)
                     {
-                        result[kv.Key] = ConvertJsValue(kv.Value);
+                        result[kv.Key] = ConvertInputValue(kv.Value);
                     }
                     return result;
                 case JavaScriptValueType.Array:
@@ -331,7 +331,7 @@ namespace Forms.App.Main.JsObject.Objects
                     var list = new List<object?>();
                     foreach (var item in array)
                     {
-                        list.Add(ConvertJsValue(item));
+                        list.Add(ConvertInputValue(item));
                     }
                     return list;
                 default:
