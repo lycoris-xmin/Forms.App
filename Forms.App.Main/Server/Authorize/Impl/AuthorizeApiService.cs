@@ -2,17 +2,15 @@
 using Forms.App.Main.Shared;
 using Lycoris.Autofac.Extensions;
 
-namespace Forms.App.Main.Server
+namespace Forms.App.Main.Server.Authorize.Impl
 {
     /// <summary>
     /// 
     /// </summary>
     [ApiModule("Authorize")]
-    [AutofacRegister(ServiceLifeTime.Transient)]
-    public class AuthorizeApiService : BaseApiService
+    [AutofacRegister(ServiceLifeTime.Scoped, PropertiesAutowired = true, EnableInterceptor = true)]
+    public class AuthorizeApiService : BaseApiService, IAuthorizeApiService
     {
-        public AuthorizeApiService(IServiceProvider serviceProvider) : base(serviceProvider) { }
-
         [ApiMethod]
         public async Task<List<TestBInput>> TestAsync(TestInput input)
         {

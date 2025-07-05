@@ -8,15 +8,22 @@ namespace Forms.App.Main.Shared
     /// </summary>
     public class BaseApiService
     {
-        protected readonly IServiceProvider ServiceProvider;
-        protected readonly IServerLogger Logger;
+        public IServiceProvider ServiceProvider { get; set; } = default!;
 
-        public BaseApiService(IServiceProvider serviceProvider)
+        private IServerLogger? _logger;
+
+        protected IServerLogger Logger
         {
-            this.ServiceProvider = serviceProvider;
+            get
+            {
+                if (_logger != null)
+                    return _logger;
 
-            var factory = serviceProvider.GetRequiredService<IServerLoggerFactory>();
-            this.Logger = factory.CreateLogger(this.GetType());
+                var factory = ServiceProvider.GetRequiredService<IServerLoggerFactory>();
+                _logger = factory.CreateLogger(this.GetType());
+
+                return _logger;
+            }
         }
     }
 }

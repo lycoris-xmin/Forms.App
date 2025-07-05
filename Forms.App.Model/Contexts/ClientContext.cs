@@ -2,7 +2,7 @@
 
 namespace Forms.App.Model.Contexts
 {
-    [AutofacRegister(ServiceLifeTime.Singleton)]
+    [AutofacRegister(ServiceLifeTime.Scoped)]
     public class ClientContext
     {
         /// <summary>

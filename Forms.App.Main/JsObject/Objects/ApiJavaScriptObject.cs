@@ -1,6 +1,8 @@
-﻿using Forms.App.Main.JsObject.Builder;
+﻿using Castle.DynamicProxy.Internal;
+using Forms.App.Main.JsObject.Builder;
 using Forms.App.Main.Shared;
 using Forms.App.Model.Contexts;
+using Lycoris.Autofac.Extensions;
 using Lycoris.Common.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -175,6 +177,46 @@ namespace Forms.App.Main.JsObject.Objects
             });
 
             var array = filter.ToArray();
+
+            var filerArray = new List<ApiType>();
+
+            foreach (var item in array)
+            {
+                var registerAttr = item.ClassType.GetCustomAttribute<AutofacRegisterAttribute>(false);
+                if (registerAttr == null)
+                    continue;
+
+                if (registerAttr.Self)
+                {
+                    filerArray.Add(item);
+                    continue;
+                }
+
+                var interfaces = item.ClassType.GetAllInterfaces();
+                if (!interfaces.HasValue())
+                {
+                    filerArray.Add(item);
+                    continue;
+                }
+
+                var @interface = interfaces.Where(x => x.Name.EndsWith(item.ClassType.Name)).FirstOrDefault();
+                if (@interface != null)
+                {
+                    item.ClassType = @interface;
+                    filerArray.Add(item);
+                    continue;
+                }
+
+                @interface = interfaces.LastOrDefault();
+                if (@interface != null)
+                {
+                    item.ClassType = @interface;
+                    filerArray.Add(item);
+                    continue;
+                }
+
+                filerArray.Add(item);
+            }
 
             if (!array.HasValue())
                 return Array.Empty<ApiType>();
