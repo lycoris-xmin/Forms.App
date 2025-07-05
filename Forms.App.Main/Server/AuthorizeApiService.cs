@@ -14,10 +14,11 @@ namespace Forms.App.Main.Server
         public AuthorizeApiService(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
         [ApiMethod]
-        public async Task TestAsync(TestInput input)
+        public async Task<List<TestBInput>> TestAsync(TestInput input)
         {
             Console.WriteLine(1);
             await Task.CompletedTask;
+            return input.B;
         }
     }
 

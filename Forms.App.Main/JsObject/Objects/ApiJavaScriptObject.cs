@@ -8,9 +8,7 @@ using System.Collections;
 using System.Reflection;
 using Vanara.Extensions;
 using WinFormium.CefGlue;
-using WinFormium.JavaScript;
 using WinFormium.Sources.JavaScript.JavaScriptEngine;
-using static Quartz.Logging.OperationName;
 
 namespace Forms.App.Main.JsObject.Objects
 {
@@ -78,7 +76,7 @@ namespace Forms.App.Main.JsObject.Objects
                         var resultProperty = task.GetType().GetProperty("Result");
                         var result = resultProperty?.GetValue(task);
 
-                        promise.Resolve(ConvertReturnValue(method.ReturnType, result));
+                        promise.Resolve(ConvertReturnValue(result));
                     }
                     catch (Exception ex)
                     {
@@ -110,7 +108,7 @@ namespace Forms.App.Main.JsObject.Objects
                     var service = scope.ServiceProvider.GetRequiredService(@class.ClassType);
 
                     var result = method.Invoke(service, ConvertArgs(args, method));
-                    return ConvertReturnValue(method.ReturnType, result);
+                    return ConvertReturnValue(result);
                 }
 
                 // 进行方法注册
@@ -273,6 +271,8 @@ namespace Forms.App.Main.JsObject.Objects
                 return value.GetDecimal();
             if (targetType == typeof(DateTime))
                 return value.GetDateTime();
+            if (targetType == typeof(Guid))
+                return value.GetString()!.ToGuid();
 
             // 枚举
             if (targetType.IsEnum)
@@ -327,7 +327,7 @@ namespace Forms.App.Main.JsObject.Objects
                     }
                     return result;
                 case JavaScriptValueType.Array:
-                    var array = value.ToArray(); 
+                    var array = value.ToArray();
                     var list = new List<object?>();
                     foreach (var item in array)
                     {
@@ -357,38 +357,53 @@ namespace Forms.App.Main.JsObject.Objects
         /// </summary>
         /// <param name="result"></param>
         /// <returns></returns>
-        private static JavaScriptValue ConvertReturnValue(Type returnType, object? result)
+        private static JavaScriptValue ConvertReturnValue(object? result)
         {
             if (result == null)
-                return returnType == typeof(string) ? new JavaScriptValue("") : new JavaScriptValue();
+                return new JavaScriptValue();
+
+            var type = result.GetType();
+
+            if (result is Guid guid)
+                return new JavaScriptValue(guid.ToString());
+
+            if (result is TimeSpan ts)
+                return new JavaScriptValue(ts.ToString());
 
             if (result is string str)
                 return new JavaScriptValue(str);
-            if (result is int i)
-                return new JavaScriptValue(i);
-            if (result is long l)
-                return new JavaScriptValue(l.ToString());
-            if (result is double d)
-                return new JavaScriptValue(d.ToString("0.00"));
-            if (result is decimal dec)
-                return new JavaScriptValue(dec.ToString("0.00"));
+
             if (result is bool b)
                 return new JavaScriptValue(b);
+
+            if (result is int i)
+                return new JavaScriptValue(i);
+
+            // js 不支持 long，转 string
+            if (result is long l)
+                return new JavaScriptValue(l.ToString());
+
+            if (result is float f)
+                return new JavaScriptValue(f.ToString("0.00"));
+
+            if (result is double d)
+                return new JavaScriptValue(d.ToString("0.00"));
+
+            if (result is decimal dec)
+                return new JavaScriptValue(dec.ToString("0.00"));
+
             if (result is DateTime dt)
                 return new JavaScriptValue(dt.ToString("yyyy-MM-dd HH:mm:ss"));
 
-            // 处理数组、List
-            if (typeof(IEnumerable).IsAssignableFrom(returnType) && returnType != typeof(string))
-            {
-                var jsArray = new JavaScriptArray();
+            if (type.IsEnum)
+                return new JavaScriptValue((int)result);
 
-                foreach (var item in (IEnumerable)result)
-                    jsArray.Add(ConvertReturnValue(item?.GetType() ?? typeof(object), item));
+            // Nullable<T> 递归处理
+            var underlying = Nullable.GetUnderlyingType(type);
+            if (underlying != null)
+                return ConvertReturnValue(Convert.ChangeType(result, underlying));
 
-                return jsArray;
-            }
-
-            // 处理字典
+            // Dictionary 处理
             if (result is IDictionary dict)
             {
                 var jsObj = new JavaScriptObject();
@@ -396,27 +411,38 @@ namespace Forms.App.Main.JsObject.Objects
                 foreach (DictionaryEntry entry in dict)
                 {
                     var key = entry.Key?.ToString() ?? "";
-                    jsObj.Add(key.ToCamelCase(), ConvertReturnValue(entry.Value?.GetType() ?? typeof(object), entry.Value));
+                    jsObj.Add(key.ToCamelCase(), ConvertReturnValue(entry.Value));
                 }
 
                 return jsObj;
             }
-
-            // 处理自定义对象
-            var obj = new JavaScriptObject();
-            var props = returnType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-            foreach (var prop in props)
+            else if (result is IEnumerable enumerable && type != typeof(string))
             {
-                if (!prop.CanRead)
-                    continue;
+                var jsArray = new JavaScriptArray();
 
-                var value = prop.GetValue(result);
-                var valueType = prop.PropertyType;
-                obj.Add(prop.Name.ToCamelCase(), ConvertReturnValue(valueType, value));
+                foreach (var item in enumerable)
+                    jsArray.Add(ConvertReturnValue(item));
+
+                return jsArray;
             }
+            else
+            {
+                // 自定义对象：反射属性
+                var jsObj = new JavaScriptObject();
+                var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-            return obj;
+                foreach (var prop in props)
+                {
+                    if (!prop.CanRead)
+                        continue;
+
+                    var name = prop.Name.ToCamelCase();
+                    var value = prop.GetValue(result);
+                    jsObj.Add(name, ConvertReturnValue(value));
+                }
+
+                return jsObj;
+            }
         }
 
         /// <summary>
