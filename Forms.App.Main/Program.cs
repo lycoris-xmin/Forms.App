@@ -80,7 +80,8 @@ namespace Forms.App.Main
                         handler.ActiveRunningInstance();
                 });
 
-                appBuilder.UseDevToolsMenu();
+                if (AppSettings.IsDebugger)
+                    appBuilder.UseDevToolsMenu();
 
                 appBuilder.UseWinFormiumApp<App_Startup>();
 

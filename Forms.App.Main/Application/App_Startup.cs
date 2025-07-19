@@ -59,19 +59,35 @@ namespace Forms.App.Main.Application
         protected override void ConfigurationChromiumEmbedded(ChromiumEnvironmentBuiler cef)
         {
             // 在此处配置 Chromium Embedded Framwork
-            cef.ConfigureCommandLineArguments(cmdLine =>
+            cef.ConfigureCommandLineArguments(opt =>
             {
-                cmdLine.AppendSwitch("enable-gpu");
-                //cmdLine.AppendArgument("disable-web-security");
                 //cmdLine.AppendSwitch("no-proxy-server");
+                opt.AppendSwitch("ignore-certificate-errors");
+                opt.AppendSwitch("disable-web-security");
+                opt.AppendSwitch("enable-media-stream");
+                opt.AppendSwitch("enable-print-preview");
+                opt.AppendSwitch("enable-gpu");
+                opt.AppendSwitch("autoplay-policy", "no-user-gesture-required");
             });
 
-            cef.ConfigureDefaultSettings(settings =>
+            // 
+            cef.ConfigureDefaultSettings(opt =>
             {
-                settings.WindowlessRenderingEnabled = true;
+                opt.WindowlessRenderingEnabled = true;
             });
 
+            // 
             cef.UseCustomUserDataDirectory(Path.Combine(AppPath.RootPath, "Local"));
+
+            // 
+            cef.ConfigureSubprocess(opt =>
+            {
+                opt.SubprocessFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FormiumClientSubprocess.exe");
+                opt.SubprocessNotExists = (architecture, path) =>
+                {
+                    return MessageBox.Show($"", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+                };
+            });
         }
 
         /// <summary>

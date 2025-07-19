@@ -61,6 +61,60 @@ namespace Forms.App.Model
             }
         }
 
+        public class Application
+        {
+            private static string? _Host = null;
+            /// <summary>
+            /// 
+            /// </summary>
+            public static string Host
+            {
+                get
+                {
+                    if (_Host != null)
+                        return _Host;
+
+                    _Host = "Application:Host".TryGetConfig();
+                    _Host ??= "http://127.0.0.1:9999";
+                    return _Host;
+                }
+            }
+
+            private static int? _LocalPort = null;
+            /// <summary>
+            /// 
+            /// </summary>
+            public static int LocalPort
+            {
+                get
+                {
+                    if (_LocalPort.HasValue)
+                        return _LocalPort.Value;
+
+                    var tmp = "Application:LocalPort".TryGetConfig();
+                    _LocalPort = tmp.ToTryInt() ?? 5004;
+                    return _LocalPort.Value;
+                }
+            }
+
+            private static int? _ProxyPort = null;
+            /// <summary>
+            /// 
+            /// </summary>
+            public static int ProxyPort
+            {
+                get
+                {
+                    if (_ProxyPort.HasValue)
+                        return _ProxyPort.Value;
+
+                    var tmp = "Application:ProxyPort".TryGetConfig();
+                    _ProxyPort = tmp.ToTryInt() ?? 5004;
+                    return _ProxyPort.Value;
+                }
+            }
+        }
+
         /// <summary>
         /// Sql数据库配置
         /// </summary>
