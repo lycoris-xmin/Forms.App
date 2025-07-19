@@ -2,7 +2,7 @@
 using Forms.App.Main.Shared;
 using Lycoris.Autofac.Extensions;
 
-namespace Forms.App.Main.Server.Authorize.Impl
+namespace Forms.App.Main.PageApi.Authorize.Impl
 {
     /// <summary>
     /// 
