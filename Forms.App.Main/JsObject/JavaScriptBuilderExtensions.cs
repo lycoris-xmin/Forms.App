@@ -1,4 +1,4 @@
-ï»¿using Forms.App.Main.JsObject.Builder;
+using Forms.App.Main.JsObject.Builder;
 using Forms.App.Main.Shared;
 using Lycoris.Common.Extensions;
 using System.Linq.Expressions;
@@ -15,7 +15,7 @@ namespace Forms.App.Main.JsObject
         private static readonly Dictionary<Type, Func<CefBrowser?, InvokeOnUIThread, JavaScriptObjectBuilder>> FactoryMap = new();
 
         /// <summary>
-        /// æž„å»ºæ³¨å†Œç±»æ˜ å°„
+        /// ¹¹½¨×¢²áÀàÓ³Éä
         /// </summary>
         internal static void BuildMap()
         {
@@ -31,30 +31,36 @@ namespace Forms.App.Main.JsObject
                           .Select(x => new JavaScriptObjectMap()
                           {
                               Name = x.Attr.Name.ToCamelCase(),
+                              Host = x.Attr.Host,
                               Path = x.Attr.Path,
                               Type = x.Type
                           }).ToList();
         }
 
         /// <summary>
-        /// æž„å»ºå¯¹è±¡
+        /// ¹¹½¨¶ÔÏó
         /// </summary>
         /// <param name="formuinm"></param>
-        /// <param name="path"></param>
+        /// <param name="uri"></param>
         /// <returns></returns>
-        internal static Dictionary<string, JavaScriptObject> GetOrCreateJavaScriptObject(this BaseFormiumWindow formuinm, string path)
+        internal static Dictionary<string, JavaScriptObject> GetOrCreateJavaScriptObject(this BaseFormiumWindow formuinm, Uri uri)
         {
             if (!Map.HasValue())
                 return new Dictionary<string, JavaScriptObject>();
 
+            var filterMaps = new Dictionary<string, JavaScriptObject>();
+
             foreach (var item in Map)
             {
-                if (item.Path.IsNullOrEmpty() || item.Path!.Equals(path))
-                {
-                    if (item.Instance != null)
-                        continue;
+                if (!item.Host.IsNullOrEmpty() && !uri.Host!.Contains(item.Host!))
+                    continue;
 
-                    // èŽ·å–æˆ–åˆ›å»ºå·¥åŽ‚å§”æ‰˜
+                if (!item.Path.IsNullOrEmpty() && !item.Path!.Equals(uri.AbsolutePath))
+                    continue;
+
+                if (item.Instance == null)
+                {
+                    // »ñÈ¡»ò´´½¨¹¤³§Î¯ÍÐ
                     if (!FactoryMap.TryGetValue(item.Type, out var factory))
                     {
                         factory = CreateFactory(item.Type);
@@ -62,17 +68,18 @@ namespace Forms.App.Main.JsObject
                     }
 
                     var builder = factory(formuinm.BrowserInstance, formuinm.InvokeThead);
+
                     item.Instance = builder.Build();
                 }
+
+                filterMaps.Add(item.Name, item.Instance);
             }
 
-            return Map.Where(x => x.Path.IsNullOrEmpty() || x.Path!.Equals(path))
-                      .OrderBy(x => (x.Path ?? "").Length)
-                      .ToDictionary(x => x.Name, x => x.Instance!) ?? new Dictionary<string, JavaScriptObject>();
+            return filterMaps ?? new Dictionary<string, JavaScriptObject>();
         }
 
         /// <summary>
-        /// è§£é‡Šå™¨åˆ›å»ºæž„é€ å‡½æ•°å§”æ‰˜
+        /// ½âÊÍÆ÷´´½¨¹¹Ôìº¯ÊýÎ¯ÍÐ
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -97,3 +104,4 @@ namespace Forms.App.Main.JsObject
         }
     }
 }
+

@@ -10,10 +10,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="Source\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Lycoris.NetDimension.NanUI" Version="1.0.109.604" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.6">
 		  <PrivateAssets>all</PrivateAssets>
@@ -43,7 +39,7 @@
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</None>
 
-		<None Update="Source\**\*">
+		<None Update="source\**\*">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</None>

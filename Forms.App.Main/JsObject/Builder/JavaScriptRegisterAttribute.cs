@@ -1,4 +1,4 @@
-﻿namespace Forms.App.Main.JsObject.Builder
+namespace Forms.App.Main.JsObject.Builder
 {
     /// <summary>
     /// 
@@ -10,6 +10,11 @@
         /// 
         /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string? Host { get; set; }
 
         /// <summary>
         /// 
@@ -26,3 +31,4 @@
         }
     }
 }
+

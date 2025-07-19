@@ -1,6 +1,6 @@
-﻿using Forms.App.Core.Logging;
+﻿using Forms.App.Core.Contexts;
+using Forms.App.Core.Logging;
 using Forms.App.Model;
-using Forms.App.Model.Contexts;
 using Microsoft.Extensions.DependencyInjection;
 using WinFormium.CefGlue;
 using WinFormium.Sources.Bootstrapper;

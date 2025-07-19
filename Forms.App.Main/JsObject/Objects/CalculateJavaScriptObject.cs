@@ -1,4 +1,4 @@
-锘縰sing Forms.App.Main.JsObject.Builder;
+using Forms.App.Main.JsObject.Builder;
 using Lycoris.Common.Extensions;
 using WinFormium.CefGlue;
 using WinFormium.Sources.JavaScript.JavaScriptEngine;
@@ -27,7 +27,7 @@ namespace Forms.App.Main.JsObject.Objects
         }
 
         /// <summary>
-        /// 鍔犳硶
+        /// 加法
         /// </summary>
         /// <param name="array"></param>
         /// <returns></returns>
@@ -38,7 +38,7 @@ namespace Forms.App.Main.JsObject.Objects
         }
 
         /// <summary>
-        /// 鍑忔硶
+        /// 减法
         /// </summary>
         /// <param name="array"></param>
         /// <returns></returns>
@@ -55,7 +55,7 @@ namespace Forms.App.Main.JsObject.Objects
         }
 
         /// <summary>
-        /// 涔樻硶
+        /// 乘法
         /// </summary>
         /// <param name="array"></param>
         /// <returns></returns>
@@ -73,7 +73,7 @@ namespace Forms.App.Main.JsObject.Objects
         }
 
         /// <summary>
-        /// 闄ゆ硶
+        /// 除法
         /// </summary>
         /// <param name="array"></param>
         /// <returns></returns>
@@ -96,3 +96,4 @@ namespace Forms.App.Main.JsObject.Objects
         }
     }
 }
+

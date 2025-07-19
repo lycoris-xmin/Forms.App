@@ -89,7 +89,7 @@ namespace Forms.App.Main.Shared
             {
                 if (!frame.Url.IsNullOrEmpty())
                 {
-                    var registerMap = this.GetOrCreateJavaScriptObject(new Uri(frame.Url).AbsolutePath);
+                    var registerMap = this.GetOrCreateJavaScriptObject(new Uri(frame.Url));
 
                     if (registerMap.HasValue())
                     {

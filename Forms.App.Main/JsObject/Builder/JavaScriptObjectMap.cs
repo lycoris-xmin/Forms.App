@@ -1,4 +1,4 @@
-﻿using WinFormium.Sources.JavaScript.JavaScriptEngine;
+using WinFormium.Sources.JavaScript.JavaScriptEngine;
 
 namespace Forms.App.Main.JsObject.Builder
 {
@@ -9,6 +9,8 @@ namespace Forms.App.Main.JsObject.Builder
     {
         public string Name { get; set; } = default!;
 
+        public string? Host { get; set; }
+
         public string? Path { get; set; }
 
         public Type Type { get; set; } = default!;
@@ -16,3 +18,4 @@ namespace Forms.App.Main.JsObject.Builder
         public JavaScriptObject? Instance { get; set; }
     }
 }
+

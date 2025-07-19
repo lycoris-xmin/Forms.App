@@ -1,11 +1,11 @@
 using Forms.App.Application;
 using Forms.App.Common;
 using Forms.App.Core;
+using Forms.App.Core.Contexts;
 using Forms.App.EntityFrameworkCore;
 using Forms.App.Main.Application;
 using Forms.App.Main.JsObject;
 using Forms.App.Model;
-using Forms.App.Model.Contexts;
 using Lycoris.Autofac.Extensions;
 using Lycoris.Common.ConfigurationManager;
 using Lycoris.Common.Extensions;
@@ -89,7 +89,7 @@ namespace Forms.App.Main
 
             var appHost = hostBuilder.Build();
 
-            FormAppContext.ServiceProvider = appHost.Services;
+            FormAppContext.RegisterServiceProvider(appHost.Services);
 
             JavaScriptBuilderExtensions.BuildMap();
 

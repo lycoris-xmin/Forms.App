@@ -60,6 +60,16 @@
         /// <summary>
         /// 日志文件路径
         /// </summary>
-        public static string LogFile => Path.Combine(RootPath, "logs/log.txt");
+        public static string LogFolder => Path.Combine(RootPath, "logs");
+
+        /// <summary>
+        /// 日志文件路径
+        /// </summary>
+        public static string LogFile => Path.Combine(LogFolder, "logs/log.txt");
+
+        /// <summary>
+        /// 缓存文件夹
+        /// </summary>
+        public static string TempFolder => Path.Combine(RootPath, "temp");
     }
 }

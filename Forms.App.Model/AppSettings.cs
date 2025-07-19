@@ -76,7 +76,7 @@ namespace Forms.App.Model
                     if (!Directory.Exists(AppPath.Data))
                         Directory.CreateDirectory(AppPath.Data);
 
-                    return $"Data Source={Path.Combine(AppPath.Data, "app.db")}";
+                    return $"Data Source={Path.Combine(AppPath.Data, "source/data/app.db")}";
                 }
             }
 
