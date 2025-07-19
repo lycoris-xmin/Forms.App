@@ -1,4 +1,4 @@
-锘縰sing Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Forms.App.Core.Logging
 {
@@ -12,35 +12,36 @@ namespace Forms.App.Core.Logging
         bool IsEnabled(LogLevel logLevel);
 
         /// <summary>
-        /// 鏃ュ織璁板綍
+        /// 日志记录
         /// </summary>
-        /// <param name="message">鏃ュ織鍐呭</param>
+        /// <param name="message">日志内容</param>
         void Info(string message);
 
         /// <summary>
-        /// 鏃ュ織璁板綍
+        /// 日志记录
         /// </summary>
-        /// <param name="message">鏃ュ織鍐呭</param>
+        /// <param name="message">日志内容</param>
         void Warn(string message);
 
         /// <summary>
-        /// 鏃ュ織璁板綍
+        /// 日志记录
         /// </summary>
-        /// <param name="message">鏃ュ織鍐呭</param>
-        /// <param name="ex"><see cref="Exception"/>寮傚父淇℃伅</param>
+        /// <param name="message">日志内容</param>
+        /// <param name="ex"><see cref="Exception"/>异常信息</param>
         void Warn(string message, Exception? ex);
 
         /// <summary>
-        /// 鏃ュ織璁板綍
+        /// 日志记录
         /// </summary>
-        /// <param name="message">鏃ュ織鍐呭</param>
+        /// <param name="message">日志内容</param>
         void Error(string message);
 
         /// <summary>
-        /// 鏃ュ織璁板綍
+        /// 日志记录
         /// </summary>
-        /// <param name="message">鏃ュ織鍐呭</param>
+        /// <param name="message">日志内容</param>
         /// <param name="ex"><see cref="Exception"/></param>
         void Error(string message, Exception? ex);
     }
 }
+

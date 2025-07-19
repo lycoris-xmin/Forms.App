@@ -1,4 +1,4 @@
-锘縰sing Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Forms.App.Core.Logging.Impl
 {
@@ -12,32 +12,32 @@ namespace Forms.App.Core.Logging.Impl
         }
 
         /// <summary>
-        /// 鏃ュ織璁板綍
+        /// 日志记录
         /// </summary>
         /// <param name="message"></param>
         public void Info(string message) => _logger.LogInformation("{message}", message);
 
         /// <summary>
-        /// 鏃ュ織璁板綍
+        /// 日志记录
         /// </summary>
         /// <param name="message"></param>
         public void Warn(string message) => _logger.LogWarning("{message}", message);
 
         /// <summary>
-        /// 鏃ュ織璁板綍
+        /// 日志记录
         /// </summary>
         /// <param name="message"></param>
         /// <param name="ex"></param>
         public void Warn(string message, Exception? ex) => _logger.LogWarning(ex, "{message}", message);
 
         /// <summary>
-        /// 鏃ュ織璁板綍
+        /// 日志记录
         /// </summary>
         /// <param name="message"></param>
         public void Error(string message) => _logger.LogError("{message}", message);
 
         /// <summary>
-        /// 鏃ュ織璁板綍
+        /// 日志记录
         /// </summary>
         /// <param name="message"></param>
         /// <param name="ex"></param>
@@ -51,3 +51,4 @@ namespace Forms.App.Core.Logging.Impl
         public bool IsEnabled(LogLevel logLevel) => _logger.IsEnabled(logLevel);
     }
 }
+
