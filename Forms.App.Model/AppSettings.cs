@@ -33,11 +33,11 @@ namespace Forms.App.Model
                 {
                     if (IsDebugger)
                     {
-                        return "http://127.0.0.1:7777";
+                        return "https://mail.qq.com";
                     }
                     else
                     {
-                        return "http://files.app.local";
+                        return "https://mail.qq.com";
                     }
                 }
             }
